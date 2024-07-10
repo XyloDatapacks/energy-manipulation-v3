@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"package": "com.xylo_datapacks.energy_manipulation.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ExampleMixin",
+		"SoundEventAccessor"
+	],
+	"client": [
+		"ItemRendererAccessor",
+		"ItemRendererMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
