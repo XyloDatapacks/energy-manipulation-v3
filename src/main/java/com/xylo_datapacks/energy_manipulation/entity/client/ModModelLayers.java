@@ -6,8 +6,8 @@ import net.minecraft.util.Identifier;
 
 public class ModModelLayers {
     public static final EntityModelLayer SPELL = new EntityModelLayer(
-            new Identifier(EnergyManipulation.MOD_ID, "spell"), "main");
+            EnergyManipulation.id("spell"), "main");
 
     public static final EntityModelLayer PROJECTILE_SHAPE = new EntityModelLayer(
-            new Identifier(EnergyManipulation.MOD_ID, "projectile_shape"), "main");
+            EnergyManipulation.id("projectile_shape"), "main");
 }

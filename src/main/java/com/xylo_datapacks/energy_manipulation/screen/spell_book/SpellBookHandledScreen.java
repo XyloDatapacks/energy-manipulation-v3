@@ -2,10 +2,10 @@ package com.xylo_datapacks.energy_manipulation.screen.spell_book;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.api.Counter;
-import com.xylo_datapacks.energy_manipulation.item.custom.spell_book.gui.GuiManager;
-import com.xylo_datapacks.energy_manipulation.item.custom.spell_book.node.base_class.AbstractNodeWithList;
-import com.xylo_datapacks.energy_manipulation.item.custom.spell_book.node.base_class.AbstractNodeWithValue;
-import com.xylo_datapacks.energy_manipulation.item.custom.spell_book.node.base_class.record.NodeResult;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.gui.GuiManager;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithList;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithValue;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
 import com.xylo_datapacks.energy_manipulation.api.Dimension;
 import com.xylo_datapacks.energy_manipulation.screen.custom_owo.CollapsibleContainerV2;
 import com.xylo_datapacks.energy_manipulation.screen.custom_owo.XyloOwoContainers;

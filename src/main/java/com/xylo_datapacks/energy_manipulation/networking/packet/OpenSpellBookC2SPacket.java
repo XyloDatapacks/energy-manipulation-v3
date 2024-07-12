@@ -1,6 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.networking.packet;
 
-import com.xylo_datapacks.energy_manipulation.item.custom.SpellBookItem;
+import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
 import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
 import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;

@@ -1,7 +1,7 @@
 package com.xylo_datapacks.energy_manipulation.entity.custom;
 
-import com.xylo_datapacks.energy_manipulation.item.custom.spell_book.SpellExecutor;
-import com.xylo_datapacks.energy_manipulation.item.custom.spell_book.node.spell.SpellNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.SpellExecutor;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
