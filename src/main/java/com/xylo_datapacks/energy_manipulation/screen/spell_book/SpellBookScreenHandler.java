@@ -57,8 +57,8 @@ public class SpellBookScreenHandler extends ScreenHandler {
     private BackpackInventory inventory;
     private Consumer<Boolean> NodeListUpdateConsumer;
 
-    public SpellBookScreenHandler(int synchronizationID, PlayerInventory playerInventory, RegistryByteBuf registryByteBuf) {
-        this(synchronizationID, playerInventory, ItemStack.OPTIONAL_PACKET_CODEC.decode(registryByteBuf));
+    public SpellBookScreenHandler(int synchronizationID, PlayerInventory playerInventory, SpellBookItem.SpellBookMenuData spellBookMenuData) {
+        this(synchronizationID, playerInventory, spellBookMenuData.spellBookItemStack());
     }
 
     public SpellBookScreenHandler(int synchronizationID, PlayerInventory playerInventory, ItemStack spellBookStack) {

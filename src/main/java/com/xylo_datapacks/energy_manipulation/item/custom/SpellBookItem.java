@@ -1,14 +1,15 @@
 package com.xylo_datapacks.energy_manipulation.item.custom;
 
-import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.config.SpellBookInfo;
 import com.xylo_datapacks.energy_manipulation.entity.ModEntities;
 import com.xylo_datapacks.energy_manipulation.entity.custom.SpellEntity;
 import com.xylo_datapacks.energy_manipulation.item.custom.spell_book.node.base_class.GenericNode;
 import com.xylo_datapacks.energy_manipulation.item.custom.spell_book.node.spell.SpellNode;
+import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
 import com.xylo_datapacks.energy_manipulation.screen.spell_book.SpellBookScreenHandler;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -20,7 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -29,15 +32,12 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SpellBookItem extends Item implements FabricItem {
@@ -234,12 +234,10 @@ public class SpellBookItem extends Item implements FabricItem {
 
     public static void openScreen(PlayerEntity player, ItemStack spellBookItemStack) {
         if (player.getWorld() != null && !player.getWorld().isClient()) {
-            player.openHandledScreen(new ExtendedScreenHandlerFactory() {
+            player.openHandledScreen(new ExtendedScreenHandlerFactory<SpellBookMenuData>() {
                 @Override
-                public void writeScreenOpeningData(ServerPlayerEntity serverPlayerEntity, PacketByteBuf packetByteBuf) {
-                    ItemStack.CODEC.
-                    packetByteBuf.write
-                            //writeItemStack(spellBookItemStack);
+                public SpellBookMenuData getScreenOpeningData(ServerPlayerEntity player) {
+                    return new SpellBookMenuData(spellBookItemStack);
                 }
 
                 @Override
@@ -252,6 +250,16 @@ public class SpellBookItem extends Item implements FabricItem {
                     return new SpellBookScreenHandler(syncId, inv, spellBookItemStack);
                 }
             });
+        }
+    }
+
+    public record SpellBookMenuData(ItemStack spellBookItemStack) implements CustomPayload {
+        public static final CustomPayload.Id<SpellBookMenuData> ID = new CustomPayload.Id<>(ModPackets.INIT_SPELL_BOOK_MENU_PACKET_ID);
+        public static final PacketCodec<RegistryByteBuf, SpellBookMenuData> PACKET_CODEC = PacketCodec.tuple(ItemStack.PACKET_CODEC, SpellBookMenuData::spellBookItemStack, SpellBookMenuData::new);
+        
+        @Override
+        public CustomPayload.Id<? extends CustomPayload> getId() {
+            return ID;
         }
     }
 
@@ -314,10 +322,5 @@ public class SpellBookItem extends Item implements FabricItem {
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    
-
-    public static Identifier id(String name) {
-        return new Identifier(EnergyManipulation.MOD_ID, name);
-    }
 
 }

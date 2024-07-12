@@ -33,6 +33,8 @@ public class EnergyManipulationClient implements ClientModInitializer {
 
         // Register Server RPCs (so client can receive server rpcs)
         ModPackets.registerS2CPackets();
+        
+        // screens
         HandledScreens.register(EnergyManipulation.SPELL_BOOK_MENU_TYPE, SpellBookHandledScreen::new);
 
         /*------------------------------------------------------------------------------------ -----------------------*/

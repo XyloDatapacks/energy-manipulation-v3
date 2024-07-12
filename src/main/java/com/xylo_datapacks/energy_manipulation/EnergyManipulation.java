@@ -23,12 +23,10 @@ public class EnergyManipulation implements ModInitializer {
 	public static Identifier id(String path) {
 		return Identifier.of(MOD_ID, path);
 	}
-
-	// spell book
-	public static final Identifier SPELL_BOOK_ID = SpellBookItem.id("spell_book");
+	
 	// spell book menu
-	public static final ScreenHandlerType<SpellBookScreenHandler> SPELL_BOOK_MENU_TYPE = Registry.register(Registries.SCREEN_HANDLER, SPELL_BOOK_ID,
-			new ExtendedScreenHandlerType<>(SpellBookScreenHandler::new));
+	public static final ExtendedScreenHandlerType<SpellBookScreenHandler, SpellBookItem.SpellBookMenuData> SPELL_BOOK_MENU_TYPE = Registry.register(Registries.SCREEN_HANDLER, EnergyManipulation.id("spell_book_menu"), new ExtendedScreenHandlerType<>(SpellBookScreenHandler::new, SpellBookItem.SpellBookMenuData.PACKET_CODEC));
+	
 
 	@Override
 	public void onInitialize() {

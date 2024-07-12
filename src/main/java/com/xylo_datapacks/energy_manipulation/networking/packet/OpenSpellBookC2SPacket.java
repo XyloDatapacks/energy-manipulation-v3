@@ -1,29 +1,33 @@
 package com.xylo_datapacks.energy_manipulation.networking.packet;
 
 import com.xylo_datapacks.energy_manipulation.item.custom.SpellBookItem;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
+import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
+import io.netty.buffer.ByteBuf;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 // it is a server RPC
-public class OpenSpellBookC2SPacket {
+public record OpenSpellBookC2SPacket(Integer integer) implements CustomPayload{
+    public static final CustomPayload.Id<OpenSpellBookC2SPacket> ID = new CustomPayload.Id<>(ModPackets.OPEN_SPELL_BOOK_MENU_PACKET_ID);
+    public static final PacketCodec<ByteBuf, OpenSpellBookC2SPacket> PACKET_CODEC = PacketCodec.tuple(PacketCodecs.INTEGER, OpenSpellBookC2SPacket::integer, OpenSpellBookC2SPacket::new);;
     
-    public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-        
-        if (player.getMainHandStack().getItem() instanceof SpellBookItem spellBook) {
-            SpellBookItem.openScreen(player, player.getMainHandStack());
+    public static void receive(OpenSpellBookC2SPacket payload, ServerPlayNetworking.Context player) {
+
+        ServerPlayerEntity serverPlayer = ((ServerPlayerEntity) player);
+        if (serverPlayer.getMainHandStack().getItem() instanceof SpellBookItem spellBook) {
+            SpellBookItem.openScreen(serverPlayer, serverPlayer.getMainHandStack());
         }
-        else if (player.getOffHandStack().getItem() instanceof SpellBookItem spellBook) {
-            SpellBookItem.openScreen(player, player.getOffHandStack());
+        else if (serverPlayer.getOffHandStack().getItem() instanceof SpellBookItem spellBook) {
+            SpellBookItem.openScreen(serverPlayer, serverPlayer.getOffHandStack());
         }
     }
-
+    
+    @Override
+    public CustomPayload.Id<? extends CustomPayload> getId() {
+        return ID;
+    }
 }
 

@@ -2,6 +2,7 @@ package com.xylo_datapacks.energy_manipulation.event;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
+import com.xylo_datapacks.energy_manipulation.networking.packet.OpenSpellBookC2SPacket;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -48,7 +49,7 @@ public class KeyInputHandler {
             // Check key press
             if (openSpellBookMenuKey.isPressed() && client.player != null) {
                 // call Custom Action Server RPC
-                ClientPlayNetworking.send(ModPackets.OPEN_SPELL_BOOK_MENU_ID, PacketByteBufs.create());
+                ClientPlayNetworking.send(new OpenSpellBookC2SPacket(0));
                 //client.setScreen(new MyDataDrivenScreen());
             }
 
