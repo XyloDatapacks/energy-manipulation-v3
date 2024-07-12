@@ -13,13 +13,13 @@ import net.minecraft.registry.Registry;
 public class EntityRegistry {
     public static final EntityType<SpellEntity> SPELL = Registry.register(Registries.ENTITY_TYPE, 
             EnergyManipulation.id("spell"),
-            FabricEntityTypeBuilder.<SpellEntity>create(SpawnGroup.MISC, SpellEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.5f, 0.5f)).build());
+            EntityType.Builder.<SpellEntity>create(SpellEntity::new, SpawnGroup.MISC)
+                    .dimensions(0.5f, 0.5f).build());
 
     public static final EntityType<ProjectileShapeEntity> PROJECTILE_SHAPE = Registry.register(Registries.ENTITY_TYPE,
             EnergyManipulation.id("projectile_shape"),
-            FabricEntityTypeBuilder.<ProjectileShapeEntity>create(SpawnGroup.MISC, ProjectileShapeEntity::new)
-                    .dimensions(EntityDimensions.fixed(0.5f, 0.5f)).trackRangeBlocks(10).trackedUpdateRate(1).build());
+            EntityType.Builder.<ProjectileShapeEntity>create(ProjectileShapeEntity::new, SpawnGroup.MISC)
+                    .dimensions(0.5f, 0.5f).maxTrackingRange(10).trackingTickInterval(1).build());
     
     
     public static void init() {

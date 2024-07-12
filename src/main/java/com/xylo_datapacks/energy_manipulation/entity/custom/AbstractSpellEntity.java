@@ -12,6 +12,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractSpellEntity extends PersistentProjectileEntity implements SpellExecutor {
     protected static final String SPELL_KEY = "spell_data";
@@ -25,14 +26,16 @@ public abstract class AbstractSpellEntity extends PersistentProjectileEntity imp
         super(entityType, world);
     }
 
-    protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world) {
-        super(type, x, y, z, world);
+    protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
+        super(type, x, y, z, world, stack, weapon);
     }
 
-    protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, LivingEntity owner, World world) {
-        super(type, owner, world);
+    protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
+        super(type, owner, world, stack, shotFrom);
     }
-    
+
+
+
     /*----------------------------------------------------------------------------------------------------------------*/
     /* PersistentProjectileEntity Interface */
     

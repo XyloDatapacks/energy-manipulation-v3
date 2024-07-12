@@ -11,9 +11,12 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
+
+import java.awt.*;
 
 @Environment(value= EnvType.CLIENT)
 public class SpellEntityRenderer extends EntityRenderer<SpellEntity> {
@@ -31,7 +34,7 @@ public class SpellEntityRenderer extends EntityRenderer<SpellEntity> {
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(MathHelper.lerp(g, spellEntity.prevYaw, spellEntity.getYaw()) - 90.0f));
         matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(MathHelper.lerp(g, spellEntity.prevPitch, spellEntity.getPitch()) + 90.0f));
         VertexConsumer vertexConsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumerProvider, this.model.getLayer(this.getTexture(spellEntity)), false, true);
-        this.model.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
+        this.model.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 0xFFFFFFFF);
         matrixStack.pop();
         super.render(spellEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
