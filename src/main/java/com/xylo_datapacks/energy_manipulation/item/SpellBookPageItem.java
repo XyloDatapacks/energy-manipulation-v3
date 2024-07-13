@@ -5,6 +5,8 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.I
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.ModifyPositionInstructionNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import net.fabricmc.fabric.api.item.v1.FabricItem;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -19,17 +21,19 @@ public class SpellBookPageItem extends Item implements FabricItem {
     
     public static void setSpell(ItemStack stack, NbtCompound spell) {
         System.out.println("NEW INPUT: " + spell);
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
-        System.out.println("INITIAL NBT: " + nbtCompound);
-        nbtCompound.put(SPELL_KEY, spell);
-        System.out.println("FINAL NBT: " + nbtCompound);
+        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
+            System.out.println("INITIAL NBT: " + currentNbt);
+            currentNbt.put(SPELL_KEY, spell);
+            System.out.println("FINAL NBT: " + currentNbt);
+        }));
     }
 
     public static GenericNode getSpell(ItemStack stack) {
-        NbtCompound nbtCompound = stack.getNbt();
-        if (nbtCompound == null) {
+        NbtCompound nbtCompound = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+        NbtCompound spell = nbtCompound.getCompound(SPELL_KEY);
+        if (spell.isEmpty()) {
             return new SpellNode();
         }
-        return GenericNode.generateFromNbt(nbtCompound.getCompound(SPELL_KEY));
+        return GenericNode.generateFromNbt(spell);
     }
 }

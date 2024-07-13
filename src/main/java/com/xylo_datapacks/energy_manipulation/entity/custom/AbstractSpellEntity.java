@@ -40,11 +40,6 @@ public abstract class AbstractSpellEntity extends PersistentProjectileEntity imp
     /* PersistentProjectileEntity Interface */
     
     @Override
-    protected ItemStack asItemStack() {
-        return null;
-    }
-    
-    @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.spellData = nbt.getCompound(SPELL_KEY);
@@ -64,7 +59,9 @@ public abstract class AbstractSpellEntity extends PersistentProjectileEntity imp
 
 
     public void runSpell() {
-        spellNode.executeSpell(this);
+        if (spellNode != null) {
+            spellNode.executeSpell(this);
+        }
     }
 
     public void setSpellNode(SpellNode spellNode) {

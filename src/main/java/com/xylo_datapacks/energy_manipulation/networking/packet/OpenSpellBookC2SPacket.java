@@ -15,8 +15,8 @@ public record OpenSpellBookC2SPacket(Integer integer) implements CustomPayload{
     public static final PacketCodec<ByteBuf, OpenSpellBookC2SPacket> PACKET_CODEC = PacketCodec.tuple(PacketCodecs.INTEGER, OpenSpellBookC2SPacket::integer, OpenSpellBookC2SPacket::new);;
     
     public static void receive(OpenSpellBookC2SPacket payload, ServerPlayNetworking.Context player) {
-
-        ServerPlayerEntity serverPlayer = ((ServerPlayerEntity) player);
+        
+        ServerPlayerEntity serverPlayer = player.player();
         if (serverPlayer.getMainHandStack().getItem() instanceof SpellBookItem spellBook) {
             SpellBookItem.openScreen(serverPlayer, serverPlayer.getMainHandStack());
         }

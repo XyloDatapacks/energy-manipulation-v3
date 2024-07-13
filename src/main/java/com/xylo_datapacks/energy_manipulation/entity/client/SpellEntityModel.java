@@ -32,6 +32,6 @@ public class SpellEntityModel extends Model {
 	
 	@Override
 	public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-		super.render(matrices, vertices, light, overlay);
+		spell.render(matrices, vertices, light, overlay, color);
 	}
 }

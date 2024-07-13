@@ -6,6 +6,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNo
 import net.minecraft.entity.*;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +33,7 @@ public class SpellEntity extends AbstractSpellEntity {
 
     @Override
     protected ItemStack getDefaultItemStack() {
-        return null;
+        return new ItemStack(Items.ARROW);
     }
 
     @Override

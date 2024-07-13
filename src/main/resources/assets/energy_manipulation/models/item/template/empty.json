@@ -1,0 +1,7 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "energy_manipulation:item/empty"
+	}
+}
+

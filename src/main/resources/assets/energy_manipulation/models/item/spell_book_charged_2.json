@@ -1,0 +1,6 @@
+{
+    "parent": "energy_manipulation:item/template/spell_book_open",
+    "textures": {
+        "layer1": "energy_manipulation:item/spell_book_charging"
+    }
+}

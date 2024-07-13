@@ -1,0 +1,646 @@
+<owo-ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/wisp-forest/owo-lib/1.20/owo-ui.xsd">
+    <components>
+        <flow-layout direction="vertical">
+            <children>
+                <stack-layout id="screen_stack">
+                    <children>
+                        <!--=================================================================================================-->
+                        <!--MAIN STACK-->
+                        <stack-layout id="main_stack">
+                            <children>
+                                <flow-layout direction="vertical">
+                                    <children>
+                                        <texture texture="energy_manipulation:textures/gui/spell_book/spell_book_menu.png" u="0"
+                                                 v="0" region-width="292" region-height="180" texture-width="512"
+                                                 texture-height="512"/>
+                                        <texture texture="energy_manipulation:textures/gui/spell_book/spell_book_menu.png" u="0"
+                                                 v="180" region-width="292" region-height="90" texture-width="512"
+                                                 texture-height="512">
+                                            <z-index>100</z-index>
+                                        </texture>
+                                    </children>
+                                </flow-layout>
+        
+                                <!--=========================================================================================-->
+                                <!--PAGE DATA-->
+                                <flow-layout direction="horizontal">
+                                    <children>
+                                        <!--=================================================================================-->
+                                        <!--FIRST PAGE-->
+                                        <flow-layout direction="vertical">
+                                            <children>
+                                                <!--=========================================================================-->
+                                                <!--FIRST PAGE CONTENT-->
+                                                <flow-layout direction="vertical" id="first_page_content">
+                                                    <children>
+                                                        <!--=================================================================-->
+                                                        <!--NODES SCROLL BAR-->
+                                                        <scroll direction="vertical" id="nodes_list_scroll">
+                                                            <!--=================================================================-->
+                                                            <!--NODES CONTAINER-->
+                                                            <flow-layout direction="vertical" id="nodes_list_scroll_content">
+                                                                <children/> <!--added at runtime-->
+        
+                                                                <!--nodes container style-->
+                                                                <sizing>
+                                                                    <vertical method="content">0</vertical>
+                                                                    <horizontal method="fill">100</horizontal>
+                                                                </sizing>
+                                
+                                                                <padding> <!--padding for scroll bar content-->
+                                                                    <right>4</right>
+                                                                </padding>
+                                                            </flow-layout>
+                                                            <!--END NODES CONTAINER-->
+                                                            <!--=================================================================-->
+        
+                                                            <!--nodes scroll bar style-->
+                                                            <margins>
+                                                                <top>7</top>
+                                                                <bottom>32</bottom>
+                                                                <horizontal>8</horizontal>
+                                                            </margins>
+                                                            
+                                                            <sizing>
+                                                                <vertical method="fill">100</vertical>
+                                                                <horizontal method="fill">100</horizontal>
+                                                            </sizing>
+                                                        </scroll>
+                                                        <!--END NODES SCROLL BAR-->
+                                                        <!--=================================================================-->
+                                                    </children>
+        
+                                                    <!--first page content style-->
+                                                    <sizing>
+                                                        <vertical method="fill">100</vertical>
+                                                        <horizontal method="fill">100</horizontal>
+                                                    </sizing>
+        
+                                                    <!--> 
+                                                    <surface>
+                                                        <panel dark="true"></panel>
+                                                    </surface>
+                                                    <!-->
+        
+                                                </flow-layout>
+                                                <!--END FIRST PAGE CONTENT-->
+                                                <!--=========================================================================-->
+                                            </children>
+        
+                                            <!--first page style-->
+                                            <sizing>
+                                                <vertical method="fill">100</vertical>
+                                                <horizontal method="fill">100</horizontal>
+                                            </sizing>
+                                            
+                                            <padding> <!--padding so content stays in the left page's bounds-->
+                                                <top>7</top>
+                                                <left>8</left>
+                                                <bottom>8</bottom>
+                                                <right>6</right>
+                                            </padding>
+        
+                                        </flow-layout>
+                                        <!--END FIRST PAGE-->
+                                        <!--=================================================================================-->
+                                    </children>
+        
+                                    <!--page data style-->
+                                    <sizing>
+                                        <vertical method="fixed">180</vertical>
+                                        <horizontal method="fixed">292</horizontal>
+                                    </sizing>
+        
+                                    <positioning type="relative">50,0</positioning>
+                                    
+                                    <horizontal-alignment>center</horizontal-alignment>
+                                    <vertical-alignment>center</vertical-alignment>
+                                    
+                                </flow-layout>
+                                <!--END PAGE DATA-->
+                                <!--=========================================================================================-->
+                            </children>
+        
+                            <!--main stack style-->
+                            <sizing>
+                                <vertical method="content">0</vertical>
+                                <horizontal method="content">0</horizontal>
+                            </sizing>
+        
+                            <horizontal-alignment>center</horizontal-alignment>
+                            <vertical-alignment>center</vertical-alignment>
+                            
+                        </stack-layout>
+                        <!--END MAIN STACK-->
+                        <!--=================================================================================================-->
+
+                        <!--here goes the node info pop up, added at run time-->
+                    </children>
+                    
+                    <sizing>
+                        <horizontal method="fill">100</horizontal>
+                        <vertical method="fill">100</vertical>
+                    </sizing>
+
+                    <horizontal-alignment>center</horizontal-alignment>
+                    <vertical-alignment>center</vertical-alignment>
+                </stack-layout>
+            
+            </children>
+
+            <horizontal-alignment>center</horizontal-alignment>
+            <vertical-alignment>center</vertical-alignment>
+            
+            <surface>
+                <vanilla-translucent></vanilla-translucent>
+            </surface>
+            
+        </flow-layout>
+    </components>
+
+
+
+    <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+    
+    <templates>
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--SECOND PAGE TEMPLATE-->
+        <template name="second_page">
+            
+            <flow-layout direction="vertical" id="second_page_content">
+                <children>
+                    <template name="node_info"/>
+                    <template name="node_info_class"/>
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+                
+            </flow-layout>
+            
+        </template>
+        <!--END SECOND PAGE TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+        
+        
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--NODE INFO TEMPLATE-->
+        <template name="node_info">
+
+            <flow-layout direction="vertical" id="template_node_info_layout">
+                <children>
+                    <template name="node_info_name">
+                        <label_id>node_info_name_label</label_id>
+                    </template>
+
+                    <template name="node_info_description">
+                        <label_id>node_info_description_label</label_id>
+                        <vertical_filling>30</vertical_filling>
+                    </template>
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+
+                <padding>
+                    <horizontal>4</horizontal>
+                    <vertical>4</vertical>
+                </padding>
+                
+                <surface>
+                    <panel dark="true"></panel>
+                </surface>
+            </flow-layout>
+
+        </template>
+        <!--END NODE INFO TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--NODE INFO CLASS TEMPLATE-->
+        <template name="node_info_class">
+
+            <flow-layout direction="vertical" id="template_node_info_class_layout">
+                <children>
+                    <template name="node_info_name">
+                        <label_id>node_info_class_name_label</label_id>
+                    </template>
+
+                    <flow-layout direction="horizontal">
+                        <children>
+                            <button id="node_info_class_button_prev">
+                                <text translate="false">◄</text>
+
+                                <padding>
+                                    <all>0</all>
+                                </padding>
+
+                                <sizing>
+                                    <horizontal method="content">0</horizontal>
+                                    <vertical method="content">0</vertical>
+                                </sizing>
+                            </button>
+                            
+                            <flow-layout direction="vertical">
+                                <children>
+                                    <template name="node_info_description">
+                                        <label_id>node_info_class_description_label</label_id>
+                                        <vertical_filling>35</vertical_filling>
+                                    </template>
+                                </children>
+                                <sizing>
+                                    <horizontal method="fill">78</horizontal>
+                                </sizing>
+                            </flow-layout>
+
+                            <button id="node_info_class_button_next">
+                                <text translate="false">►</text>
+
+                                <padding>
+                                    <all>0</all>
+                                </padding>
+
+                                <sizing>
+                                    <horizontal method="content">0</horizontal>
+                                    <vertical method="content">0</vertical>
+                                </sizing>
+                            </button>
+                        </children>
+
+                        <horizontal-alignment>center</horizontal-alignment>
+                        <vertical-alignment>center</vertical-alignment>
+                    </flow-layout>
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+
+                <padding>
+                    <horizontal>4</horizontal>
+                    <vertical>4</vertical>
+                </padding>
+
+                <surface>
+                    <panel dark="true"></panel>
+                </surface>
+            </flow-layout>
+
+        </template>
+        <!--END NODE INFO CLASS TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+        
+        
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--NODE INFO NAME TEMPLATE-->
+        <template name="node_info_name">
+
+            <flow-layout direction="vertical">
+                <children>
+                    <label id="{{label_id}}">
+                        <text translate="false">"node_info_name_label"</text>
+
+                        <sizing>
+                            <horizontal method="content">0</horizontal>
+                            <vertical method="content">0</vertical>
+                        </sizing>
+                        
+                    </label>
+                </children>
+
+                <sizing>
+                    <horizontal method="content">0</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+
+                <padding>
+                    <horizontal>6</horizontal>
+                    <top>5</top>
+                    <bottom>4</bottom>
+                </padding>
+
+                <surface>
+                    <panel dark="false"></panel>
+                </surface>
+            </flow-layout>
+
+        </template>
+        <!--END NODE INFO NAME TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--NODE INFO DESCRIPTION TEMPLATE-->
+        <template name="node_info_description">
+            
+            <flow-layout direction="vertical">
+                <children>
+                    <scroll direction="vertical">
+                        <label id="{{label_id}}">
+                            <text translate="false">"node_info_description_label"</text>
+                            <sizing>
+                                <horizontal method="fill">100</horizontal>
+                                <vertical method="content">0</vertical>
+                            </sizing>
+                            
+                            <margins>
+                                <right>2</right>
+                            </margins>
+                        </label>
+
+                        <sizing>
+                            <horizontal method="fill">100</horizontal>
+                            <vertical method="fill">100</vertical>
+                        </sizing>
+                    </scroll>
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="fixed">{{vertical_filling}}</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+
+                <padding>
+                    <left>6</left>
+                    <right>4</right>
+                    <top>5</top>
+                    <bottom>4</bottom>
+                </padding>
+
+                <surface>
+                    <panel dark="false"></panel>
+                </surface>
+            </flow-layout>
+
+        </template>
+        <!--END NODE INFO DESCRIPTION TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--NODE INFO POP-UP TEMPLATE-->
+        <template name="node_info_pop_up">
+
+            <draggable id="node_info_pop_up">
+                <stack-layout>
+                    <children>
+                        <texture texture="energy_manipulation:textures/gui/spell_book/spell_book_menu.png" u="292"
+                                 v="0" region-width="146" region-height="180" texture-width="512"
+                                 texture-height="512"/>
+
+                        <!--=================================================================================-->
+                        <!--NODE INFO PAGE-->
+                        <flow-layout direction="vertical">
+                            <children>
+                                <!--=========================================================================-->
+                                <!--NODE INFO PAGE CONTENT-->
+                                <flow-layout direction="vertical">
+                                    <children>
+                                        <!--=================================================================-->
+                                        <!--NODES INFO SCROLL BAR-->
+                                        <scroll direction="vertical">
+                                            <!--=================================================================-->
+                                            <!--NODES INFO CONTAINER-->
+                                            <flow-layout direction="vertical" id="node_info_scroll_content">
+                                                <children/> <!--added at run time-->
+            
+                                                <!--nodes container style-->
+                                                <sizing>
+                                                    <horizontal method="fill">100</horizontal>
+                                                    <vertical method="content">0</vertical>
+                                                </sizing>
+            
+                                                <padding> <!--padding for scroll bar content-->
+                                                    <right>4</right>
+                                                </padding>
+                                            </flow-layout>
+                                            <!--END NODES CONTAINER-->
+                                            <!--=================================================================-->
+            
+                                            <!--nodes scroll bar style-->
+                                            <margins>
+                                                <vertical>7</vertical>
+                                                <left>8</left>
+                                                <right>4</right>
+                                            </margins>
+            
+                                            <sizing>
+                                                <vertical method="fill">100</vertical>
+                                                <horizontal method="fill">100</horizontal>
+                                            </sizing>
+                                        </scroll>
+                                        <!--END NODES INFO SCROLL BAR-->
+                                        <!--=================================================================-->
+                                    </children>
+            
+                                    <!--second page content style-->
+                                    <sizing>
+                                        <vertical method="fill">100</vertical>
+                                        <horizontal method="fill">100</horizontal>
+                                    </sizing>
+            
+                                    <!--> 
+                                    <surface>
+                                        <panel dark="true"></panel>
+                                    </surface>
+                                    <!-->
+            
+                                </flow-layout>
+                                <!--END NODE INFO PAGE CONTENT-->
+                                <!--=========================================================================-->
+                            </children>
+            
+                            <!--second page style-->
+                            <sizing>
+                                <vertical method="fill">100</vertical>
+                                <horizontal method="fill">100</horizontal>
+                            </sizing>
+            
+                            <margins> <!--padding so content stays in the right page's bounds-->
+                                <top>7</top>
+                                <left>6</left>
+                                <bottom>8</bottom>
+                                <right>8</right>
+                            </margins>
+            
+                        </flow-layout>
+                        <!--END NODE INFO PAGE-->
+                        <!--=================================================================================-->
+
+                        <button id="close_node_info_panel">
+                            <text translate="false">x</text>
+                            <sizing>
+                                <horizontal method="fixed">10</horizontal>
+                                <vertical method="fixed">10</vertical>
+                            </sizing>
+                            <positioning type="relative">100,100</positioning>
+                        </button>
+                        
+                    </children>
+
+                    <sizing>
+                        <horizontal method="fixed">146</horizontal>
+                        <vertical method="fixed">180</vertical>
+                    </sizing>
+                </stack-layout>
+
+                <sizing>
+                    <horizontal method="content">0</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+                
+                <padding>
+                    <all>8</all>
+                </padding>
+                
+                <positioning type="relative">85,8</positioning>
+                
+                <z-index>80</z-index>
+            </draggable>
+            
+        </template>
+        <!--END NODE INFO POP-UP TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+
+
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--SELECTOR BOX TEMPLATE-->
+        <template name="selector_box">
+
+            <flow-layout direction="vertical" id="selector_box_layout">
+                <children>
+                    
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+
+                <padding>
+                    <horizontal>4</horizontal>
+                    <vertical>4</vertical>
+                </padding>
+
+                <surface>
+                    <panel dark="true"></panel>
+                </surface>
+            </flow-layout>
+
+        </template>
+        <!--SELECTOR BOX TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--SLIDER SELECTOR TEMPLATE-->
+        <template name="slider_selector_template">
+
+            <flow-layout direction="vertical">
+                <children>
+                    <discrete-slider min="{{min_value}}" max="{{max_value}}" id="slider">
+                        <value>{{value}}</value>
+                        
+                        <sizing>
+                            <horizontal method="fill">100</horizontal>
+                            <vertical method="content">0</vertical>
+                        </sizing>
+                    </discrete-slider>
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+            </flow-layout>
+
+        </template>
+        <!--SLIDER SELECTOR TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--CHECKBOX SELECTOR TEMPLATE-->
+        <template name="checkbox_selector_template">
+
+            <flow-layout direction="vertical">
+                <children>
+                    <checkbox id="checkbox">
+                        <checked>{{checked}}</checked>
+                    </checkbox>
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+            </flow-layout>
+
+        </template>
+        <!--CHECKBOX SELECTOR TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        
+        
+    </templates>
+</owo-ui>

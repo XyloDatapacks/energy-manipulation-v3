@@ -26,6 +26,7 @@ public class EnergyManipulationClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         
+        KeyBindingRegistry.init();
         registerKeyInputs();
         ModPackets.initClient();
         

@@ -3,11 +3,11 @@ package com.xylo_datapacks.energy_manipulation.screen.spell_book;
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.config.SpellBookInfo;
 import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
+import com.xylo_datapacks.energy_manipulation.item.SpellBookPageItem;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.gui.GuiManager;
 import com.xylo_datapacks.energy_manipulation.api.Dimension;
 import com.xylo_datapacks.energy_manipulation.api.Point;
 import com.xylo_datapacks.energy_manipulation.registry.MenuTypeRegistry;
-import com.xylo_datapacks.energy_manipulation.util.InventoryUtils;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -17,13 +17,17 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
+import javax.swing.text.Element;
+import java.util.Stack;
 import java.util.function.Consumer;
 
 public class SpellBookScreenHandler extends ScreenHandler {
@@ -87,7 +91,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         inventory = new BackpackInventory(rowWidth * numberOfRows) {
             @Override
             public void markDirty() {
-                spellBookStack.getOrCreateNbt().put("Inventory", InventoryUtils.toTag(this));
+                SpellBookItem.setBackpackContent(playerInventory.player.getRegistryManager(), spellBookStack, inventory);
                 super.markDirty();
             }
 
@@ -97,7 +101,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
             }
         };
         // update inventory from nbt
-        loadInventoryFromNbt(spellBookStack);
+        loadInventoryFromNbt(playerInventory.player.getRegistryManager(), spellBookStack);
 
         // spell book inventory slots
         for (int i = 0; i < 8; i++) {
@@ -178,9 +182,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         ItemStack page = inventory.getStack(0);
         if (!page.isEmpty() && page.getItem() instanceof SpellBookPageItem) {
             SpellBookPageItem.setSpell(page, guiManager.toNbt());
-            System.out.println("SAVED NBT: " + page.getNbt());
             inventory.markDirty();
-            System.out.println("POST SAVED NBT: " + page.getNbt());
         }
     }
 
@@ -198,7 +200,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
         ItemStack page = inventory.getStack(0);
         if (!page.isEmpty() && page.getItem() instanceof SpellBookPageItem) {
             this.guiManager.setRootNode(SpellBookPageItem.getSpell(page));
-            System.out.println("FOUND NBT: " + page.getNbt());
         } 
         else {
             this.guiManager.reset();   
@@ -224,11 +225,11 @@ public class SpellBookScreenHandler extends ScreenHandler {
         return spellBookStack.getItem() instanceof SpellBookItem;
     }
 
-    private void loadInventoryFromNbt(ItemStack spellBookStack) {
-        // get spell book inventory in nbt form
-        NbtList tag = spellBookStack.getOrCreateNbt().getList("Inventory", NbtElement.COMPOUND_TYPE);
-        // fill inventory from nbt
-        InventoryUtils.fromTag(tag, inventory);
+    private void loadInventoryFromNbt(RegistryWrapper.WrapperLookup registries, ItemStack spellBookStack) {
+        inventory.clear();
+        SpellBookItem.getBackpackContents(registries, spellBookStack).forEach((slot, element) -> {
+            inventory.setStack(slot, element);            
+        });
     }
     
     
@@ -354,7 +355,34 @@ public class SpellBookScreenHandler extends ScreenHandler {
 
         @Override
         public void onInventoryChanged(Inventory sender) {
-            
+        }
+
+        @Override
+        public NbtList toNbtList(RegistryWrapper.WrapperLookup registries) {
+            NbtList nbtList = new NbtList();
+            System.out.println("toNbtList");
+            for (int i = 0; i < this.size(); i++) {
+                ItemStack itemStack = this.getStack(i);
+                if (!itemStack.isEmpty()) {
+                    NbtCompound itemStackCompound = (NbtCompound) itemStack.encode(registries);
+                    itemStackCompound.putByte("Slot", (byte) i);
+                    nbtList.add(itemStackCompound);
+                }
+            }
+
+            return nbtList;
+        }
+
+        @Override
+        public void readNbtList(NbtList list, RegistryWrapper.WrapperLookup registries) {
+            this.clear();
+
+            for (int i = 0; i < list.size(); i++) {
+                NbtCompound itemStackCompound = list.getCompound(i);
+                int slot = itemStackCompound.getInt("Slot");
+                itemStackCompound.remove("Slot");
+                ItemStack.fromNbt(registries, itemStackCompound).ifPresent(stack -> this.setStack(slot, stack));
+            }
         }
     }
     

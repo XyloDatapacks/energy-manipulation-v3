@@ -10,13 +10,17 @@ import com.xylo_datapacks.energy_manipulation.screen.spell_book.SpellBookScreenH
 import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
+import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -25,6 +29,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -35,11 +40,13 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class SpellBookItem extends Item implements FabricItem {
     private static final String CHARGED_KEY = "Charged";
@@ -47,6 +54,11 @@ public class SpellBookItem extends Item implements FabricItem {
     private boolean charged = false;
     private boolean loaded = false;
     private boolean completed = false;
+    private static final CrossbowItem.LoadingSounds DEFAULT_LOADING_SOUNDS = new CrossbowItem.LoadingSounds(
+            Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_START),
+            Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE),
+            Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_END)
+    );
     
     public SpellBookItem(Item.Settings settings) {
         super(settings);
@@ -56,9 +68,9 @@ public class SpellBookItem extends Item implements FabricItem {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* Casting Logic */
 
-    public SpellNode getSpellNode(ItemStack itemStack) {
+    public SpellNode getSpellNode(PlayerEntity user, ItemStack itemStack) {
         // get inventory items
-        Map<Integer, ItemStack> spellBookContent = getBackpackContents(itemStack);
+        Map<Integer, ItemStack> spellBookContent = getBackpackContents(user.getRegistryManager(), itemStack);
         // check if there is slot zero
         if (spellBookContent.containsKey(0)) {
             // check if slot zero is spell book page
@@ -74,7 +86,7 @@ public class SpellBookItem extends Item implements FabricItem {
     }
     
     public void runSpell(World world, PlayerEntity user, Hand hand, ItemStack itemStack) {
-        SpellNode spellNode = getSpellNode(itemStack);
+        SpellNode spellNode = getSpellNode(user, itemStack);
         SpellEntity spell = EntityRegistry.SPELL.spawn((ServerWorld) world, user.getBlockPos(), SpawnReason.TRIGGERED);
         if (spell != null) {
             spell.setOwner(user);
@@ -113,8 +125,8 @@ public class SpellBookItem extends Item implements FabricItem {
 
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
-        int i = this.getMaxUseTime(stack) - remainingUseTicks;
-        float f = SpellBookItem.getPullProgress(i, stack);
+        int i = this.getMaxUseTime(stack, user) - remainingUseTicks;
+        float f = SpellBookItem.getPullProgress(i, stack, user);
         if (!SpellBookItem.isCharged(stack)) {
             SpellBookItem.setCharged(stack, true);
             SpellBookItem.setCharge(stack, f);
@@ -124,35 +136,30 @@ public class SpellBookItem extends Item implements FabricItem {
     }
 
     public static boolean isCharged(ItemStack stack) {
-        NbtCompound nbtCompound = stack.getNbt();
-        return nbtCompound != null && nbtCompound.getBoolean(CHARGED_KEY);
+        return stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt().getBoolean(CHARGED_KEY);
     }
 
     public static void setCharged(ItemStack stack, boolean charged) {
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
-        nbtCompound.putBoolean(CHARGED_KEY, charged);
+        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
+            currentNbt.putBoolean(CHARGED_KEY, charged);
+        }));
     }
 
     public static float getCharge(ItemStack stack) {
-        NbtCompound nbtCompound = stack.getNbt();
-        if (nbtCompound == null) {
-            return 0.0f;
-        }
-        return nbtCompound.getFloat(CHARGE_KEY);
+        return stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt().getFloat(CHARGE_KEY);
     }
     
     public static void setCharge(ItemStack stack, float charge) {
-        NbtCompound nbtCompound = stack.getOrCreateNbt();
-        nbtCompound.putFloat(CHARGE_KEY, charge);
+        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
+            currentNbt.putFloat(CHARGE_KEY, charge);
+        }));
     }
 
     @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks) {
         if (!world.isClient) {
-            int i = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
-            SoundEvent soundEvent = this.getQuickChargeSound(i);
-            SoundEvent soundEvent2 = i == 0 ? SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE : null;
-            float f = (float)(stack.getMaxUseTime() - remainingUseTicks) / (float) SpellBookItem.getPullTime(stack);
+            CrossbowItem.LoadingSounds loadingSounds = this.getLoadingSounds(stack);
+            float f = (float)(stack.getMaxUseTime(user) - remainingUseTicks) / (float)getPullTime(stack, user);
             if (f < 0.2f) {
                 this.charged = false;
                 this.loaded = false;
@@ -160,31 +167,30 @@ public class SpellBookItem extends Item implements FabricItem {
             }
             if (f >= 0.2f && !this.charged) {
                 this.charged = true;
-                world.playSound(null, user.getX(), user.getY(), user.getZ(), soundEvent, SoundCategory.PLAYERS, 0.5f, 1.0f);
+                loadingSounds.start().ifPresent(sound -> world.playSound(null, user.getX(), user.getY(), user.getZ(), (SoundEvent)sound.value(), SoundCategory.PLAYERS, 0.5F, 1.0F));
             }
-            if (f >= 0.5f && soundEvent2 != null && !this.loaded) {
+            if (f >= 0.5f && !this.loaded) {
                 this.loaded = true;
-                world.playSound(null, user.getX(), user.getY(), user.getZ(), soundEvent2, SoundCategory.PLAYERS, 0.5f, 1.0f);
+                loadingSounds.mid().ifPresent(sound -> world.playSound(null, user.getX(), user.getY(), user.getZ(), (SoundEvent)sound.value(), SoundCategory.PLAYERS, 0.5F, 1.0F));
             }
             if (f >= 0.75f && !this.completed) {
                 this.completed = true;
-                //world.playSound(null, user.getX(), user.getY(), user.getZ(), soundEvent2, SoundCategory.PLAYERS, 0.5f, 1.0f);
             }
         }
     }
     
     @Override
-    public int getMaxUseTime(ItemStack stack) {
+    public int getMaxUseTime(ItemStack stack, LivingEntity user) {
         return 72000;
     }
 
-    public int internalGetMaxUseTime(ItemStack stack) {
-        return SpellBookItem.getPullTime(stack) + 3;
+    public int internalGetMaxUseTime(ItemStack stack, LivingEntity user) {
+        return SpellBookItem.getPullTime(stack, user) + 3;
     }
 
-    public static int getPullTime(ItemStack stack) {
-        int i = EnchantmentHelper.getLevel(Enchantments.QUICK_CHARGE, stack);
-        return i == 0 ? 25 : 25 - 5 * i;
+    public static int getPullTime(ItemStack stack, LivingEntity user) {
+        float f = EnchantmentHelper.getCrossbowChargeTime(stack, user, 1.25F);
+        return MathHelper.floor(f * 20.0F);
     }
 
     @Override
@@ -192,26 +198,17 @@ public class SpellBookItem extends Item implements FabricItem {
         return UseAction.CROSSBOW;
     }
 
-    private SoundEvent getQuickChargeSound(int stage) {
-        switch (stage) {
-            case 1: {
-                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_1;
-            }
-            case 2: {
-                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_2;
-            }
-            case 3: {
-                return SoundEvents.ITEM_CROSSBOW_QUICK_CHARGE_3;
-            }
-        }
-        return SoundEvents.ITEM_CROSSBOW_LOADING_START;
+    CrossbowItem.LoadingSounds getLoadingSounds(ItemStack stack) {
+        return (CrossbowItem.LoadingSounds)EnchantmentHelper.getEffect(stack, EnchantmentEffectComponentTypes.CROSSBOW_CHARGING_SOUNDS)
+                .orElse(DEFAULT_LOADING_SOUNDS);
     }
 
-    private static float getPullProgress(int useTicks, ItemStack stack) {
-        float f = (float)useTicks / (float) SpellBookItem.getPullTime(stack);
-        if (f > 1.0f) {
-            f = 1.0f;
+    private static float getPullProgress(int useTicks, ItemStack stack, LivingEntity user) {
+        float f = (float)useTicks / (float)getPullTime(stack, user);
+        if (f > 1.0F) {
+            f = 1.0F;
         }
+
         return f;
     }
 
@@ -221,7 +218,7 @@ public class SpellBookItem extends Item implements FabricItem {
     }
 
     @Override
-    public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
+    public boolean allowComponentsUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack) {
         return SpellBookItem.getCharge(oldStack) == SpellBookItem.getCharge(new ItemStack(this));
     }
 
@@ -280,38 +277,29 @@ public class SpellBookItem extends Item implements FabricItem {
         return containerComponent.streamNonEmpty().count() > 0;
     }
 
-    public static Map<Integer, ItemStack> getBackpackContents(ItemStack stack) {
+    public static Map<Integer, ItemStack> getBackpackContents(RegistryWrapper.WrapperLookup registries, ItemStack stack) {
         Map<Integer, ItemStack> stacks = new LinkedHashMap<>();
-        NbtList tag = stack.getOrCreateNbt().getList("Inventory", NbtElement.COMPOUND_TYPE);
-
-        for (NbtElement element : tag) {
+        NbtCompound nbtCompound = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+        NbtList inventoryNbt = nbtCompound.getList("Inventory", NbtElement.COMPOUND_TYPE);
+        
+        for (NbtElement element : inventoryNbt) {
             NbtCompound stackTag = (NbtCompound) element;
-            ItemStack backpackStack = ItemStack.fromNbt(stackTag);
-            stacks.put(stackTag.getInt("Slot"), backpackStack);
+            ItemStack.fromNbt(registries, stackTag).ifPresent(backpackStack -> stacks.put(stackTag.getInt("Slot"), backpackStack));
         }
 
         return stacks;
     }
-
-    public static NbtCompound getSlotNbt(ItemStack stack, int slot) {
-        ContainerComponent containerComponent = stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
-        
-        
-        NbtList tag = stack.getOrCreateNbt().getList("Inventory", NbtElement.COMPOUND_TYPE);
-
-        // return the element with matching slot
-        for (NbtElement element : tag) {
-            NbtCompound stackTag = (NbtCompound) element;
-            if (stackTag.getInt("Slot") == slot) {
-                return stackTag;
-            }
-        }
-
-        return null;
+    
+    public static void setBackpackContent(RegistryWrapper.WrapperLookup registries, ItemStack stack, SimpleInventory inventory)  {
+        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
+            currentNbt.put("Inventory", inventory.toNbtList(registries));
+        }));
     }
 
     public static void wipeBackpack(ItemStack stack) {
-        stack.getOrCreateNbt().remove("Inventory");
+        stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
+            currentNbt.remove("Inventory");
+        }));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
