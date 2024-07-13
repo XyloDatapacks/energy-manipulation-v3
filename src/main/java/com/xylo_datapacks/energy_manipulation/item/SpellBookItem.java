@@ -14,12 +14,10 @@ import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -273,8 +271,9 @@ public class SpellBookItem extends Item implements FabricItem {
     }
     
     public static boolean isBackpackEmpty(ItemStack stack) {
-        ContainerComponent containerComponent = stack.getOrDefault(DataComponentTypes.CONTAINER, ContainerComponent.DEFAULT);
-        return containerComponent.streamNonEmpty().count() > 0;
+        NbtCompound nbtCompound = stack.getOrDefault(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT).copyNbt();
+        NbtList inventoryNbt = nbtCompound.getList("Inventory", NbtElement.COMPOUND_TYPE);
+        return inventoryNbt.isEmpty();
     }
 
     public static Map<Integer, ItemStack> getBackpackContents(RegistryWrapper.WrapperLookup registries, ItemStack stack) {
@@ -286,13 +285,13 @@ public class SpellBookItem extends Item implements FabricItem {
             NbtCompound stackTag = (NbtCompound) element;
             ItemStack.fromNbt(registries, stackTag).ifPresent(backpackStack -> stacks.put(stackTag.getInt("Slot"), backpackStack));
         }
-
+        
         return stacks;
     }
     
-    public static void setBackpackContent(RegistryWrapper.WrapperLookup registries, ItemStack stack, SimpleInventory inventory)  {
+    public static void setBackpackContentFromNbt(ItemStack stack, NbtList inventoryNbt)  {
         stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
-            currentNbt.put("Inventory", inventory.toNbtList(registries));
+            currentNbt.put("Inventory", inventoryNbt);
         }));
     }
 

@@ -88,7 +88,7 @@ public interface GenericNode {
     
     /** split a sting path into a list path */
     public static List<String> stringPathToListPath(String path) {
-        return new ArrayList<String>(Arrays.asList(path.split("\\.")));
+        return new ArrayList<String>(!path.isBlank() ? List.of(path.split("\\.")) : List.of());
     };
     /** join a list path into a string path */
     public static String listPathToStringPath(List<String> path) {

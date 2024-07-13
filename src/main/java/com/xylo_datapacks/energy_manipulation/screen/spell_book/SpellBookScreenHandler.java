@@ -1,6 +1,5 @@
 package com.xylo_datapacks.energy_manipulation.screen.spell_book;
 
-import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.config.SpellBookInfo;
 import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
 import com.xylo_datapacks.energy_manipulation.item.SpellBookPageItem;
@@ -18,16 +17,12 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
-import javax.swing.text.Element;
-import java.util.Stack;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class SpellBookScreenHandler extends ScreenHandler {
@@ -91,7 +86,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         inventory = new BackpackInventory(rowWidth * numberOfRows) {
             @Override
             public void markDirty() {
-                SpellBookItem.setBackpackContent(playerInventory.player.getRegistryManager(), spellBookStack, inventory);
+                SpellBookItem.setBackpackContentFromNbt(spellBookStack, this.toNbtList(playerInventory.player.getRegistryManager()));
                 super.markDirty();
             }
 
@@ -226,8 +221,10 @@ public class SpellBookScreenHandler extends ScreenHandler {
     }
 
     private void loadInventoryFromNbt(RegistryWrapper.WrapperLookup registries, ItemStack spellBookStack) {
+        Map<Integer, ItemStack> stacks = SpellBookItem.getBackpackContents(registries, spellBookStack);
+        
         inventory.clear();
-        SpellBookItem.getBackpackContents(registries, spellBookStack).forEach((slot, element) -> {
+        stacks.forEach((slot, element) -> {
             inventory.setStack(slot, element);            
         });
     }
@@ -360,7 +357,6 @@ public class SpellBookScreenHandler extends ScreenHandler {
         @Override
         public NbtList toNbtList(RegistryWrapper.WrapperLookup registries) {
             NbtList nbtList = new NbtList();
-            System.out.println("toNbtList");
             for (int i = 0; i < this.size(); i++) {
                 ItemStack itemStack = this.getStack(i);
                 if (!itemStack.isEmpty()) {

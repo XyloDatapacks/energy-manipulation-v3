@@ -84,7 +84,9 @@ public abstract class AbstractNode implements GenericNode {
             path.remove(0);
             return node.getNode().getNodeFromPath(path);
         }
-        if (!path.isEmpty()) System.out.println("path failed at: " + path);
+        if (!path.isEmpty()) {
+            System.out.println("path failed at: " + path);
+        }
         return null;
     }
     
