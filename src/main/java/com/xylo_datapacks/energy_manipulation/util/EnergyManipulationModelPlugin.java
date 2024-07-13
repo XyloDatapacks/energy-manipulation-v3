@@ -10,6 +10,6 @@ public class EnergyManipulationModelPlugin implements ModelLoadingPlugin {
     
     @Override
     public void onInitializeModelLoader(Context pluginContext) {
-        pluginContext.addModels(EnergyManipulation.id("spell_book_inv"));
+        pluginContext.addModels(EnergyManipulation.id("item/spell_book_inv"));
     }
 }
