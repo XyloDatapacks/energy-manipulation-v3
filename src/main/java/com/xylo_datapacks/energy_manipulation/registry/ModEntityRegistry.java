@@ -12,7 +12,7 @@ public class ModEntityRegistry {
     public static final EntityType<SpellEntity> SPELL = Registry.register(Registries.ENTITY_TYPE, 
             EnergyManipulation.id("spell"),
             EntityType.Builder.<SpellEntity>create(SpellEntity::new, SpawnGroup.MISC)
-                    .dimensions(0.5f, 0.5f).build());
+                    .dimensions(0.5f, 0.5f).maxTrackingRange(10).trackingTickInterval(1).build());
 
     public static final EntityType<ProjectileShapeEntity> PROJECTILE_SHAPE = Registry.register(Registries.ENTITY_TYPE,
             EnergyManipulation.id("projectile_shape"),

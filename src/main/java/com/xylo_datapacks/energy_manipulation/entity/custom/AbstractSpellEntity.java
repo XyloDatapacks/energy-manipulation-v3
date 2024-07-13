@@ -4,6 +4,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -14,7 +15,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractSpellEntity extends PersistentProjectileEntity implements SpellExecutor {
+public abstract class AbstractSpellEntity extends DisplayPersistentProjectileEntity.ItemDisplayPersistentProjectileEntity implements SpellExecutor {
     protected static final String SPELL_KEY = "spell_data";
     protected static final String CONTEXT_KEY = "context";
     protected static final String POSITION_KEY = "position";
@@ -22,7 +23,7 @@ public abstract class AbstractSpellEntity extends PersistentProjectileEntity imp
     private NbtCompound spellData = new NbtCompound();
     private SpellNode spellNode;
 
-    protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+    public AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -33,7 +34,6 @@ public abstract class AbstractSpellEntity extends PersistentProjectileEntity imp
     protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
     }
-
 
 
     /*----------------------------------------------------------------------------------------------------------------*/

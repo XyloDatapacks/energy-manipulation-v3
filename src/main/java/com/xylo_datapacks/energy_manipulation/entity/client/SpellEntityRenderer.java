@@ -1,6 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.entity.client;
 
-import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
+/*import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.entity.custom.SpellEntity;
 import com.xylo_datapacks.energy_manipulation.registry.ModEntityModelLayerRegistry;
 import net.fabricmc.api.EnvType;
@@ -40,5 +40,15 @@ public class SpellEntityRenderer extends EntityRenderer<SpellEntity> {
     @Override
     public Identifier getTexture(SpellEntity entity) {
         return TEXTURE;
+    }
+}
+*/
+
+import net.minecraft.client.render.entity.EntityRendererFactory;
+
+public class SpellEntityRenderer extends DisplayPersistentProjectileEntityRenderer.ItemDisplayPersistentProjectileEntityRenderer {
+
+    public SpellEntityRenderer(EntityRendererFactory.Context context) {
+        super(context);
     }
 }
