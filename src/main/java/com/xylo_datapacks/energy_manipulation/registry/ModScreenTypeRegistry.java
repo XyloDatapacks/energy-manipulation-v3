@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
-public class MenuTypeRegistry {
+public class ModScreenTypeRegistry {
 
     // spell book menu
     public static final ExtendedScreenHandlerType<SpellBookScreenHandler, SpellBookItem.SpellBookMenuData> SPELL_BOOK_MENU_TYPE = Registry.register(Registries.SCREEN_HANDLER, EnergyManipulation.id("spell_book_menu"), new ExtendedScreenHandlerType<>(SpellBookScreenHandler::new, SpellBookItem.SpellBookMenuData.PACKET_CODEC));

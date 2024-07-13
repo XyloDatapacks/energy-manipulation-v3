@@ -6,7 +6,7 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
-public class KeyBindingRegistry {
+public class ModKeyBindingRegistry {
     public static final String KEY_CATEGORY_TUTORIAL = "key.category." + EnergyManipulation.MOD_ID;
 
     // Keybindings

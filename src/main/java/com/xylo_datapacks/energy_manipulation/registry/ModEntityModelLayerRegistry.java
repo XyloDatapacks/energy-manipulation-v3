@@ -1,10 +1,9 @@
-package com.xylo_datapacks.energy_manipulation.entity.client;
+package com.xylo_datapacks.energy_manipulation.registry;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.util.Identifier;
 
-public class ModModelLayers {
+public class ModEntityModelLayerRegistry {
     public static final EntityModelLayer SPELL = new EntityModelLayer(
             EnergyManipulation.id("spell"), "main");
 

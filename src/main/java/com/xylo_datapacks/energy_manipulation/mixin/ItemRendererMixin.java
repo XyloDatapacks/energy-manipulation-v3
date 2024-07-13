@@ -1,7 +1,7 @@
 package com.xylo_datapacks.energy_manipulation.mixin;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
-import com.xylo_datapacks.energy_manipulation.registry.ItemRegistry;
+import com.xylo_datapacks.energy_manipulation.registry.ModItemRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class ItemRendererMixin {
     @ModifyVariable(method = "renderItem", at = @At(value = "HEAD"), argsOnly = true)
     public BakedModel useSpellBookModel(BakedModel value, ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay) {
-        if (stack.isOf(ItemRegistry.SPELL_BOOK) && renderMode == ModelTransformationMode.GUI) {
+        if (stack.isOf(ModItemRegistry.SPELL_BOOK) && renderMode == ModelTransformationMode.GUI) {
             return MinecraftClient.getInstance().getBakedModelManager().getModel(EnergyManipulation.id("spell_book_inv"));
         }
         return value;

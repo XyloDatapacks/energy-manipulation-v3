@@ -1,6 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.datagen;
 
-import com.xylo_datapacks.energy_manipulation.registry.ItemRegistry;
+import com.xylo_datapacks.energy_manipulation.registry.ModItemRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.server.recipe.RecipeExporter;
@@ -20,20 +20,20 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 
     @Override
     public void generate(RecipeExporter exporter) {
-        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, ItemRegistry.SPELL_BOOK, 1)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, ModItemRegistry.SPELL_BOOK, 1)
                 .input(Items.ENCHANTED_BOOK)
                 .input(Items.BLAZE_POWDER)
                 .criterion(hasItem(Items.ENCHANTED_BOOK), conditionsFromItem(Items.ENCHANTED_BOOK))
                 .criterion(hasItem(Items.BLAZE_POWDER), conditionsFromItem(Items.BLAZE_POWDER))
-                .offerTo(exporter, Identifier.of(getRecipeName(ItemRegistry.SPELL_BOOK)));
+                .offerTo(exporter, Identifier.of(getRecipeName(ModItemRegistry.SPELL_BOOK)));
 
-        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, ItemRegistry.SPELL_BOOK_PAGE, 1)
+        ShapelessRecipeJsonBuilder.create(RecipeCategory.MISC, ModItemRegistry.SPELL_BOOK_PAGE, 1)
                 .input(Items.PAPER)
                 .input(Items.INK_SAC)
                 .input(Items.BLAZE_POWDER)
                 .criterion(hasItem(Items.PAPER), conditionsFromItem(Items.PAPER))
                 .criterion(hasItem(Items.INK_SAC), conditionsFromItem(Items.INK_SAC))
                 .criterion(hasItem(Items.BLAZE_POWDER), conditionsFromItem(Items.BLAZE_POWDER))
-                .offerTo(exporter, Identifier.of(getRecipeName(ItemRegistry.SPELL_BOOK_PAGE)));
+                .offerTo(exporter, Identifier.of(getRecipeName(ModItemRegistry.SPELL_BOOK_PAGE)));
     }
 }

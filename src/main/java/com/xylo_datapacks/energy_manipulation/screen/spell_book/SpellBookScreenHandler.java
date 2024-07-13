@@ -6,7 +6,7 @@ import com.xylo_datapacks.energy_manipulation.item.SpellBookPageItem;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.gui.GuiManager;
 import com.xylo_datapacks.energy_manipulation.api.Dimension;
 import com.xylo_datapacks.energy_manipulation.api.Point;
-import com.xylo_datapacks.energy_manipulation.registry.MenuTypeRegistry;
+import com.xylo_datapacks.energy_manipulation.registry.ModScreenTypeRegistry;
 import net.minecraft.block.ShulkerBoxBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -61,7 +61,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
     }
 
     public SpellBookScreenHandler(int synchronizationID, PlayerInventory playerInventory, ItemStack spellBookStack) {
-        super(MenuTypeRegistry.SPELL_BOOK_MENU_TYPE, synchronizationID);
+        super(ModScreenTypeRegistry.SPELL_BOOK_MENU_TYPE, synchronizationID);
         this.spellBookStack = spellBookStack;
         this.guiManager = new GuiManager(null);
         

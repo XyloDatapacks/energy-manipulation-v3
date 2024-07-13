@@ -2,6 +2,7 @@ package com.xylo_datapacks.energy_manipulation.entity.client;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.entity.custom.SpellEntity;
+import com.xylo_datapacks.energy_manipulation.registry.ModEntityModelLayerRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.OverlayTexture;
@@ -11,12 +12,9 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
-
-import java.awt.*;
 
 @Environment(value= EnvType.CLIENT)
 public class SpellEntityRenderer extends EntityRenderer<SpellEntity> {
@@ -25,7 +23,7 @@ public class SpellEntityRenderer extends EntityRenderer<SpellEntity> {
     
     public SpellEntityRenderer(EntityRendererFactory.Context context) {
         super(context);
-        this.model = new SpellEntityModel(context.getPart(ModModelLayers.SPELL));
+        this.model = new SpellEntityModel(context.getPart(ModEntityModelLayerRegistry.SPELL));
     }
 
     @Override

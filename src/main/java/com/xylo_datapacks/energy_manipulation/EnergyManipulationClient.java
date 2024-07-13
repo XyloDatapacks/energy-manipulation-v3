@@ -1,14 +1,14 @@
 package com.xylo_datapacks.energy_manipulation;
 
-import com.xylo_datapacks.energy_manipulation.registry.EntityRegistry;
-import com.xylo_datapacks.energy_manipulation.entity.client.ModModelLayers;
+import com.xylo_datapacks.energy_manipulation.registry.ModEntityRegistry;
+import com.xylo_datapacks.energy_manipulation.registry.ModEntityModelLayerRegistry;
 import com.xylo_datapacks.energy_manipulation.entity.client.ProjectileShapeEntityRenderer;
 import com.xylo_datapacks.energy_manipulation.entity.client.SpellEntityModel;
 import com.xylo_datapacks.energy_manipulation.entity.client.SpellEntityRenderer;
 import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
 import com.xylo_datapacks.energy_manipulation.networking.packet.OpenSpellBookC2SPacket;
-import com.xylo_datapacks.energy_manipulation.registry.KeyBindingRegistry;
-import com.xylo_datapacks.energy_manipulation.registry.MenuTypeRegistry;
+import com.xylo_datapacks.energy_manipulation.registry.ModKeyBindingRegistry;
+import com.xylo_datapacks.energy_manipulation.registry.ModScreenTypeRegistry;
 import com.xylo_datapacks.energy_manipulation.screen.spell_book.SpellBookHandledScreen;
 import com.xylo_datapacks.energy_manipulation.util.EnergyManipulationModelPlugin;
 import com.xylo_datapacks.energy_manipulation.util.ModModelPredicateProvider;
@@ -26,23 +26,23 @@ public class EnergyManipulationClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         
-        KeyBindingRegistry.init();
+        ModKeyBindingRegistry.init();
         registerKeyInputs();
         ModPackets.initClient();
         
         ModModelPredicateProvider.registerModModels();
         ModelLoadingPlugin.register(new EnergyManipulationModelPlugin());
         
-        HandledScreens.register(MenuTypeRegistry.SPELL_BOOK_MENU_TYPE, SpellBookHandledScreen::new);
+        HandledScreens.register(ModScreenTypeRegistry.SPELL_BOOK_MENU_TYPE, SpellBookHandledScreen::new);
 
         /*------------------------------------------------------------------------------------ -----------------------*/
         /* register entity models */
 
         // spell
-        EntityRendererRegistry.register(EntityRegistry.SPELL, SpellEntityRenderer::new);
-        EntityModelLayerRegistry.registerModelLayer(ModModelLayers.SPELL, SpellEntityModel::getTexturedModelData);
+        EntityRendererRegistry.register(ModEntityRegistry.SPELL, SpellEntityRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(ModEntityModelLayerRegistry.SPELL, SpellEntityModel::getTexturedModelData);
         // projectile shape
-        EntityRendererRegistry.register(EntityRegistry.PROJECTILE_SHAPE, ProjectileShapeEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntityRegistry.PROJECTILE_SHAPE, ProjectileShapeEntityRenderer::new);
 
         /*------------------------------------------------------------------------------------ -----------------------*/
         
@@ -55,7 +55,7 @@ public class EnergyManipulationClient implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
 
             // Check key press
-            if (KeyBindingRegistry.OPEN_SPELL_BOOK_MENU_KEY.isPressed() && client.player != null) {
+            if (ModKeyBindingRegistry.OPEN_SPELL_BOOK_MENU_KEY.isPressed() && client.player != null) {
                 // call Custom Action Server RPC
                 ClientPlayNetworking.send(new OpenSpellBookC2SPacket(0));
                 //client.setScreen(new MyDataDrivenScreen());

@@ -3,14 +3,12 @@ package com.xylo_datapacks.energy_manipulation.registry;
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.entity.custom.ProjectileShapeEntity;
 import com.xylo_datapacks.energy_manipulation.entity.custom.SpellEntity;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
-public class EntityRegistry {
+public class ModEntityRegistry {
     public static final EntityType<SpellEntity> SPELL = Registry.register(Registries.ENTITY_TYPE, 
             EnergyManipulation.id("spell"),
             EntityType.Builder.<SpellEntity>create(SpellEntity::new, SpawnGroup.MISC)

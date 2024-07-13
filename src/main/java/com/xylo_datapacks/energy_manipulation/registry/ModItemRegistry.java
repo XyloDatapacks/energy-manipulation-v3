@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
-public class ItemRegistry {
+public class ModItemRegistry {
 
     public static final Item SPELL_BOOK = registerItem("spell_book", new SpellBookItem(new Item.Settings().component(DataComponentTypes.MAX_DAMAGE, 100)));
     public static final Item SPELL_BOOK_PAGE = registerItem("spell_book_page", new SpellBookPageItem(new Item.Settings()));

@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
-public class BlockRegistry {
+public class ModBlockRegistry {
 
 
 

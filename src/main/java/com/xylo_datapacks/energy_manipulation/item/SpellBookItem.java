@@ -1,7 +1,7 @@
 package com.xylo_datapacks.energy_manipulation.item;
 
 import com.xylo_datapacks.energy_manipulation.config.SpellBookInfo;
-import com.xylo_datapacks.energy_manipulation.registry.EntityRegistry;
+import com.xylo_datapacks.energy_manipulation.registry.ModEntityRegistry;
 import com.xylo_datapacks.energy_manipulation.entity.custom.SpellEntity;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
@@ -85,7 +85,7 @@ public class SpellBookItem extends Item implements FabricItem {
     
     public void runSpell(World world, PlayerEntity user, Hand hand, ItemStack itemStack) {
         SpellNode spellNode = getSpellNode(user, itemStack);
-        SpellEntity spell = EntityRegistry.SPELL.spawn((ServerWorld) world, user.getBlockPos(), SpawnReason.TRIGGERED);
+        SpellEntity spell = ModEntityRegistry.SPELL.spawn((ServerWorld) world, user.getBlockPos(), SpawnReason.TRIGGERED);
         if (spell != null) {
             spell.setOwner(user);
             spell.setSpellNode(spellNode);

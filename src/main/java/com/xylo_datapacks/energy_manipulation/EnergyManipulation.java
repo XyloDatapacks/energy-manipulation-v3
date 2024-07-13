@@ -21,12 +21,12 @@ public class EnergyManipulation implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Initializing " + MOD_ID);
 		
-		CreativeTabRegistry.init();
-		ItemRegistry.init();
-		BlockRegistry.init();
-		EntityRegistry.init();
-		DataComponentRegistry.init();
-		MenuTypeRegistry.init();
+		ModCreativeTabRegistry.init();
+		ModItemRegistry.init();
+		ModBlockRegistry.init();
+		ModEntityRegistry.init();
+		ModDataComponentRegistry.init();
+		ModScreenTypeRegistry.init();
 		
 		ModPackets.initServer();
 	}

@@ -8,7 +8,7 @@ import net.minecraft.util.dynamic.Codecs;
 
 import java.util.function.UnaryOperator;
 
-public class DataComponentRegistry {
+public class ModDataComponentRegistry {
 
     public static final ComponentType<Integer> TEST_COMPONENT = registerComponent("test_component", builder -> builder.codec(Codecs.NONNEGATIVE_INT).packetCodec(PacketCodecs.VAR_INT));
     
