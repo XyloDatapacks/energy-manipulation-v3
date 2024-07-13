@@ -11,13 +11,13 @@ import net.fabricmc.fabric.api.item.v1.FabricItem;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
-import net.minecraft.component.type.ContainerComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -289,9 +289,9 @@ public class SpellBookItem extends Item implements FabricItem {
         return stacks;
     }
     
-    public static void setBackpackContentFromNbt(ItemStack stack, NbtList inventoryNbt)  {
+    public static void setBackpackContent(ItemStack stack, SimpleInventory inventory, RegistryWrapper.WrapperLookup registries)  {
         stack.apply(DataComponentTypes.CUSTOM_DATA, NbtComponent.DEFAULT, comp -> comp.apply(currentNbt -> {
-            currentNbt.put("Inventory", inventoryNbt);
+            currentNbt.put("Inventory", inventory.toNbtList(registries));
         }));
     }
 

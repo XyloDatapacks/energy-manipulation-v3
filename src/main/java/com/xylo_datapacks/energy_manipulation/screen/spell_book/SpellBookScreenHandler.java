@@ -86,7 +86,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         inventory = new BackpackInventory(rowWidth * numberOfRows) {
             @Override
             public void markDirty() {
-                SpellBookItem.setBackpackContentFromNbt(spellBookStack, this.toNbtList(playerInventory.player.getRegistryManager()));
+                SpellBookItem.setBackpackContent(spellBookStack, this, playerInventory.player.getRegistryManager());
                 super.markDirty();
             }
 
@@ -365,7 +365,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
                     nbtList.add(itemStackCompound);
                 }
             }
-
+            
             return nbtList;
         }
 
