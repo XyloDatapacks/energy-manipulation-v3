@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class SpellEntity extends AbstractSpellEntity {
     
-    public SpellEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+    public SpellEntity(EntityType<? extends SpellEntity> entityType, World world) {
         super(ModEntityRegistry.SPELL, world);
     }
 

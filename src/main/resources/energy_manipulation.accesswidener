@@ -20,3 +20,4 @@ accessible field net/minecraft/entity/decoration/DisplayEntity$RenderState shado
 accessible method net/minecraft/entity/decoration/DisplayEntity$AffineTransformationInterpolator <init> (Lnet/minecraft/util/math/AffineTransformation;Lnet/minecraft/util/math/AffineTransformation;)V
 accessible method net/minecraft/entity/decoration/DisplayEntity$FloatLerperImpl <init> (FF)V
 
+accessible field net/minecraft/entity/decoration/DisplayEntity LOGGER Lorg/slf4j/Logger;

@@ -11,15 +11,15 @@ import org.jetbrains.annotations.Nullable;
 public abstract class AbstractShapeEntity extends AbstractSpellEntity {
 
 
-    protected AbstractShapeEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+    protected AbstractShapeEntity(EntityType<? extends AbstractShapeEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    protected AbstractShapeEntity(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
+    protected AbstractShapeEntity(EntityType<? extends AbstractShapeEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(type, x, y, z, world, stack, weapon);
     }
 
-    protected AbstractShapeEntity(EntityType<? extends PersistentProjectileEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
+    protected AbstractShapeEntity(EntityType<? extends AbstractShapeEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
     }
 }

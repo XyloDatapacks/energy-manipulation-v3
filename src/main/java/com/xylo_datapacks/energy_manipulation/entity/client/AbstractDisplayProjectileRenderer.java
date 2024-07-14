@@ -92,7 +92,7 @@ public abstract class AbstractDisplayProjectileRenderer<T extends AbstractDispla
 
 
     @Environment(EnvType.CLIENT)
-    public static class ItemDisplayProjectileRenderer extends AbstractDisplayProjectileRenderer<AbstractDisplayProjectile, DisplayEntity.ItemDisplayEntity.Data> {
+    public static class ItemDisplayProjectileRenderer extends AbstractDisplayProjectileRenderer<AbstractDisplayProjectile.AbstractItemDisplayProjectile, DisplayEntity.ItemDisplayEntity.Data> {
         private final ItemRenderer itemRenderer;
 
         protected ItemDisplayProjectileRenderer(EntityRendererFactory.Context context) {
@@ -101,12 +101,12 @@ public abstract class AbstractDisplayProjectileRenderer<T extends AbstractDispla
         }
 
         @Nullable
-        protected DisplayEntity.ItemDisplayEntity.Data getData(AbstractDisplayProjectile itemAbstractDisplayProjectile) {
+        protected DisplayEntity.ItemDisplayEntity.Data getData(AbstractDisplayProjectile.AbstractItemDisplayProjectile itemAbstractDisplayProjectile) {
             return itemAbstractDisplayProjectile.getData();
         }
 
         public void render(
-                AbstractDisplayProjectile itemAbstractDisplayProjectile,
+                AbstractDisplayProjectile.AbstractItemDisplayProjectile itemAbstractDisplayProjectile,
                 DisplayEntity.ItemDisplayEntity.Data data,
                 MatrixStack matrixStack,
                 VertexConsumerProvider vertexConsumerProvider,

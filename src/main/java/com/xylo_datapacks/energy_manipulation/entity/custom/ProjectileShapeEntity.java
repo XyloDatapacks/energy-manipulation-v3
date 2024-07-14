@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ProjectileShapeEntity extends AbstractShapeEntity {
     
-    public ProjectileShapeEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+    public ProjectileShapeEntity(EntityType<? extends ProjectileShapeEntity> entityType, World world) {
         super(ModEntityRegistry.PROJECTILE_SHAPE, world);
     }
 

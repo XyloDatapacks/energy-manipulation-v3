@@ -16,7 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractSpellEntity extends AbstractDisplayProjectile implements SpellExecutor {
+public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.AbstractItemDisplayProjectile implements SpellExecutor {
     protected static final String SPELL_KEY = "spell_data";
     protected static final String CONTEXT_KEY = "context";
     protected static final String POSITION_KEY = "position";
@@ -24,15 +24,15 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile impl
     private NbtCompound spellData = new NbtCompound();
     private SpellNode spellNode;
 
-    public AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+    public AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
+    protected AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(type, x, y, z, world, stack, weapon);
     }
 
-    protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
+    protected AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
     }
 

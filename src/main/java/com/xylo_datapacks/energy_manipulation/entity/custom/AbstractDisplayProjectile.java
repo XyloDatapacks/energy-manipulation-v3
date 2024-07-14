@@ -3,7 +3,7 @@ package com.xylo_datapacks.energy_manipulation.entity.custom;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.entity.Entity;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
@@ -12,6 +12,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.decoration.Brightness;
 import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -28,33 +29,32 @@ import org.slf4j.Logger;
 
 public abstract class AbstractDisplayProjectile extends PersistentProjectileEntity {
     
-    protected AbstractDisplayProjectile(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
+    protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> entityType, World world) {
         super(entityType, world);
         //this.noClip = true;
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
 
-    protected AbstractDisplayProjectile(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
+    protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(type, x, y, z, world, stack, weapon);
         //this.noClip = true;
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
 
-    protected AbstractDisplayProjectile(EntityType<? extends PersistentProjectileEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
+    protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
         //this.noClip = true;
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
 
-    
+
     
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /* Item Display implementation */
+    //region Display Entity implementation
 
     static final Logger LOGGER = LogUtils.getLogger();
     public static final int field_42384 = -1;
@@ -134,10 +134,11 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
 
     @Override
     public void tick() {
-        Entity entity = this.getVehicle();
+        super.tick();
+        /*Entity entity = this.getVehicle();
         if (entity != null && entity.isRemoved()) {
             this.stopRiding();
-        }
+        }*/
 
         if (this.getWorld().isClient) {
             if (this.startInterpolationSet) {
@@ -183,6 +184,7 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
 
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
+        super.initDataTracker(builder);
         builder.add(TELEPORT_DURATION, 0);
         builder.add(START_INTERPOLATION, 0);
         builder.add(INTERPOLATION_DURATION, 0);
@@ -508,9 +510,118 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
                 this.getGlowColorOverride()
         );
     }
+
+
     
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+    //region Item Display Entity implementation
+
+    public abstract static class AbstractItemDisplayProjectile extends AbstractDisplayProjectile {
+        private static final String ITEM_NBT_KEY = "item";
+        private static final String ITEM_DISPLAY_NBT_KEY = "item_display";
+        private static final TrackedData<ItemStack> ITEM = DataTracker.registerData(AbstractItemDisplayProjectile.class, TrackedDataHandlerRegistry.ITEM_STACK);
+        private static final TrackedData<Byte> ITEM_DISPLAY = DataTracker.registerData(AbstractItemDisplayProjectile.class, TrackedDataHandlerRegistry.BYTE);
+        private final StackReference stackReference = StackReference.of(this::getItemStack, this::setItemStack);
+        @Nullable
+        private DisplayEntity.ItemDisplayEntity.Data data;
+
+        protected AbstractItemDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> entityType, World world) {
+            super(entityType, world);
+        }
+
+        protected AbstractItemDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
+            super(type, x, y, z, world, stack, weapon);
+        }
+
+        protected AbstractItemDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
+            super(type, owner, world, stack, shotFrom);
+        }
+
+
+        @Override
+        protected void initDataTracker(DataTracker.Builder builder) {
+            super.initDataTracker(builder);
+            builder.add(ITEM, ItemStack.EMPTY);
+            builder.add(ITEM_DISPLAY, ModelTransformationMode.NONE.getIndex());
+        }
+
+        @Override
+        public void onTrackedDataSet(TrackedData<?> data) {
+            super.onTrackedDataSet(data);
+            if (ITEM.equals(data) || ITEM_DISPLAY.equals(data)) {
+                this.renderingDataSet = true;
+            }
+        }
+
+        public ItemStack getItemStack() {
+            return this.dataTracker.get(ITEM);
+        }
+
+        private void setItemStack(ItemStack stack) {
+            this.dataTracker.set(ITEM, stack);
+        }
+
+        private void setTransformationMode(ModelTransformationMode transformationMode) {
+            this.dataTracker.set(ITEM_DISPLAY, transformationMode.getIndex());
+        }
+
+        private ModelTransformationMode getTransformationMode() {
+            return (ModelTransformationMode)ModelTransformationMode.FROM_INDEX.apply(this.dataTracker.get(ITEM_DISPLAY));
+        }
+
+        @Override
+        public void readCustomDataFromNbt(NbtCompound nbt) {
+            super.readCustomDataFromNbt(nbt);
+            if (nbt.contains("item")) {
+                this.setItemStack((ItemStack)ItemStack.fromNbt(this.getRegistryManager(), nbt.getCompound("item")).orElse(ItemStack.EMPTY));
+            } else {
+                this.setItemStack(ItemStack.EMPTY);
+            }
+
+            if (nbt.contains("item_display", NbtElement.STRING_TYPE)) {
+                ModelTransformationMode.CODEC
+                        .decode(NbtOps.INSTANCE, nbt.get("item_display"))
+                        .resultOrPartial(Util.addPrefix("Display entity", DisplayEntity.LOGGER::error))
+                        .ifPresent(mode -> this.setTransformationMode((ModelTransformationMode)mode.getFirst()));
+            }
+        }
+
+        @Override
+        public void writeCustomDataToNbt(NbtCompound nbt) {
+            super.writeCustomDataToNbt(nbt);
+            if (!this.getItemStack().isEmpty()) {
+                nbt.put("item", this.getItemStack().encode(this.getRegistryManager()));
+            }
+
+            ModelTransformationMode.CODEC.encodeStart(NbtOps.INSTANCE, this.getTransformationMode()).ifSuccess(nbtx -> nbt.put("item_display", nbtx));
+        }
+
+        @Override
+        public StackReference getStackReference(int mappedIndex) {
+            return mappedIndex == 0 ? this.stackReference : StackReference.EMPTY;
+        }
+
+        @Nullable
+        public DisplayEntity.ItemDisplayEntity.Data getData() {
+            return this.data;
+        }
+
+        @Override
+        protected void refreshData(boolean shouldLerp, float lerpProgress) {
+            ItemStack itemStack = this.getItemStack();
+            itemStack.setHolder(this);
+            this.data = new DisplayEntity.ItemDisplayEntity.Data(itemStack, this.getTransformationMode());
+        }
+
+        public static record Data(ItemStack itemStack, ModelTransformationMode itemTransform) {
+        }
+    }
+
+    //endregion
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //endregion
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     
     
