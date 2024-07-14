@@ -31,21 +31,18 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
     
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> entityType, World world) {
         super(entityType, world);
-        //this.noClip = true;
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
 
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(type, x, y, z, world, stack, weapon);
-        //this.noClip = true;
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
 
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
-        //this.noClip = true;
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
@@ -205,62 +202,62 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        if (nbt.contains("transformation")) {
+        if (nbt.contains(TRANSFORMATION_NBT_KEY)) {
             AffineTransformation.ANY_CODEC
-                    .decode(NbtOps.INSTANCE, nbt.get("transformation"))
+                    .decode(NbtOps.INSTANCE, nbt.get(TRANSFORMATION_NBT_KEY))
                     .resultOrPartial(Util.addPrefix("Display entity", LOGGER::error))
                     .ifPresent(pair -> this.setTransformation((AffineTransformation)pair.getFirst()));
         }
 
-        if (nbt.contains("interpolation_duration", NbtElement.NUMBER_TYPE)) {
-            int i = nbt.getInt("interpolation_duration");
+        if (nbt.contains(INTERPOLATION_DURATION_KEY, NbtElement.NUMBER_TYPE)) {
+            int i = nbt.getInt(INTERPOLATION_DURATION_KEY);
             this.setInterpolationDuration(i);
         }
 
-        if (nbt.contains("start_interpolation", NbtElement.NUMBER_TYPE)) {
-            int i = nbt.getInt("start_interpolation");
+        if (nbt.contains(START_INTERPOLATION_KEY, NbtElement.NUMBER_TYPE)) {
+            int i = nbt.getInt(START_INTERPOLATION_KEY);
             this.setStartInterpolation(i);
         }
 
-        if (nbt.contains("teleport_duration", NbtElement.NUMBER_TYPE)) {
-            int i = nbt.getInt("teleport_duration");
+        if (nbt.contains(TELEPORT_DURATION_KEY, NbtElement.NUMBER_TYPE)) {
+            int i = nbt.getInt(TELEPORT_DURATION_KEY);
             this.setTeleportDuration(MathHelper.clamp(i, 0, 59));
         }
 
-        if (nbt.contains("billboard", NbtElement.STRING_TYPE)) {
+        if (nbt.contains(BILLBOARD_NBT_KEY, NbtElement.STRING_TYPE)) {
             DisplayEntity.BillboardMode.CODEC
-                    .decode(NbtOps.INSTANCE, nbt.get("billboard"))
+                    .decode(NbtOps.INSTANCE, nbt.get(BILLBOARD_NBT_KEY))
                     .resultOrPartial(Util.addPrefix("Display entity", LOGGER::error))
                     .ifPresent(pair -> this.setBillboardMode((DisplayEntity.BillboardMode)pair.getFirst()));
         }
 
-        if (nbt.contains("view_range", NbtElement.NUMBER_TYPE)) {
-            this.setViewRange(nbt.getFloat("view_range"));
+        if (nbt.contains(VIEW_RANGE_NBT_KEY, NbtElement.NUMBER_TYPE)) {
+            this.setViewRange(nbt.getFloat(VIEW_RANGE_NBT_KEY));
         }
 
-        if (nbt.contains("shadow_radius", NbtElement.NUMBER_TYPE)) {
-            this.setShadowRadius(nbt.getFloat("shadow_radius"));
+        if (nbt.contains(SHADOW_RADIUS_NBT_KEY, NbtElement.NUMBER_TYPE)) {
+            this.setShadowRadius(nbt.getFloat(SHADOW_RADIUS_NBT_KEY));
         }
 
-        if (nbt.contains("shadow_strength", NbtElement.NUMBER_TYPE)) {
-            this.setShadowStrength(nbt.getFloat("shadow_strength"));
+        if (nbt.contains(SHADOW_STRENGTH_NBT_KEY, NbtElement.NUMBER_TYPE)) {
+            this.setShadowStrength(nbt.getFloat(SHADOW_STRENGTH_NBT_KEY));
         }
 
-        if (nbt.contains("width", NbtElement.NUMBER_TYPE)) {
-            this.setDisplayWidth(nbt.getFloat("width"));
+        if (nbt.contains(WIDTH_NBT_KEY, NbtElement.NUMBER_TYPE)) {
+            this.setDisplayWidth(nbt.getFloat(WIDTH_NBT_KEY));
         }
 
-        if (nbt.contains("height", NbtElement.NUMBER_TYPE)) {
-            this.setDisplayHeight(nbt.getFloat("height"));
+        if (nbt.contains(HEIGHT_NBT_KEY, NbtElement.NUMBER_TYPE)) {
+            this.setDisplayHeight(nbt.getFloat(HEIGHT_NBT_KEY));
         }
 
-        if (nbt.contains("glow_color_override", NbtElement.NUMBER_TYPE)) {
-            this.setGlowColorOverride(nbt.getInt("glow_color_override"));
+        if (nbt.contains(GLOW_COLOR_OVERRIDE_NBT_KEY, NbtElement.NUMBER_TYPE)) {
+            this.setGlowColorOverride(nbt.getInt(GLOW_COLOR_OVERRIDE_NBT_KEY));
         }
 
-        if (nbt.contains("brightness", NbtElement.COMPOUND_TYPE)) {
+        if (nbt.contains(BRIGHTNESS_NBT_KEY, NbtElement.COMPOUND_TYPE)) {
             Brightness.CODEC
-                    .decode(NbtOps.INSTANCE, nbt.get("brightness"))
+                    .decode(NbtOps.INSTANCE, nbt.get(BRIGHTNESS_NBT_KEY))
                     .resultOrPartial(Util.addPrefix("Display entity", LOGGER::error))
                     .ifPresent(pair -> this.setBrightness((Brightness)pair.getFirst()));
         } else {
@@ -273,19 +270,19 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
         super.writeCustomDataToNbt(nbt);
         AffineTransformation.ANY_CODEC
                 .encodeStart(NbtOps.INSTANCE, getTransformation(this.dataTracker))
-                .ifSuccess(transformations -> nbt.put("transformation", transformations));
-        DisplayEntity.BillboardMode.CODEC.encodeStart(NbtOps.INSTANCE, this.getBillboardMode()).ifSuccess(billboard -> nbt.put("billboard", billboard));
-        nbt.putInt("interpolation_duration", this.getInterpolationDuration());
-        nbt.putInt("teleport_duration", this.getTeleportDuration());
-        nbt.putFloat("view_range", this.getViewRange());
-        nbt.putFloat("shadow_radius", this.getShadowRadius());
-        nbt.putFloat("shadow_strength", this.getShadowStrength());
-        nbt.putFloat("width", this.getDisplayWidth());
-        nbt.putFloat("height", this.getDisplayHeight());
-        nbt.putInt("glow_color_override", this.getGlowColorOverride());
+                .ifSuccess(transformations -> nbt.put(TRANSFORMATION_NBT_KEY, transformations));
+        DisplayEntity.BillboardMode.CODEC.encodeStart(NbtOps.INSTANCE, this.getBillboardMode()).ifSuccess(billboard -> nbt.put(BILLBOARD_NBT_KEY, billboard));
+        nbt.putInt(INTERPOLATION_DURATION_KEY, this.getInterpolationDuration());
+        nbt.putInt(TELEPORT_DURATION_KEY, this.getTeleportDuration());
+        nbt.putFloat(VIEW_RANGE_NBT_KEY, this.getViewRange());
+        nbt.putFloat(SHADOW_RADIUS_NBT_KEY, this.getShadowRadius());
+        nbt.putFloat(SHADOW_STRENGTH_NBT_KEY, this.getShadowStrength());
+        nbt.putFloat(WIDTH_NBT_KEY, this.getDisplayWidth());
+        nbt.putFloat(HEIGHT_NBT_KEY, this.getDisplayHeight());
+        nbt.putInt(GLOW_COLOR_OVERRIDE_NBT_KEY, this.getGlowColorOverride());
         Brightness brightness = this.getBrightnessUnpacked();
         if (brightness != null) {
-            Brightness.CODEC.encodeStart(NbtOps.INSTANCE, brightness).ifSuccess(brightnessx -> nbt.put("brightness", brightnessx));
+            Brightness.CODEC.encodeStart(NbtOps.INSTANCE, brightness).ifSuccess(brightnessx -> nbt.put(BRIGHTNESS_NBT_KEY, brightnessx));
         }
     }
 
@@ -572,15 +569,15 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
         @Override
         public void readCustomDataFromNbt(NbtCompound nbt) {
             super.readCustomDataFromNbt(nbt);
-            if (nbt.contains("item")) {
-                this.setItemStack((ItemStack)ItemStack.fromNbt(this.getRegistryManager(), nbt.getCompound("item")).orElse(ItemStack.EMPTY));
+            if (nbt.contains(ITEM_NBT_KEY)) {
+                this.setItemStack((ItemStack)ItemStack.fromNbt(this.getRegistryManager(), nbt.getCompound(ITEM_NBT_KEY)).orElse(ItemStack.EMPTY));
             } else {
                 this.setItemStack(ItemStack.EMPTY);
             }
 
-            if (nbt.contains("item_display", NbtElement.STRING_TYPE)) {
+            if (nbt.contains(ITEM_DISPLAY_NBT_KEY, NbtElement.STRING_TYPE)) {
                 ModelTransformationMode.CODEC
-                        .decode(NbtOps.INSTANCE, nbt.get("item_display"))
+                        .decode(NbtOps.INSTANCE, nbt.get(ITEM_DISPLAY_NBT_KEY))
                         .resultOrPartial(Util.addPrefix("Display entity", DisplayEntity.LOGGER::error))
                         .ifPresent(mode -> this.setTransformationMode((ModelTransformationMode)mode.getFirst()));
             }
@@ -590,10 +587,10 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
         public void writeCustomDataToNbt(NbtCompound nbt) {
             super.writeCustomDataToNbt(nbt);
             if (!this.getItemStack().isEmpty()) {
-                nbt.put("item", this.getItemStack().encode(this.getRegistryManager()));
+                nbt.put(ITEM_NBT_KEY, this.getItemStack().encode(this.getRegistryManager()));
             }
 
-            ModelTransformationMode.CODEC.encodeStart(NbtOps.INSTANCE, this.getTransformationMode()).ifSuccess(nbtx -> nbt.put("item_display", nbtx));
+            ModelTransformationMode.CODEC.encodeStart(NbtOps.INSTANCE, this.getTransformationMode()).ifSuccess(nbtx -> nbt.put(ITEM_DISPLAY_NBT_KEY, nbtx));
         }
 
         @Override
