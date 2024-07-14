@@ -4,7 +4,6 @@ import com.xylo_datapacks.energy_manipulation.entity.client.DisplayPersistentPro
 import com.xylo_datapacks.energy_manipulation.registry.ModEntityRegistry;
 import com.xylo_datapacks.energy_manipulation.registry.ModEntityModelLayerRegistry;
 import com.xylo_datapacks.energy_manipulation.entity.client.ProjectileShapeEntityRenderer;
-import com.xylo_datapacks.energy_manipulation.entity.client.SpellEntityModel;
 import com.xylo_datapacks.energy_manipulation.entity.client.SpellEntityRenderer;
 import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
 import com.xylo_datapacks.energy_manipulation.networking.packet.OpenSpellBookC2SPacket;

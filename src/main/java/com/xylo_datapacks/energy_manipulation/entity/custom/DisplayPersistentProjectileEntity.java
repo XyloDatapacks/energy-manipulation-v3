@@ -373,7 +373,7 @@ public abstract class DisplayPersistentProjectileEntity extends PersistentProjec
         return this.dataTracker.get(START_INTERPOLATION);
     }
 
-    private void setTeleportDuration(int teleportDuration) {
+    protected void setTeleportDuration(int teleportDuration) {
         this.dataTracker.set(TELEPORT_DURATION, teleportDuration);
     }
 
