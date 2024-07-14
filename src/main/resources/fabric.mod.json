@@ -36,5 +36,6 @@
 	},
 	"suggests": {
 		"another-mod": "*"
-	}
+	},
+	"accessWidener" : "energy_manipulation.accesswidener"
 }

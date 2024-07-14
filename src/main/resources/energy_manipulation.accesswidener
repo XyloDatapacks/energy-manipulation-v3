@@ -1,0 +1,22 @@
+accessWidener v2 named
+
+accessible method net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget <init> (IDDDDD)V
+accessible field net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget x D
+accessible field net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget y D
+accessible field net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget z D
+accessible field net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget pitch D
+accessible field net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget yaw D
+accessible field net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget step I
+accessible method net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget applyInterpolated (Lnet/minecraft/entity/Entity;)V
+accessible method net/minecraft/entity/decoration/DisplayEntity$InterpolationTarget apply (Lnet/minecraft/entity/Entity;)V
+
+
+accessible method net/minecraft/entity/decoration/DisplayEntity$BillboardMode getIndex ()B
+
+
+accessible field net/minecraft/entity/decoration/DisplayEntity$RenderState transformation Lnet/minecraft/entity/decoration/DisplayEntity$AbstractInterpolator;
+accessible field net/minecraft/entity/decoration/DisplayEntity$RenderState shadowRadius Lnet/minecraft/entity/decoration/DisplayEntity$FloatLerper;
+accessible field net/minecraft/entity/decoration/DisplayEntity$RenderState shadowStrength Lnet/minecraft/entity/decoration/DisplayEntity$FloatLerper;
+accessible method net/minecraft/entity/decoration/DisplayEntity$AffineTransformationInterpolator <init> (Lnet/minecraft/util/math/AffineTransformation;Lnet/minecraft/util/math/AffineTransformation;)V
+accessible method net/minecraft/entity/decoration/DisplayEntity$FloatLerperImpl <init> (FF)V
+
