@@ -1,6 +1,6 @@
 package com.xylo_datapacks.energy_manipulation;
 
-import com.xylo_datapacks.energy_manipulation.entity.client.DisplayPersistentProjectileEntityRenderer;
+
 import com.xylo_datapacks.energy_manipulation.registry.ModEntityRegistry;
 import com.xylo_datapacks.energy_manipulation.registry.ModEntityModelLayerRegistry;
 import com.xylo_datapacks.energy_manipulation.entity.client.ProjectileShapeEntityRenderer;
@@ -40,7 +40,6 @@ public class EnergyManipulationClient implements ClientModInitializer {
 
         // spell
         EntityRendererRegistry.register(ModEntityRegistry.SPELL, SpellEntityRenderer::new);
-        //EntityModelLayerRegistry.registerModelLayer(ModEntityModelLayerRegistry.SPELL, SpellEntityModel::getTexturedModelData);
         // projectile shape
         EntityRendererRegistry.register(ModEntityRegistry.PROJECTILE_SHAPE, ProjectileShapeEntityRenderer::new);
 
