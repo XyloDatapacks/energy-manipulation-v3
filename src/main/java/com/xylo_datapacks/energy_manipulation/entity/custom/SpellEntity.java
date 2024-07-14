@@ -13,14 +13,17 @@ public class SpellEntity extends AbstractSpellEntity {
     
     public SpellEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
         super(ModEntityRegistry.SPELL, world);
+        this.setNoGravity(true);
     }
 
-    protected SpellEntity(double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
+    public SpellEntity(double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(ModEntityRegistry.SPELL, x, y, z, world, stack, weapon);
+        this.setNoGravity(true);
     }
 
-    protected SpellEntity(LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
+    public SpellEntity(LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(ModEntityRegistry.SPELL, owner, world, stack, shotFrom);
+        this.setNoGravity(true);
     }
     
     @Override

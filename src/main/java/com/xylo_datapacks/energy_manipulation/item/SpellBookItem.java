@@ -21,6 +21,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -85,12 +86,12 @@ public class SpellBookItem extends Item implements FabricItem {
     
     public void runSpell(World world, PlayerEntity user, Hand hand, ItemStack itemStack) {
         SpellNode spellNode = getSpellNode(user, itemStack);
-        SpellEntity spell = ModEntityRegistry.SPELL.spawn((ServerWorld) world, user.getBlockPos(), SpawnReason.TRIGGERED);
-        if (spell != null) {
-            spell.setOwner(user);
-            spell.setSpellNode(spellNode);
-            spell.runSpell();
-        }
+        SpellEntity spell = new SpellEntity(user, world, new ItemStack(Items.ARROW), itemStack);
+        spell.setOwner(user);
+        spell.setSpellNode(spellNode);
+        spell.runSpell();
+        
+        world.spawnEntity(spell);
     }
 
 

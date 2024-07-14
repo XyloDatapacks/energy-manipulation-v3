@@ -26,16 +26,19 @@ public abstract class AbstractSpellEntity extends DisplayPersistentProjectileEnt
     public AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world) {
         super(entityType, world);
         setTeleportDuration(1);
+        pickupType = PickupPermission.DISALLOWED;
     }
 
     protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(type, x, y, z, world, stack, weapon);
         setTeleportDuration(1);
+        pickupType = PickupPermission.DISALLOWED;
     }
 
     protected AbstractSpellEntity(EntityType<? extends PersistentProjectileEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
         setTeleportDuration(1);
+        pickupType = PickupPermission.DISALLOWED;
     }
 
 

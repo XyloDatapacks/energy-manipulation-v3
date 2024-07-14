@@ -145,10 +145,10 @@ public abstract class DisplayPersistentProjectileEntity extends PersistentProjec
     @Override
     public void tick() {
         super.tick();
-        Entity entity = this.getVehicle();
+        /*Entity entity = this.getVehicle();
         if (entity != null && entity.isRemoved()) {
             this.stopRiding();
-        }
+        }*/
 
         if (this.getWorld().isClient) {
             if (this.startInterpolationSet) {
@@ -701,7 +701,7 @@ public abstract class DisplayPersistentProjectileEntity extends PersistentProjec
     }
 
     public abstract static class ItemDisplayPersistentProjectileEntity extends DisplayPersistentProjectileEntity {
-        private static final String ITEM_NBT_KEY = "item";
+        private static final String ITEM_NBT_KEY = "display_item";
         private static final String ITEM_DISPLAY_NBT_KEY = "item_display";
         private static final TrackedData<ItemStack> ITEM = DataTracker.registerData(DisplayPersistentProjectileEntity.ItemDisplayPersistentProjectileEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
         private static final TrackedData<Byte> ITEM_DISPLAY = DataTracker.registerData(DisplayPersistentProjectileEntity.ItemDisplayPersistentProjectileEntity.class, TrackedDataHandlerRegistry.BYTE);
@@ -756,15 +756,15 @@ public abstract class DisplayPersistentProjectileEntity extends PersistentProjec
         @Override
         public void readCustomDataFromNbt(NbtCompound nbt) {
             super.readCustomDataFromNbt(nbt);
-            if (nbt.contains("item")) {
-                this.setItemStack((ItemStack)ItemStack.fromNbt(this.getRegistryManager(), nbt.getCompound("item")).orElse(ItemStack.EMPTY));
+            if (nbt.contains(ITEM_NBT_KEY)) {
+                this.setItemStack((ItemStack)ItemStack.fromNbt(this.getRegistryManager(), nbt.getCompound(ITEM_NBT_KEY)).orElse(ItemStack.EMPTY));
             } else {
                 this.setItemStack(ItemStack.EMPTY);
             }
 
-            if (nbt.contains("item_display", NbtElement.STRING_TYPE)) {
+            if (nbt.contains(ITEM_DISPLAY_NBT_KEY, NbtElement.STRING_TYPE)) {
                 ModelTransformationMode.CODEC
-                        .decode(NbtOps.INSTANCE, nbt.get("item_display"))
+                        .decode(NbtOps.INSTANCE, nbt.get(ITEM_DISPLAY_NBT_KEY))
                         .resultOrPartial(Util.addPrefix("Display entity", DisplayPersistentProjectileEntity.LOGGER::error))
                         .ifPresent(mode -> this.setTransformationMode((ModelTransformationMode)mode.getFirst()));
             }
@@ -774,10 +774,10 @@ public abstract class DisplayPersistentProjectileEntity extends PersistentProjec
         public void writeCustomDataToNbt(NbtCompound nbt) {
             super.writeCustomDataToNbt(nbt);
             if (!this.getItemStack().isEmpty()) {
-                nbt.put("item", this.getItemStack().encode(this.getRegistryManager()));
+                nbt.put(ITEM_NBT_KEY, this.getItemStack().encode(this.getRegistryManager()));
             }
 
-            ModelTransformationMode.CODEC.encodeStart(NbtOps.INSTANCE, this.getTransformationMode()).ifSuccess(nbtx -> nbt.put("item_display", nbtx));
+            ModelTransformationMode.CODEC.encodeStart(NbtOps.INSTANCE, this.getTransformationMode()).ifSuccess(nbtx -> nbt.put(ITEM_DISPLAY_NBT_KEY, nbtx));
         }
 
         @Override
