@@ -19,7 +19,7 @@ public class ProjectileShapeEntity extends AbstractShapeEntity {
         super(ModEntityRegistry.PROJECTILE_SHAPE, x, y, z, world, stack, weapon);
     }
 
-    protected ProjectileShapeEntity(LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
+    public ProjectileShapeEntity(LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(ModEntityRegistry.PROJECTILE_SHAPE, owner, world, stack, shotFrom);
     }
 }

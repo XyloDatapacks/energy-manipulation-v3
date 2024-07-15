@@ -78,11 +78,11 @@ public abstract class AbstractDisplayProjectileRenderer<T extends AbstractDispla
     }
 
     private static <T extends AbstractDisplayProjectile> float lerpYaw(T entity, float delta) {
-        return MathHelper.lerpAngleDegrees(delta, entity.prevYaw, entity.getYaw());
+        return -MathHelper.lerpAngleDegrees(delta, entity.prevYaw, entity.getYaw());
     }
 
     private static <T extends AbstractDisplayProjectile> float lerpPitch(T entity, float delta) {
-        return MathHelper.lerp(delta, entity.prevPitch, entity.getPitch());
+        return -MathHelper.lerp(delta, entity.prevPitch, entity.getPitch());
     }
 
     @Nullable

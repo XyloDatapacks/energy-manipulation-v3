@@ -12,15 +12,15 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.decoration.Brightness;
 import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.AffineTransformation;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
@@ -31,25 +31,28 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
     
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> entityType, World world) {
         super(entityType, world);
+
+        this.setTeleportDuration(1);
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
 
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(type, x, y, z, world, stack, weapon);
+
+        this.setTeleportDuration(1);
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
 
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
+        
+        this.setTeleportDuration(1);
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
 
-
-    
-    
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //region Display Entity implementation
 
@@ -131,12 +134,9 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
 
     @Override
     public void tick() {
+        //if (this.getWorld().isClient) { System.out.println("CLIENT TICK---------------------"); } else { System.out.println("SERVER TICK---------------------"); }
         super.tick();
-        /*Entity entity = this.getVehicle();
-        if (entity != null && entity.isRemoved()) {
-            this.stopRiding();
-        }*/
-
+        
         if (this.getWorld().isClient) {
             if (this.startInterpolationSet) {
                 this.startInterpolationSet = false;
@@ -160,7 +160,7 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
 
                 this.refreshData(bl, this.lerpProgress);
             }
-
+            
             if (this.interpolationTarget != null) {
                 if (this.interpolationTarget.step == 0) {
                     this.interpolationTarget.apply(this);
@@ -175,6 +175,8 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
                 }
             }
         }
+
+        //if (this.getWorld().isClient) { System.out.println("END CLIENT TICK---------------------"); } else { System.out.println("END SERVER TICK---------------------"); }
     }
 
     protected abstract void refreshData(boolean shouldLerp, float lerpProgress);
@@ -514,11 +516,11 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
     //region Item Display Entity implementation
 
     public abstract static class AbstractItemDisplayProjectile extends AbstractDisplayProjectile {
-        private static final String ITEM_NBT_KEY = "item";
+        private static final String ITEM_NBT_KEY = "displayed_item";
         private static final String ITEM_DISPLAY_NBT_KEY = "item_display";
         private static final TrackedData<ItemStack> ITEM = DataTracker.registerData(AbstractItemDisplayProjectile.class, TrackedDataHandlerRegistry.ITEM_STACK);
         private static final TrackedData<Byte> ITEM_DISPLAY = DataTracker.registerData(AbstractItemDisplayProjectile.class, TrackedDataHandlerRegistry.BYTE);
-        private final StackReference stackReference = StackReference.of(this::getItemStack, this::setItemStack);
+        private final StackReference stackReference = StackReference.of(this::getDisplayedItemStack, this::setDisplayedItemStack);
         @Nullable
         private DisplayEntity.ItemDisplayEntity.Data data;
 
@@ -550,11 +552,11 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
             }
         }
 
-        public ItemStack getItemStack() {
+        public ItemStack getDisplayedItemStack() {
             return this.dataTracker.get(ITEM);
         }
 
-        private void setItemStack(ItemStack stack) {
+        public void setDisplayedItemStack(ItemStack stack) {
             this.dataTracker.set(ITEM, stack);
         }
 
@@ -570,9 +572,9 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
         public void readCustomDataFromNbt(NbtCompound nbt) {
             super.readCustomDataFromNbt(nbt);
             if (nbt.contains(ITEM_NBT_KEY)) {
-                this.setItemStack((ItemStack)ItemStack.fromNbt(this.getRegistryManager(), nbt.getCompound(ITEM_NBT_KEY)).orElse(ItemStack.EMPTY));
+                this.setDisplayedItemStack((ItemStack)ItemStack.fromNbt(this.getRegistryManager(), nbt.getCompound(ITEM_NBT_KEY)).orElse(ItemStack.EMPTY));
             } else {
-                this.setItemStack(ItemStack.EMPTY);
+                this.setDisplayedItemStack(ItemStack.EMPTY);
             }
 
             if (nbt.contains(ITEM_DISPLAY_NBT_KEY, NbtElement.STRING_TYPE)) {
@@ -586,8 +588,8 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
         @Override
         public void writeCustomDataToNbt(NbtCompound nbt) {
             super.writeCustomDataToNbt(nbt);
-            if (!this.getItemStack().isEmpty()) {
-                nbt.put(ITEM_NBT_KEY, this.getItemStack().encode(this.getRegistryManager()));
+            if (!this.getDisplayedItemStack().isEmpty()) {
+                nbt.put(ITEM_NBT_KEY, this.getDisplayedItemStack().encode(this.getRegistryManager()));
             }
 
             ModelTransformationMode.CODEC.encodeStart(NbtOps.INSTANCE, this.getTransformationMode()).ifSuccess(nbtx -> nbt.put(ITEM_DISPLAY_NBT_KEY, nbtx));
@@ -605,7 +607,7 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
 
         @Override
         protected void refreshData(boolean shouldLerp, float lerpProgress) {
-            ItemStack itemStack = this.getItemStack();
+            ItemStack itemStack = this.getDisplayedItemStack();
             itemStack.setHolder(this);
             this.data = new DisplayEntity.ItemDisplayEntity.Data(itemStack, this.getTransformationMode());
         }
