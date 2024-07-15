@@ -2,7 +2,6 @@ package com.xylo_datapacks.energy_manipulation;
 
 
 import com.xylo_datapacks.energy_manipulation.registry.ModEntityRegistry;
-import com.xylo_datapacks.energy_manipulation.registry.ModEntityModelLayerRegistry;
 import com.xylo_datapacks.energy_manipulation.entity.client.ProjectileShapeEntityRenderer;
 import com.xylo_datapacks.energy_manipulation.entity.client.SpellEntityRenderer;
 import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
@@ -11,12 +10,11 @@ import com.xylo_datapacks.energy_manipulation.registry.ModKeyBindingRegistry;
 import com.xylo_datapacks.energy_manipulation.registry.ModScreenTypeRegistry;
 import com.xylo_datapacks.energy_manipulation.screen.spell_book.SpellBookHandledScreen;
 import com.xylo_datapacks.energy_manipulation.util.EnergyManipulationModelPlugin;
-import com.xylo_datapacks.energy_manipulation.util.ModModelPredicateProvider;
+import com.xylo_datapacks.energy_manipulation.registry.ModModelPredicateProvider;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 

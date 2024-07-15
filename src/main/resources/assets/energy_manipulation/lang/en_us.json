@@ -2,5 +2,6 @@
   "itemgroup.energy_manipulation": "Energy Manipulation Group",
   
   "item.energy_manipulation.spell_book": "Spell Book",
+  "item.energy_manipulation.spell_book.catalyst": "Catalyst",
   "item.energy_manipulation.spell_book_page": "Spell Book Page"
 }
