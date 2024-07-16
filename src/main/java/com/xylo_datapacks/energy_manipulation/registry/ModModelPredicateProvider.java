@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.registry;
 
+import com.xylo_datapacks.energy_manipulation.item.ModItems;
 import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
 import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.component.DataComponentTypes;
@@ -11,7 +12,7 @@ import net.minecraft.util.Identifier;
 public class ModModelPredicateProvider {
     
     public static void registerModModels() {
-        registerSpellBook(ModItemRegistry.SPELL_BOOK);
+        registerSpellBook(ModItems.SPELL_BOOK);
     }
     
     private static void registerSpellBook(Item spellBook) {

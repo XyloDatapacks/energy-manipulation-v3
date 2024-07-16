@@ -1,4 +1,4 @@
-package com.xylo_datapacks.energy_manipulation.entity.client;
+package com.xylo_datapacks.energy_manipulation.client.render.entity;
 
 import com.xylo_datapacks.energy_manipulation.entity.custom.AbstractDisplayProjectile;
 import net.fabricmc.api.EnvType;

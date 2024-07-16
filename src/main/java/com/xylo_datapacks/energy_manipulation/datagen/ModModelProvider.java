@@ -1,6 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.datagen;
 
-import com.xylo_datapacks.energy_manipulation.registry.ModItemRegistry;
+import com.xylo_datapacks.energy_manipulation.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.client.BlockStateModelGenerator;
@@ -21,6 +21,9 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
-        itemModelGenerator.register(ModItemRegistry.SPELL_BOOK_PAGE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SPELL_BOOK_PAGE, Models.GENERATED);
+        itemModelGenerator.register(ModItems.BASIC_CATALYST, Models.GENERATED);
+        itemModelGenerator.register(ModItems.SPIKE_CATALYST, Models.GENERATED);
+        itemModelGenerator.register(ModItems.PLATE_CATALYST, Models.GENERATED);
     }
 }

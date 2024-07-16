@@ -1,7 +1,7 @@
-package com.xylo_datapacks.energy_manipulation.networking.packet;
+package com.xylo_datapacks.energy_manipulation.network.packet;
 
 import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
-import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
+import com.xylo_datapacks.energy_manipulation.network.ModPackets;
 import io.netty.buffer.ByteBuf;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.codec.PacketCodec;

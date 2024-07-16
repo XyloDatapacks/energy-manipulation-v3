@@ -1,4 +1,4 @@
-package com.xylo_datapacks.energy_manipulation.registry;
+package com.xylo_datapacks.energy_manipulation.entity;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.entity.custom.ProjectileShapeEntity;
@@ -8,7 +8,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
-public class ModEntityRegistry {
+public class ModEntityType {
     public static final EntityType<SpellEntity> SPELL = Registry.register(Registries.ENTITY_TYPE, 
             EnergyManipulation.id("spell"),
             EntityType.Builder.<SpellEntity>create(SpellEntity::new, SpawnGroup.MISC)

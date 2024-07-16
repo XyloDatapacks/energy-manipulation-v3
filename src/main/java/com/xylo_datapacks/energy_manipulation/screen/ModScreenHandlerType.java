@@ -1,4 +1,4 @@
-package com.xylo_datapacks.energy_manipulation.registry;
+package com.xylo_datapacks.energy_manipulation.screen;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
-public class ModScreenTypeRegistry {
+public class ModScreenHandlerType {
 
     // spell book menu
     public static final ExtendedScreenHandlerType<SpellBookScreenHandler, SpellBookItem.SpellBookMenuData> SPELL_BOOK_MENU_TYPE = Registry.register(Registries.SCREEN_HANDLER, EnergyManipulation.id("spell_book_menu"), new ExtendedScreenHandlerType<>(SpellBookScreenHandler::new, SpellBookItem.SpellBookMenuData.PACKET_CODEC));

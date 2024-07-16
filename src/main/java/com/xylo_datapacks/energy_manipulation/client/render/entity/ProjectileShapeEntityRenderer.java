@@ -1,4 +1,4 @@
-package com.xylo_datapacks.energy_manipulation.entity.client;
+package com.xylo_datapacks.energy_manipulation.client.render.entity;
 
 import net.minecraft.client.render.entity.EntityRendererFactory;
 

@@ -1,4 +1,4 @@
-package com.xylo_datapacks.energy_manipulation.registry;
+package com.xylo_datapacks.energy_manipulation.block;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import net.minecraft.block.Block;
@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 
-public class ModBlockRegistry {
+public class ModBlocks {
 
 
 

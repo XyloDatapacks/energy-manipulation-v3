@@ -1,7 +1,7 @@
-package com.xylo_datapacks.energy_manipulation.networking;
+package com.xylo_datapacks.energy_manipulation.network;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
-import com.xylo_datapacks.energy_manipulation.networking.packet.OpenSpellBookC2SPacket;
+import com.xylo_datapacks.energy_manipulation.network.packet.OpenSpellBookC2SPacket;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;

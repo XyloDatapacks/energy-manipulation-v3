@@ -4,24 +4,23 @@ import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
+import com.xylo_datapacks.energy_manipulation.component.CatalystComponent;
+import com.xylo_datapacks.energy_manipulation.component.ModDataComponentTypes;
 import com.xylo_datapacks.energy_manipulation.config.SpellBookInfo;
+import com.xylo_datapacks.energy_manipulation.datagen.ModItemTagsProvider;
 import com.xylo_datapacks.energy_manipulation.entity.custom.ProjectileShapeEntity;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
-import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
+import com.xylo_datapacks.energy_manipulation.network.ModPackets;
 import com.xylo_datapacks.energy_manipulation.screen.spell_book.SpellBookScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.ChargedProjectilesComponent;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -31,10 +30,7 @@ import net.minecraft.entity.projectile.FireworkRocketEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.RangedWeaponItem;
+import net.minecraft.item.*;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -44,9 +40,9 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenTexts;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -54,10 +50,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
@@ -75,15 +68,13 @@ public class SpellBookItem extends RangedWeaponItem {
     private static final float CHARGE_PROGRESS = 0.2F;
     private static final float LOAD_PROGRESS = 0.5F;
     private static final float COMPLETE_PROGRESS = 0.75F;
-    private static final float DEFAULT_SPEED = 3.15F;
-    private static final float ADVANCED_CATALYST_SPEED = 1.6F;
     private static final SpellBookItem.LoadingSounds DEFAULT_LOADING_SOUNDS = new SpellBookItem.LoadingSounds(
             Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_START),
             Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE),
             Optional.of(SoundEvents.ITEM_CROSSBOW_LOADING_END)
     );
-    public static final Predicate<ItemStack> CATALYST = stack -> stack.isOf(Items.BLAZE_POWDER);
-    public static final Predicate<ItemStack> ADVANCED_CATALYST = stack -> stack.isOf(Items.END_CRYSTAL);
+    public static final Predicate<ItemStack> CATALYST = stack -> stack.isIn(ModItemTagsProvider.CATALYSTS);
+    public static final Predicate<ItemStack> ADVANCED_CATALYST = stack -> stack.isIn(ModItemTagsProvider.ADVANCED_CATALYSTS);
     public static final Predicate<ItemStack> CATALYST_HELD = CATALYST.or(ADVANCED_CATALYST);
     private static final String CHARGE_KEY = "Charge";
 
@@ -96,7 +87,7 @@ public class SpellBookItem extends RangedWeaponItem {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* region Casting Logic */
 
-    public SpellNode getSpellNode(LivingEntity user, ItemStack itemStack) {
+    public static SpellNode getSpellNode(LivingEntity user, ItemStack itemStack) {
         // get inventory items
         Map<Integer, ItemStack> spellBookContent = getBackpackContents(user.getRegistryManager(), itemStack);
         // check if there is slot zero
@@ -114,13 +105,14 @@ public class SpellBookItem extends RangedWeaponItem {
     }
     
 
+    /** custom version of CreateArrowEntity in RangedWeaponItem */
     protected ProjectileEntity createSpellEntity(World world, LivingEntity shooter, ItemStack weaponStack, ItemStack projectileStack, boolean critical) {
-        SpellNode spellNode = getSpellNode(shooter, weaponStack);
-        ProjectileShapeEntity spell = new ProjectileShapeEntity(shooter, world, projectileStack, weaponStack);
-        spell.setSpellNode(spellNode);
-        spell.runSpell();
-        spell.setDisplayedItemStack(new ItemStack(Items.LECTERN));
-        
+        CatalystItem catalystItem = projectileStack.getItem() instanceof CatalystItem catalyst ? catalyst : (CatalystItem) ModItems.BASIC_CATALYST;
+        PersistentProjectileEntity spell = catalystItem.createSpell(world, projectileStack, shooter, weaponStack);
+        if (critical) {
+            spell.setCritical(true);
+        }
+
         return spell;
     }
 
@@ -161,7 +153,7 @@ public class SpellBookItem extends RangedWeaponItem {
                         }
                     }
         
-                    return new ItemStack(Items.BLAZE_POWDER);
+                    return new ItemStack(ModItems.BASIC_CATALYST);
                 }
             }
         }
@@ -264,13 +256,69 @@ public class SpellBookItem extends RangedWeaponItem {
         return CATALYST;
     }
 
-    private static boolean loadProjectiles(LivingEntity shooter, ItemStack spellBook) {
-        List<ItemStack> list = load(spellBook, getProjectileType(shooter, spellBook), shooter);
+    /** shadowing the one in CrossbowItem because we want to use out custom load.
+     * </p> the method is unchanged */
+    private static boolean loadProjectiles(LivingEntity shooter, ItemStack spellBookStack) {
+        List<ItemStack> list = load(spellBookStack, getProjectileType(shooter, spellBookStack), shooter);
         if (!list.isEmpty()) {
-            spellBook.set(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.of(list));
+            spellBookStack.set(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.of(list));
             return true;
         } else {
             return false;
+        }
+    }
+    
+    /** shadowing the one in RangedWeaponItem because we want to use out custom getProjectile. 
+     * </p> the method is unchanged at a logical level. just made it more readable */
+    protected static List<ItemStack> load(ItemStack spellBookStack, ItemStack projectileStack, LivingEntity shooter) {
+        if (projectileStack.isEmpty()) {
+            return List.of();
+        } else {
+            int numberOfProjectilesDesired = shooter.getWorld() instanceof ServerWorld serverWorld ? EnchantmentHelper.getProjectileCount(serverWorld, spellBookStack, shooter, 1) : 1;
+            List<ItemStack> list = new ArrayList(numberOfProjectilesDesired);
+            ItemStack copiedProjectileStack = projectileStack.copy();
+
+            for (int currentProjectileIndex = 0; currentProjectileIndex < numberOfProjectilesDesired; currentProjectileIndex++) {
+                boolean isFirstProjectile = currentProjectileIndex == 0;
+                ItemStack itemStack2 = getProjectile(spellBookStack, isFirstProjectile ? projectileStack : copiedProjectileStack, shooter, !isFirstProjectile);
+                if (!itemStack2.isEmpty()) {
+                    list.add(itemStack2);
+                }
+            }
+
+            return list;
+        }
+    }
+
+    /** shadowing the one in RangedWeaponItem 
+     * </p> made more readable and changed stack removal to account for catalyst convert on consume */
+    protected static ItemStack getProjectile(ItemStack spellBookStack, ItemStack projectileStack, LivingEntity shooter, boolean isMultishotProjectile) {
+        /* numberOfAmmoToUse is different from zero only for the first projectile 
+        * in this case im actually passing in the real projectile stack */
+        int numberOfAmmoToUse = !isMultishotProjectile && !shooter.isInCreativeMode() && shooter.getWorld() instanceof ServerWorld serverWorld
+                ? EnchantmentHelper.getAmmoUse(serverWorld, spellBookStack, projectileStack, 1)
+                : 0;
+        // not enough projectiles (first proj + !creative + server)
+        if (numberOfAmmoToUse > projectileStack.getCount()) {
+            return ItemStack.EMPTY;
+        } 
+        // no projectile required (multishot proj / creative / client)
+        else if (numberOfAmmoToUse == 0) {
+            ItemStack projectileStackToLoad = projectileStack.copyWithCount(1);
+            projectileStackToLoad.set(DataComponentTypes.INTANGIBLE_PROJECTILE, Unit.INSTANCE);
+            return projectileStackToLoad;
+        } 
+        // one or more projectiles (first proj + !creative + server)
+        else {
+            ItemStack projectileStackToLoad = projectileStack.split(numberOfAmmoToUse);
+            
+            // changed system instead of just removing stack if empty, i try to convert the catalyst
+            CatalystComponent catalystComponent = projectileStack.get(ModDataComponentTypes.CATALYST);
+            if (catalystComponent != null && shooter instanceof PlayerEntity playerEntity) {
+                CatalystComponent.convertToAndReplace(playerEntity, projectileStack, catalystComponent);
+            }
+            
+            return projectileStackToLoad;
         }
     }
 
@@ -281,16 +329,12 @@ public class SpellBookItem extends RangedWeaponItem {
     
     @Override
     protected ProjectileEntity createArrowEntity(World world, LivingEntity shooter, ItemStack weaponStack, ItemStack projectileStack, boolean critical) {
-        if (projectileStack.isOf(Items.END_CRYSTAL)) {
-            return new FireworkRocketEntity(world, projectileStack, shooter, shooter.getX(), shooter.getEyeY() - 0.15F, shooter.getZ(), true);
-        } else {
-            ProjectileEntity projectileEntity = createSpellEntity(world, shooter, weaponStack, projectileStack, critical);
-            if (projectileEntity instanceof PersistentProjectileEntity persistentProjectileEntity) {
-                persistentProjectileEntity.setSound(SoundEvents.ITEM_CROSSBOW_HIT);
-            }
-
-            return projectileEntity;
+        ProjectileEntity projectileEntity = createSpellEntity(world, shooter, weaponStack, projectileStack, critical);
+        if (projectileEntity instanceof PersistentProjectileEntity persistentProjectileEntity) {
+            persistentProjectileEntity.setSound(SoundEvents.ITEM_CROSSBOW_HIT);
         }
+
+        return projectileEntity;
     }
 
     /* endregion */
@@ -371,7 +415,15 @@ public class SpellBookItem extends RangedWeaponItem {
     }
 
     private static float getSpeed(ChargedProjectilesComponent stack) {
-        return stack.contains(Items.END_CRYSTAL) ? ADVANCED_CATALYST_SPEED : DEFAULT_SPEED;
+        List<ItemStack> projectiles = stack.getProjectiles();
+        float chargeSeconds = 0.0F;
+        for (ItemStack projectile : projectiles) {
+            CatalystComponent catalystComponent = projectile.get(ModDataComponentTypes.CATALYST);
+            if (catalystComponent != null) {
+                chargeSeconds += catalystComponent.chargeSeconds();
+            }
+        }
+        return chargeSeconds / projectiles.size();
     }
     
     @Override
@@ -412,7 +464,7 @@ public class SpellBookItem extends RangedWeaponItem {
 
     @Override
     protected int getWeaponStackDamage(ItemStack projectile) {
-        return projectile.isOf(Items.END_CRYSTAL) ? 3 : 1;
+        return ADVANCED_CATALYST.test(projectile) ? 3 : 1;
     }
 
     @Override
@@ -421,9 +473,9 @@ public class SpellBookItem extends RangedWeaponItem {
         if (chargedProjectilesComponent != null && !chargedProjectilesComponent.isEmpty()) {
             ItemStack itemStack = (ItemStack)chargedProjectilesComponent.getProjectiles().get(0);
             tooltip.add(EnergyManipulation.itemTranslation("spell_book.catalyst").append(ScreenTexts.SPACE).append(itemStack.toHoverableText()));
-            if (type.isAdvanced() && itemStack.isOf(Items.END_CRYSTAL)) {
+            if (type.isAdvanced() && ADVANCED_CATALYST.test(itemStack)) {
                 List<Text> list = Lists.<Text>newArrayList();
-                Items.END_CRYSTAL.appendTooltip(itemStack, context, list, type);
+                itemStack.getItem().appendTooltip(itemStack, context, list, type);
                 if (!list.isEmpty()) {
                     for (int i = 0; i < list.size(); i++) {
                         list.set(i, Text.literal("  ").append((Text)list.get(i)).formatted(Formatting.GRAY));
@@ -492,30 +544,30 @@ public class SpellBookItem extends RangedWeaponItem {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* region GUI */
 
-    public static void openScreen(PlayerEntity player, ItemStack spellBookItemStack) {
+    public static void openScreen(PlayerEntity player, ItemStack spellBookStack) {
         if (player.getWorld() != null && !player.getWorld().isClient()) {
             player.openHandledScreen(new ExtendedScreenHandlerFactory<SpellBookItem.SpellBookMenuData>() {
                 @Override
                 public SpellBookItem.SpellBookMenuData getScreenOpeningData(ServerPlayerEntity player) {
-                    return new SpellBookItem.SpellBookMenuData(spellBookItemStack);
+                    return new SpellBookItem.SpellBookMenuData(spellBookStack);
                 }
 
                 @Override
                 public Text getDisplayName() {
-                    return Text.translatable(spellBookItemStack.getItem().getTranslationKey());
+                    return Text.translatable(spellBookStack.getItem().getTranslationKey());
                 }
 
                 @Override
                 public @Nullable ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player) {
-                    return new SpellBookScreenHandler(syncId, inv, spellBookItemStack);
+                    return new SpellBookScreenHandler(syncId, inv, spellBookStack);
                 }
             });
         }
     }
 
-    public record SpellBookMenuData(ItemStack spellBookItemStack) implements CustomPayload {
+    public record SpellBookMenuData(ItemStack spellBookStack) implements CustomPayload {
         public static final CustomPayload.Id<SpellBookItem.SpellBookMenuData> ID = new CustomPayload.Id<>(ModPackets.INIT_SPELL_BOOK_MENU_PACKET_ID);
-        public static final PacketCodec<RegistryByteBuf, SpellBookItem.SpellBookMenuData> PACKET_CODEC = PacketCodec.tuple(ItemStack.PACKET_CODEC, SpellBookItem.SpellBookMenuData::spellBookItemStack, SpellBookItem.SpellBookMenuData::new);
+        public static final PacketCodec<RegistryByteBuf, SpellBookItem.SpellBookMenuData> PACKET_CODEC = PacketCodec.tuple(ItemStack.PACKET_CODEC, SpellBookItem.SpellBookMenuData::spellBookStack, SpellBookItem.SpellBookMenuData::new);
 
         @Override
         public CustomPayload.Id<? extends CustomPayload> getId() {

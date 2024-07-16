@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 
-public class SpellBookPageItem extends Item implements FabricItem {
+public class SpellBookPageItem extends Item {
     private static final String SPELL_KEY = "spell";
     
     public SpellBookPageItem(Item.Settings settings) {

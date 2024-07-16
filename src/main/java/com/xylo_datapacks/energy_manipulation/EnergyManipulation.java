@@ -1,7 +1,12 @@
 package com.xylo_datapacks.energy_manipulation;
 
+import com.xylo_datapacks.energy_manipulation.block.ModBlocks;
+import com.xylo_datapacks.energy_manipulation.component.ModDataComponentTypes;
+import com.xylo_datapacks.energy_manipulation.entity.ModEntityType;
+import com.xylo_datapacks.energy_manipulation.item.ModItems;
 import com.xylo_datapacks.energy_manipulation.registry.*;
-import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
+import com.xylo_datapacks.energy_manipulation.network.ModPackets;
+import com.xylo_datapacks.energy_manipulation.screen.ModScreenHandlerType;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.text.MutableText;
@@ -27,11 +32,11 @@ public class EnergyManipulation implements ModInitializer {
 		LOGGER.info("Initializing " + MOD_ID);
 		
 		ModCreativeTabRegistry.init();
-		ModItemRegistry.init();
-		ModBlockRegistry.init();
-		ModEntityRegistry.init();
-		ModDataComponentRegistry.init();
-		ModScreenTypeRegistry.init();
+		ModItems.init();
+		ModBlocks.init();
+		ModEntityType.init();
+		ModDataComponentTypes.init();
+		ModScreenHandlerType.init();
 		
 		ModPackets.initServer();
 	}

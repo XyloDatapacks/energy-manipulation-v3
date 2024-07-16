@@ -1,13 +1,13 @@
 package com.xylo_datapacks.energy_manipulation;
 
 
-import com.xylo_datapacks.energy_manipulation.registry.ModEntityRegistry;
-import com.xylo_datapacks.energy_manipulation.entity.client.ProjectileShapeEntityRenderer;
-import com.xylo_datapacks.energy_manipulation.entity.client.SpellEntityRenderer;
-import com.xylo_datapacks.energy_manipulation.networking.ModPackets;
-import com.xylo_datapacks.energy_manipulation.networking.packet.OpenSpellBookC2SPacket;
+import com.xylo_datapacks.energy_manipulation.entity.ModEntityType;
+import com.xylo_datapacks.energy_manipulation.client.render.entity.ProjectileShapeEntityRenderer;
+import com.xylo_datapacks.energy_manipulation.client.render.entity.SpellEntityRenderer;
+import com.xylo_datapacks.energy_manipulation.network.ModPackets;
+import com.xylo_datapacks.energy_manipulation.network.packet.OpenSpellBookC2SPacket;
 import com.xylo_datapacks.energy_manipulation.registry.ModKeyBindingRegistry;
-import com.xylo_datapacks.energy_manipulation.registry.ModScreenTypeRegistry;
+import com.xylo_datapacks.energy_manipulation.screen.ModScreenHandlerType;
 import com.xylo_datapacks.energy_manipulation.screen.spell_book.SpellBookHandledScreen;
 import com.xylo_datapacks.energy_manipulation.util.EnergyManipulationModelPlugin;
 import com.xylo_datapacks.energy_manipulation.registry.ModModelPredicateProvider;
@@ -31,15 +31,15 @@ public class EnergyManipulationClient implements ClientModInitializer {
         ModModelPredicateProvider.registerModModels();
         ModelLoadingPlugin.register(new EnergyManipulationModelPlugin());
         
-        HandledScreens.register(ModScreenTypeRegistry.SPELL_BOOK_MENU_TYPE, SpellBookHandledScreen::new);
+        HandledScreens.register(ModScreenHandlerType.SPELL_BOOK_MENU_TYPE, SpellBookHandledScreen::new);
 
         /*------------------------------------------------------------------------------------ -----------------------*/
         /* register entity models */
 
         // spell
-        EntityRendererRegistry.register(ModEntityRegistry.SPELL, SpellEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.SPELL, SpellEntityRenderer::new);
         // projectile shape
-        EntityRendererRegistry.register(ModEntityRegistry.PROJECTILE_SHAPE, ProjectileShapeEntityRenderer::new);
+        EntityRendererRegistry.register(ModEntityType.PROJECTILE_SHAPE, ProjectileShapeEntityRenderer::new);
 
         /*------------------------------------------------------------------------------------ -----------------------*/
         
