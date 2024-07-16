@@ -310,12 +310,17 @@ public class SpellBookItem extends RangedWeaponItem {
         } 
         // one or more projectiles (first proj + !creative + server)
         else {
+            // get catalyst before possible empty stack
+            CatalystComponent catalystComponent = projectileStack.get(ModDataComponentTypes.CATALYST);
+
             ItemStack projectileStackToLoad = projectileStack.split(numberOfAmmoToUse);
+            if (projectileStack.isEmpty() && shooter instanceof PlayerEntity playerEntity) {
+                playerEntity.getInventory().removeOne(projectileStack);
+            }
             
             // changed system instead of just removing stack if empty, i try to convert the catalyst
-            CatalystComponent catalystComponent = projectileStack.get(ModDataComponentTypes.CATALYST);
             if (catalystComponent != null && shooter instanceof PlayerEntity playerEntity) {
-                CatalystComponent.convertToAndReplace(playerEntity, projectileStack, catalystComponent);
+                CatalystComponent.giveConversionItem(playerEntity, catalystComponent);
             }
             
             return projectileStackToLoad;
@@ -327,6 +332,7 @@ public class SpellBookItem extends RangedWeaponItem {
         return !chargedProjectilesComponent.isEmpty();
     }
     
+    /** similar to crossbow version but calls createSpellEntity instead of super */
     @Override
     protected ProjectileEntity createArrowEntity(World world, LivingEntity shooter, ItemStack weaponStack, ItemStack projectileStack, boolean critical) {
         ProjectileEntity projectileEntity = createSpellEntity(world, shooter, weaponStack, projectileStack, critical);
@@ -348,7 +354,7 @@ public class SpellBookItem extends RangedWeaponItem {
         if (world instanceof ServerWorld serverWorld) {
             ChargedProjectilesComponent chargedProjectilesComponent = stack.set(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT);
             if (chargedProjectilesComponent != null && !chargedProjectilesComponent.isEmpty()) {
-                this.shootAll(serverWorld, shooter, hand, stack, chargedProjectilesComponent.getProjectiles(), speed, divergence, shooter instanceof PlayerEntity, target);
+                this.shootAll(serverWorld, shooter, hand, stack, chargedProjectilesComponent.getProjectiles(), speed, divergence, getCharge(stack) >= COMPLETE_PROGRESS, target);
                 if (shooter instanceof ServerPlayerEntity serverPlayerEntity) {
                     //Criteria.SHOT_CROSSBOW.trigger(serverPlayerEntity, stack);
                     serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));

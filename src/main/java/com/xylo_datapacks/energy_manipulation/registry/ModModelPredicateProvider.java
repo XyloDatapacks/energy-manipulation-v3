@@ -19,13 +19,13 @@ public class ModModelPredicateProvider {
         ModelPredicateProviderRegistry.register(
                 spellBook, Identifier.ofVanilla("charge"),
                 (stack, world, entity, seed) -> {
-                    if (entity == null) {
-                        return 0.0F;
-                    } 
-                    else if (SpellBookItem.isCharged(stack)) {
+                    if (SpellBookItem.isCharged(stack)) {
                         return SpellBookItem.getCharge(stack);
+                    } 
+                    else if (entity != null) {
+                        return (float) (stack.getMaxUseTime(entity) - entity.getItemUseTimeLeft()) / (float) SpellBookItem.getPullTime(stack, entity);
                     }
-                    return (float)(stack.getMaxUseTime(entity) - entity.getItemUseTimeLeft()) / (float)SpellBookItem.getPullTime(stack, entity);
+                    return 0.0F;
                 }
         );
         ModelPredicateProviderRegistry.register(

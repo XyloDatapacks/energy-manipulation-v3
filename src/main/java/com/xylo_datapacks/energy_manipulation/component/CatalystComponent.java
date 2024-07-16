@@ -48,6 +48,7 @@ public record CatalystComponent(double impact, float directivity, double conduct
     public static ItemStack convertTo(PlayerEntity player, ItemStack itemStack, CatalystComponent catalystComponent) {
         Optional<ItemStack> optional = catalystComponent.usingConvertsTo();
         if (optional.isPresent() && !player.isInCreativeMode()) {
+            
             if (itemStack.isEmpty()) {
                 return ((ItemStack)optional.get()).copy();
             }
@@ -60,15 +61,13 @@ public record CatalystComponent(double impact, float directivity, double conduct
     }
 
     /** if the item stack is not empty, give item and return the same item stack. else return the converted stack */
-    public static void convertToAndReplace(PlayerEntity player, ItemStack itemStack, CatalystComponent catalystComponent) {
-        int itemStackSlot = player.getInventory().getSlotWithStack(itemStack);
-        
-        ItemStack newItemStack = convertTo(player, itemStack, catalystComponent);
-        if (newItemStack.isEmpty()) {
-            player.getInventory().removeStack(itemStackSlot);
-        }
-        else {
-            player.getInventory().setStack(itemStackSlot, newItemStack);
+    public static void giveConversionItem(PlayerEntity player, CatalystComponent catalystComponent) {
+        Optional<ItemStack> optional = catalystComponent.usingConvertsTo();
+        if (optional.isPresent() && !player.isInCreativeMode()) {
+            
+            if (!player.getWorld().isClient()) {
+                player.getInventory().insertStack(((ItemStack)optional.get()).copy());
+            }
         }
     }
     
