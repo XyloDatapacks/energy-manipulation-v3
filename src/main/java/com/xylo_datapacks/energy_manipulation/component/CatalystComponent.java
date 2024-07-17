@@ -15,13 +15,13 @@ import net.minecraft.network.codec.PacketCodecs;
 import java.util.List;
 import java.util.Optional;
 
-public record CatalystComponent(double impact, float directivity, double conductance, float condensationSeconds, float chargeSeconds, Optional<ItemStack> usingConvertsTo, List<CatalystComponent.StatusEffectEntry> effects) {
+public record CatalystComponent(int impact, float directivity, int conductance, float condensationSeconds, float chargeSeconds, Optional<ItemStack> usingConvertsTo, List<CatalystComponent.StatusEffectEntry> effects) {
     private static final float DEFAULT_CHARGE_SECONDS = 1.6F;
     public static final Codec<CatalystComponent> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                            Codec.DOUBLE.fieldOf("impact").forGetter(CatalystComponent::impact),
+                            Codec.INT.fieldOf("impact").forGetter(CatalystComponent::impact),
                             Codec.FLOAT.fieldOf("directivity").forGetter(CatalystComponent::directivity),
-                            Codec.DOUBLE.fieldOf("conductance").forGetter(CatalystComponent::conductance),
+                            Codec.INT.fieldOf("conductance").forGetter(CatalystComponent::conductance),
                             Codec.FLOAT.fieldOf("condensationSeconds").forGetter(CatalystComponent::condensationSeconds),
                             Codec.FLOAT.fieldOf("chargeSeconds").forGetter(CatalystComponent::chargeSeconds),
                             ItemStack.UNCOUNTED_CODEC.optionalFieldOf("using_converts_to").forGetter(CatalystComponent::usingConvertsTo),
@@ -30,9 +30,9 @@ public record CatalystComponent(double impact, float directivity, double conduct
                     .apply(instance, CatalystComponent::new)
     );
     public static final PacketCodec<RegistryByteBuf, CatalystComponent> PACKET_CODEC = ModPacketCodec.tuple(
-            PacketCodecs.DOUBLE, CatalystComponent::impact,
+            PacketCodecs.INTEGER, CatalystComponent::impact,
             PacketCodecs.FLOAT, CatalystComponent::directivity,
-            PacketCodecs.DOUBLE, CatalystComponent::conductance,
+            PacketCodecs.INTEGER, CatalystComponent::conductance,
             PacketCodecs.FLOAT, CatalystComponent::condensationSeconds,
             PacketCodecs.FLOAT, CatalystComponent::chargeSeconds,
             ItemStack.PACKET_CODEC.collect(PacketCodecs::optional), CatalystComponent::usingConvertsTo,
@@ -42,6 +42,10 @@ public record CatalystComponent(double impact, float directivity, double conduct
 
     public int getChargeTicks() {
         return (int)(this.chargeSeconds * 20.0F);
+    }
+
+    public int getCondensationTicks() {
+        return (int)(this.condensationSeconds * 20.0F);
     }
     
     /** if the item stack is not empty, give item and return the same item stack. else return the converted stack */
@@ -72,7 +76,7 @@ public record CatalystComponent(double impact, float directivity, double conduct
     }
     
 
-    public static void applyEffects(PlayerEntity player, ItemStack itemStack, CatalystComponent catalystComponent) {
+    public static void applyEffects(PlayerEntity player, CatalystComponent catalystComponent) {
         if (!player.getWorld().isClient()) {
             for (CatalystComponent.StatusEffectEntry statusEffectEntry : catalystComponent.effects()) {
                 if (player.getRandom().nextFloat() < statusEffectEntry.probability()) {
@@ -86,15 +90,15 @@ public record CatalystComponent(double impact, float directivity, double conduct
     
 
     public static class Builder {
-        double impact;
-        float directivity; 
-        double conductance; 
+        int impact;
+        float directivity;
+        int conductance; 
         float condensationSeconds;
         float chargeSeconds = DEFAULT_CHARGE_SECONDS;
         private Optional<ItemStack> usingConvertsTo = Optional.empty();
         private final ImmutableList.Builder<CatalystComponent.StatusEffectEntry> effects = ImmutableList.builder();
 
-        public Builder impact(double impact) {
+        public Builder impact(int impact) {
             this.impact = impact;
             return this;
         }
@@ -104,7 +108,7 @@ public record CatalystComponent(double impact, float directivity, double conduct
             return this;
         }
         
-        public Builder conductance(double conductance) {
+        public Builder conductance(int conductance) {
             this.conductance = conductance;
             return this;
         }

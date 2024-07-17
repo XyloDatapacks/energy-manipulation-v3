@@ -60,7 +60,6 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 public class SpellBookItem extends RangedWeaponItem {
-    private static final float DEFAULT_PULL_TIME = 1.25F;
     public static final int RANGE = 8;
     private boolean charged = false;
     private boolean loaded = false;
@@ -78,6 +77,9 @@ public class SpellBookItem extends RangedWeaponItem {
     public static final Predicate<ItemStack> CATALYST_HELD = CATALYST.or(ADVANCED_CATALYST);
     private static final String CHARGE_KEY = "Charge";
 
+    private float currentProjectileChargeSeconds;
+    
+    
     public SpellBookItem(Item.Settings settings) {
         super(settings);
     }
@@ -189,15 +191,20 @@ public class SpellBookItem extends RangedWeaponItem {
         if (chargedProjectilesComponent != null && !chargedProjectilesComponent.isEmpty()) {
             this.shootAll(world, user, hand, itemStack, getSpeed(chargedProjectilesComponent), 1.0F, null);
             return TypedActionResult.consume(itemStack);
-        } else if (!getProjectileType(user, itemStack).isEmpty()) {
-            this.charged = false;
-            this.loaded = false;
-            this.completed = false;
-            user.setCurrentHand(hand);
-            return TypedActionResult.consume(itemStack);
-        } else {
-            return TypedActionResult.fail(itemStack);
-        }
+        } 
+        else {
+            ItemStack projectileType = getProjectileType(user, itemStack);
+            CatalystComponent catalystComponent = projectileType.get(ModDataComponentTypes.CATALYST);
+            if (!projectileType.isEmpty() && catalystComponent != null) {
+                this.currentProjectileChargeSeconds = catalystComponent.chargeSeconds();
+                this.charged = false;
+                this.loaded = false;
+                this.completed = false;
+                user.setCurrentHand(hand);
+                return TypedActionResult.consume(itemStack);
+            }
+        } 
+        return TypedActionResult.fail(itemStack);
     }
 
     @Override
@@ -306,6 +313,12 @@ public class SpellBookItem extends RangedWeaponItem {
         else if (numberOfAmmoToUse == 0) {
             ItemStack projectileStackToLoad = projectileStack.copyWithCount(1);
             projectileStackToLoad.set(DataComponentTypes.INTANGIBLE_PROJECTILE, Unit.INSTANCE);
+            
+            if (!isMultishotProjectile && shooter instanceof PlayerEntity playerEntity) { // (creative / client)
+                CatalystComponent catalystComponent = projectileStack.get(ModDataComponentTypes.CATALYST);
+                CatalystComponent.applyEffects(playerEntity, catalystComponent);
+            }
+            
             return projectileStackToLoad;
         } 
         // one or more projectiles (first proj + !creative + server)
@@ -321,6 +334,7 @@ public class SpellBookItem extends RangedWeaponItem {
             // changed system instead of just removing stack if empty, i try to convert the catalyst
             if (catalystComponent != null && shooter instanceof PlayerEntity playerEntity) {
                 CatalystComponent.giveConversionItem(playerEntity, catalystComponent);
+                CatalystComponent.applyEffects(playerEntity, catalystComponent);
             }
             
             return projectileStackToLoad;
@@ -449,8 +463,12 @@ public class SpellBookItem extends RangedWeaponItem {
         return 72000;
     }
     
+    public static float getCurrentProjectileChargeSeconds(ItemStack stack) {
+        return stack.getItem() instanceof SpellBookItem spellBookItem ? spellBookItem.currentProjectileChargeSeconds : 3600.0F;
+    }
+    
     public static int getPullTime(ItemStack stack, LivingEntity user) {
-        float f = EnchantmentHelper.getCrossbowChargeTime(stack, user, DEFAULT_PULL_TIME);
+        float f = EnchantmentHelper.getCrossbowChargeTime(stack, user, getCurrentProjectileChargeSeconds(stack));
         return MathHelper.floor(f * 20.0F);
     }
     

@@ -1,55 +1,56 @@
 package com.xylo_datapacks.energy_manipulation.entity.custom;
 
-import com.xylo_datapacks.energy_manipulation.item.spell_book.SpellExecutor;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellAttributes;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellData;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtDouble;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.*;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
 public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.AbstractItemDisplayProjectile implements SpellExecutor {
-    protected static final String SPELL_KEY = "spell_data";
-    protected static final String CONTEXT_KEY = "context";
-    protected static final String POSITION_KEY = "position";
-    protected static final String ROTATION_KEY = "rotation";
-    private NbtCompound spellData = new NbtCompound();
-    private SpellNode spellNode;
+    protected static final String SPELL_DATA_KEY = "spell_data";
+    private SpellData spellData;
 
     public AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> entityType, World world) {
         super(entityType, world);
+        spellData = new SpellData(getOwner(), null, null, null);
     }
 
     protected AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(type, x, y, z, world, stack, weapon);
+        spellData = new SpellData(getOwner(), null, null, null);
     }
 
     protected AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
+        spellData = new SpellData(getOwner(), null, null, null);
     }
-
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* PersistentProjectileEntity Interface */
-    
+
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.spellData = nbt.getCompound(SPELL_KEY);
+        
+        this.spellData = SpellData.readFromNbt(nbt, this.getWorld());
     }
     
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        nbt.put(SPELL_KEY, this.spellData.copy());
+        
+        nbt.put(SPELL_DATA_KEY, SpellData.writeToNbt(this.spellData));
     }
 
     @Override
@@ -58,72 +59,61 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
+    
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+    
 
     public void runSpell() {
-        if (spellNode != null) {
-            spellNode.executeSpell(this);
+        if (spellData.spellNode != null) {
+            spellData.spellNode.executeSpell(this);
         }
     }
 
     public void setSpellNode(SpellNode spellNode) {
-        this.spellNode = spellNode;
+        spellData.spellNode = spellNode;
     }
     
     protected SpellNode getSpellNode() {
-        return this.spellNode;
+        return spellData.spellNode;
     }
-
-    protected NbtCompound getSpellData() {
-        return this.spellData;
+    
+    public SpellData getSpellData() {
+        return spellData;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SpellExecutor Interface */
 
     @Override
-    public LivingEntity getCaster() {
-        return (LivingEntity) getOwner();
+    public Entity getCaster() {
+        return Optional.ofNullable(spellData.caster).orElse(getOwner());
     }
 
     @Override
     public Vec3d getContextPosition() {
-        NbtList list = (NbtList) spellData.get(CONTEXT_KEY + "." + POSITION_KEY);
-        if (list != null && list.size() == 3) {
-            return new Vec3d(list.getDouble(0), list.getDouble(1), list.getDouble(2));
-        }
-        return getPos();
+        return Optional.ofNullable(spellData.spellContext.getPosition()).orElse(getPos());
     }
 
     @Override
-    public Vec2f getContextDirection() {
-        NbtList list = (NbtList) spellData.get(CONTEXT_KEY + "." + ROTATION_KEY);
-        if (list != null && list.size() == 2) {
-            return new Vec2f(list.getFloat(0), list.getFloat(1));
-        }
-        return new Vec2f(getYaw(), getPitch());
+    public Vec2f getContextRotation() {
+        return Optional.ofNullable(spellData.spellContext.getRotation()).orElse(new Vec2f(getYaw(), getPitch()));
     }
 
     @Override
     public void setContextPosition(Vec3d position) {
-        NbtList list = new NbtList();
-        list.add(NbtDouble.of(position.x));
-        list.add(NbtDouble.of(position.y));
-        list.add(NbtDouble.of(position.z));
-        spellData.put(CONTEXT_KEY + "." + POSITION_KEY, list);
+        spellData.spellContext.setPosition(position);
     }
 
     @Override
-    public void setContextDirection(Vec2f position) {
-        NbtList list = new NbtList();
-        list.add(NbtDouble.of(position.x));
-        list.add(NbtDouble.of(position.y));
-        spellData.put(CONTEXT_KEY + "." + ROTATION_KEY, list);
+    public void setContextRotation(Vec2f rotation) {
+        spellData.spellContext.setRotation(rotation); 
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
+    
+    
+    
 }

@@ -1,6 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value;
 
-import com.xylo_datapacks.energy_manipulation.item.spell_book.SpellExecutor;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithValue;
 import io.wispforest.owo.ui.component.CheckboxComponent;

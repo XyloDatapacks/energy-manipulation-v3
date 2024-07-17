@@ -1,10 +1,9 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.position;
 
-import com.xylo_datapacks.energy_manipulation.item.spell_book.SpellExecutor;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.ValueTypeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value.BooleanNode;
 import net.minecraft.util.math.Vec3d;
 

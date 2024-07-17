@@ -18,7 +18,7 @@ public class CatalystComponents {
             .directivity(1)
             .conductance(10)
             .condensationSeconds(0.4F)
-            .chargeSeconds(0.5F)
+            .chargeSeconds(2.5F)
             .usingConvertsTo(Items.BLAZE_POWDER)
             .statusEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 0), 0.6F)
             .build();
@@ -27,7 +27,7 @@ public class CatalystComponents {
             .directivity(0)
             .conductance(6)
             .condensationSeconds(0.6F)
-            .chargeSeconds(0.8F)
+            .chargeSeconds(5.0F)
             .usingConvertsTo(Items.BLAZE_POWDER)
             .statusEffect(new StatusEffectInstance(StatusEffects.WITHER, 40, 1), 0.6F)
             .build();
