@@ -70,15 +70,6 @@ public interface GenericNode {
     /** modify a node from a path relative to this node */
     public abstract boolean modifyNodeFromPath(List<String> path, Identifier newSubNodeValueIdentifier);
     public abstract boolean modifyNodeFromPath(String path, Identifier newSubNodeValueIdentifier);
-
-
-    /** function to run a node from path 
-     * </p> override and implement the node specific resume after the super call */
-    public abstract void resumeExecution(SpellExecutor spellExecutor, List<String> path);
-    /** function to run a node from path, calls the list version of this function */
-    public abstract void resumeExecution(SpellExecutor spellExecutor, String path);
-    
-    
     
     
     /** split a sting path into a list path */

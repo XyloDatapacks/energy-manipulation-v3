@@ -5,10 +5,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.Ge
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.BreakEffectNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.EffectProviderNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.FireEffectNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.DelayInstructionNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.GenerateShapeInstructionNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.InstructionProviderNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.ModifyPositionInstructionNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.*;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.DoubleNumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerNumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerValueTypeNode;
@@ -47,6 +44,11 @@ public class Nodes {
     )));
     public static final NodeData<DelayInstructionNode> INSTRUCTION_DELAY = registerNode("instruction", "delay", new NodeData.NodeDataMaker<>("Delay", "Stops execution for a certain time", DelayInstructionNode::new, Map.of(
             "time", new SubNodeData("Time","Length of the delay")
+    )));
+    public static final NodeData<IfInstructionNode> INSTRUCTION_IF = registerNode("instruction", "if", new NodeData.NodeDataMaker<>("If", "execute instructions based on a condition", IfInstructionNode::new, Map.of(
+            "condition", new SubNodeData("Condition","Condition to pass"),
+            "passed", new SubNodeData("Passed","What happens if condition = true"),
+            "failed", new SubNodeData("Failed","What happens if condition = false")
     )));
 
     /** Shapes */

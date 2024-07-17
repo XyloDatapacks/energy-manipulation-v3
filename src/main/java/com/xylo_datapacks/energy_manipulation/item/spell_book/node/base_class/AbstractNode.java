@@ -154,28 +154,7 @@ public abstract class AbstractNode implements GenericNode {
     public final boolean modifyNodeFromPath(String path, Identifier newSubNodeValueIdentifier) {
         return modifyNodeFromPath(GenericNode.stringPathToListPath(path), newSubNodeValueIdentifier);
     }
-
     
-    
-    @Override
-    public void resumeExecution(SpellExecutor spellExecutor, List<String> path) {
-        // if path is not empty try to execute resumeExecution at the right subNode to chain execution
-        if (!path.isEmpty()) {
-            SubNode<? extends GenericNode> node = this.getSubNode(path.get(0));
-            if (node != null) {
-                path.remove(0);
-                node.getNode().resumeExecution(spellExecutor, path);
-            } 
-            else if (!path.isEmpty()) {
-                System.out.println("path failed at: " + path);
-            }
-        }
-    }
-
-    @Override
-    public final void resumeExecution(SpellExecutor spellExecutor, String path) {
-        resumeExecution(spellExecutor, GenericNode.stringPathToListPath(path));
-    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     

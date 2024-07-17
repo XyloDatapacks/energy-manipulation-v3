@@ -11,7 +11,7 @@ import java.util.Map;
 public abstract class AbstractNodeWithValue<T> extends AbstractNode implements ValueTypeNode<T> {
     private T value;
     
-    public AbstractNodeWithValue(NodeData nodeData) {
+    public AbstractNodeWithValue(NodeData<?> nodeData) {
         super(nodeData);
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractNodeWithValue<T> extends AbstractNode implements V
     }
 
     @Override
-    public GenericNode setFromNbt(NbtCompound nbt) {
+    public final GenericNode setFromNbt(NbtCompound nbt) {
         // set guiData
         getGuiData().setFromNbt(nbt.getCompound("gui_data"));
         // set value

@@ -86,7 +86,7 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
      *  }
      */
     @Override
-    public final NbtCompound toNbt() {
+    public NbtCompound toNbt() {
         // get base nbt compound
         NbtCompound nbt = super.toNbt();
         

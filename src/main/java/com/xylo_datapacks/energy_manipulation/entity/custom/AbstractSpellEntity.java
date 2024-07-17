@@ -71,7 +71,7 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
 
     public void runSpell() {
         if (spellData.spellNode != null) {
-            spellData.spellNode.resumeExecution(this, spellData.lastSpellPath);
+            spellData.spellNode.resumeExecution(this);
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.*;
 public abstract class AbstractNodeWithMap extends AbstractNode {
     private final Map<String, SubNode<? extends GenericNode>> subNodes = new LinkedHashMap<>();
     
-    public AbstractNodeWithMap(NodeData nodeData) {
+    public AbstractNodeWithMap(NodeData<?> nodeData) {
         super(nodeData);
     }
 
@@ -35,7 +35,7 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
      *  }
      */
     @Override
-    public final NbtCompound toNbt() {
+    public NbtCompound toNbt() {
         // get base nbt compound
         NbtCompound nbt = super.toNbt();
 

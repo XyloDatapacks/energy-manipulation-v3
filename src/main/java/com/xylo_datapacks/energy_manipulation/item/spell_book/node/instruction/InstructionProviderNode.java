@@ -1,21 +1,24 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction;
 
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
+import com.google.common.base.Supplier;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.*;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithList;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
 
+import java.security.Key;
 import java.util.List;
 
 
-public class InstructionProviderNode extends AbstractNodeWithList<InstructionNode> {
+public class InstructionProviderNode extends AbstractRunnableNodeWithList<InstructionNode> {
     
     public InstructionProviderNode() {
         super(Nodes.INSTRUCTION_PROVIDER, "instruction", new SubNode.Builder<InstructionNode>()
                 .addNodeValues(List.of(
                         Nodes.INSTRUCTION_GENERATE_SHAPE,
-                        Nodes.INSTRUCTION_MODIFY_POSITION)
+                        Nodes.INSTRUCTION_MODIFY_POSITION,
+                        Nodes.INSTRUCTION_DELAY,
+                        Nodes.INSTRUCTION_IF)
                 ));
     }
     
@@ -33,13 +36,16 @@ public class InstructionProviderNode extends AbstractNodeWithList<InstructionNod
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* GenericNode Interface */
+    /* RunnableNode Interface */
 
     @Override
-    public void resumeExecution(SpellExecutor spellExecutor, List<String> path) {
-        int nextInstructionIndex = !path.isEmpty() ? GenericNode.stripIndexFromPathElement(path.get(0)) + 1 : 0;
-        super.resumeExecution(spellExecutor, path);
-        runInstructionFromIndex(spellExecutor, nextInstructionIndex);
+    public void execute(SpellExecutor spellExecutor) {
+
+    }
+
+    @Override
+    public void resumeExecution(SpellExecutor spellExecutor) {
+        super.resumeExecution(spellExecutor);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

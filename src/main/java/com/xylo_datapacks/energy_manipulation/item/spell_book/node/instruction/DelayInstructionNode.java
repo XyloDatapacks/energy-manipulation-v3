@@ -1,8 +1,7 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.*;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.NumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.shape.ShapeNode;
@@ -10,7 +9,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecuto
 
 import java.util.List;
 
-public class DelayInstructionNode extends AbstractNodeWithMap implements InstructionNode {
+public class DelayInstructionNode extends AbstractRunnableNodeWithMap implements InstructionNode {
     SubNode<NumberNode> time = registerSubNode("time", new SubNode.Builder<NumberNode>()
             .addNodeValues(List.of(
                     Nodes.NUMBER_INTEGER,
@@ -34,4 +33,19 @@ public class DelayInstructionNode extends AbstractNodeWithMap implements Instruc
 
     /*--------------------------------------------------------------------------------------------------------------------*/
 
+
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* RunnableNode Interface */
+
+    @Override
+    public void execute(SpellExecutor spellExecutor) {
+
+    }
+
+    @Override
+    public void resumeExecution(SpellExecutor spellExecutor) {
+        super.resumeExecution(spellExecutor);
+    }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 }
