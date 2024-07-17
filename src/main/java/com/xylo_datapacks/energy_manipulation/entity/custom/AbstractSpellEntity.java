@@ -87,6 +87,11 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     /* SpellExecutor Interface */
 
     @Override
+    public void setLastPath(String lastPath) {
+        spellData.lastSpellPath = lastPath;
+    }
+
+    @Override
     public Entity getCaster() {
         return Optional.ofNullable(spellData.caster).orElse(getOwner());
     }

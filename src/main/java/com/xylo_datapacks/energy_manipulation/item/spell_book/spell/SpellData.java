@@ -12,22 +12,31 @@ import java.util.UUID;
 public class SpellData {
     public static final String CASTER_KEY = "caster";
     public static final String SPELL_NODE_KEY = "spell_node";
+    public static final String LAST_SPELL_PATH = "last_spell_path";
     public static final String CONTEXT_KEY = "context";
     public static final String ATTRIBUTES_KEY = "attributes";
     
     public Entity caster;
     public SpellNode spellNode;
+    public String lastSpellPath;
     public SpellContext spellContext;
     public SpellAttributes spellAttributes;
 
-    public SpellData(Entity caster, SpellNode spellNode, SpellContext spellContext, SpellAttributes spellAttributes) {
+    public SpellData(Entity caster, SpellNode spellNode, String lastSpellPath, SpellContext spellContext, SpellAttributes spellAttributes) {
         this.caster = caster;
         this.spellNode = spellNode;
+        this.lastSpellPath = lastSpellPath;
         this.spellContext = spellContext;
         this.spellAttributes = spellAttributes;
     }
+    
+    public SpellData(Entity caster, SpellNode spellNode, SpellContext spellContext, SpellAttributes spellAttributes) {
+        this(caster, spellNode, "", spellContext, spellAttributes);
+    }
 
-    /** caster, spellNode, spellContext and spellAttributes are null if not present in nbt */
+    /** if not present in nbt: 
+     *      caster, spellNode, spellContext and spellAttributes are null, 
+     *      lastSpellPath is empty. */
     public static SpellData readFromNbt(NbtCompound nbt, World world) {
         // caster
         Entity caster;
@@ -45,6 +54,9 @@ public class SpellData {
                 ? genSpellNode 
                 : null;
         
+        // last spell path
+        String lastSpellPath = nbt.getString(LAST_SPELL_PATH);
+        
         // spell context
         NbtCompound spellContextNbt = nbt.getCompound(CONTEXT_KEY);
         SpellContext spellContext = !spellContextNbt.isEmpty() ? SpellContext.readFromNbt(spellContextNbt) : null;
@@ -53,27 +65,37 @@ public class SpellData {
         NbtCompound spellAttributesNbt = nbt.getCompound(ATTRIBUTES_KEY);
         SpellAttributes spellAttributes = !spellAttributesNbt.isEmpty() ? SpellAttributes.readFromNbt(spellAttributesNbt) : null;
 
-        return new SpellData(caster, spellNode, spellContext, spellAttributes);
+        return new SpellData(caster, spellNode, lastSpellPath, spellContext, spellAttributes);
     }
 
-    /** write caster and spell_node if not null, and spell_context, spell_attributes only if their compound is not empty */
+    /** write caster, spell_node if not null, 
+     * and spell_context, spell_attributes, lastSpellPath only if their compound is not empty */
     public static NbtCompound writeToNbt(SpellData data) {
         NbtCompound spellDataNbt = new NbtCompound();
         if (data == null) return spellDataNbt;
 
+        // caster
         if (data.caster != null) {
             spellDataNbt.putUuid(CASTER_KEY, data.caster.getUuid());
         }
-        
+
+        // spell node
         if (data.spellNode != null) {
             spellDataNbt.put(SPELL_NODE_KEY, data.spellNode.toNbt());
         }
-        
+
+        // last spell path
+        if (data.lastSpellPath != null && !data.lastSpellPath.isEmpty()) {
+            spellDataNbt.putString(LAST_SPELL_PATH, data.lastSpellPath);
+        }
+
+        // spell context
         NbtCompound spellContext = SpellContext.writeToNbt(data.spellContext);
         if (!spellContext.isEmpty()) {
             spellDataNbt.put(CONTEXT_KEY, spellContext);
         }
 
+        // spell attributes
         NbtCompound spellAttributes = SpellAttributes.writeToNbt(data.spellAttributes);
         if (!spellAttributes.isEmpty()) {
             spellDataNbt.put(ATTRIBUTES_KEY, spellAttributes);

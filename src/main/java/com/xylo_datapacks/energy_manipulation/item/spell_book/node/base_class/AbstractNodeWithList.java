@@ -105,7 +105,7 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
             subNodesList.add(node.toNbt());
         }
         // add sub_nodes to nbt
-        nbt.put("sub_nodes", subNodesList);
+        if (!subNodesList.isEmpty()) nbt.put("sub_nodes", subNodesList);
         
         return nbt;
     }
@@ -119,6 +119,7 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
             NbtCompound subNodeNbt = ((NbtCompound) compound);
             Identifier nodeIdentifier = Identifier.tryParse(subNodeNbt.getString("node_type"));
             appendSubNode(nodeIdentifier);
+            // recursive
             SubNode<?> subNode = getSubNode(subNodes.size() - 1);
             if (subNode != null) {
                 subNode.getNode().setFromNbt(subNodeNbt);

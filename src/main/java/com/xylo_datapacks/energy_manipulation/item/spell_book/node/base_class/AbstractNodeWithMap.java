@@ -47,7 +47,7 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
             subNodesCompound.put(entry.getKey(), node.toNbt());
         }
         // add sub_nodes to nbt
-        nbt.put("sub_nodes", subNodesCompound);
+        if (!subNodesCompound.isEmpty()) nbt.put("sub_nodes", subNodesCompound);
         
         return nbt;
     }
@@ -62,6 +62,7 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
             NbtCompound subNodeNbt = subNodesCompound.getCompound(key);
             Identifier nodeIdentifier = Identifier.tryParse(subNodeNbt.getString("node_type"));
             modifySubNode(key, nodeIdentifier);
+            // recursive
             SubNode<?> subNode = getSubNode(key);
             if (subNode != null) {
                 subNode.getNode().setFromNbt(subNodeNbt);

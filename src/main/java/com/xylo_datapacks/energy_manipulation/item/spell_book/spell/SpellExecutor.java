@@ -5,6 +5,8 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 public interface SpellExecutor {
+
+    public abstract void setLastPath(String lastPath);
     
     public abstract Entity getCaster();
 

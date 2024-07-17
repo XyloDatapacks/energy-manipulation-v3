@@ -1,41 +1,30 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.spell;
 
 import com.xylo_datapacks.energy_manipulation.component.CatalystComponent;
-import com.xylo_datapacks.energy_manipulation.component.type.CatalystComponents;
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtDouble;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.util.math.Vec3d;
 
 public class SpellAttributes {
     public static final String IMPACT_KEY = "impact";
     public static final String DIRECTIVITY_KEY = "directivity";
     public static final String CONDUCTANCE_KEY = "conductance";
     public static final String CONDENSATION_TIME_KEY = "condensation_time";
-    public static final String CHARGE_TIME_KEY = "charge_time";
     private Integer impact;
     private Float directivity;
     private Integer conductance;
     private Integer condensationTime;
-    private Integer chargeTime;
 
-    public SpellAttributes(Integer impact, Float directivity, Integer conductance, Integer condensationTime, Integer chargeTime) {
+    public SpellAttributes(Integer impact, Float directivity, Integer conductance, Integer condensationTime) {
         this.impact = impact;
         this.directivity = directivity;
         this.conductance = conductance;
         this.condensationTime = condensationTime;
-        this.chargeTime = chargeTime;
     }
 
     public SpellAttributes(CatalystComponent catalystComponent) {
         this(catalystComponent.impact(), 
                 catalystComponent.directivity(),
                 catalystComponent.conductance(),
-                catalystComponent.getCondensationTicks(),
-                catalystComponent.getChargeTicks());
+                catalystComponent.getCondensationTicks());
     }
 
     public SpellAttributes() {
@@ -59,11 +48,7 @@ public class SpellAttributes {
     public void setCondensationTime(Integer condensationTime) {
         this.condensationTime = condensationTime;
     }
-
-    public void setChargeTime(Integer chargeTime) {
-        this.chargeTime = chargeTime;
-    }
-
+    
     public Integer getImpact() {
         return this.impact;
     }
@@ -79,10 +64,7 @@ public class SpellAttributes {
     public Integer getCondensationTime() {
         return this.condensationTime;
     }
-
-    public Integer getChargeTime() {
-        return this.chargeTime;
-    }
+    
     
     
     
@@ -93,8 +75,7 @@ public class SpellAttributes {
                 nbt.getInt(IMPACT_KEY),
                 nbt.getFloat(DIRECTIVITY_KEY),
                 nbt.getInt(CONDUCTANCE_KEY),
-                nbt.getInt(CONDENSATION_TIME_KEY),
-                nbt.getInt(CHARGE_TIME_KEY)
+                nbt.getInt(CONDENSATION_TIME_KEY)
        );
     }
 
@@ -107,7 +88,6 @@ public class SpellAttributes {
         if (attributes.directivity != null) spellAttributesNbt.putFloat(DIRECTIVITY_KEY, attributes.directivity);
         if (attributes.conductance != null) spellAttributesNbt.putInt(CONDUCTANCE_KEY, attributes.conductance);
         if (attributes.condensationTime != null) spellAttributesNbt.putInt(CONDENSATION_TIME_KEY, attributes.condensationTime);
-        if (attributes.chargeTime != null) spellAttributesNbt.putInt(CHARGE_TIME_KEY, attributes.chargeTime);
 
         return spellAttributesNbt;
     }

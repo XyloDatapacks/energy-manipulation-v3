@@ -1,13 +1,14 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.GuiData;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.SubNodeData;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AbstractNode implements GenericNode {
     private final Identifier nodeIdentifier;
@@ -32,6 +33,7 @@ public abstract class AbstractNode implements GenericNode {
     @Override
     public final Identifier getNodeIdentifier() { return nodeIdentifier; }
     
+    
     /**
      *  {
      *      node_type: "<@node_identifier>",
@@ -51,11 +53,15 @@ public abstract class AbstractNode implements GenericNode {
         return nbt;
     }
 
+    
+    
     @Override
     public final GuiData getGuiData() {
         return guiData;
     }
 
+    
+    
     @Override
     public final NodeData<? extends GenericNode> getNodeData() {
         return Nodes.NODES.get(nodeIdentifier);
@@ -66,6 +72,8 @@ public abstract class AbstractNode implements GenericNode {
         return Nodes.NODES.get(nodeIdentifier).subNodes().get(subNodeId);
     }
     
+    
+    
     @Override
     public final GenericNode getParentNode() { return parentNode; };
 
@@ -74,6 +82,34 @@ public abstract class AbstractNode implements GenericNode {
         return nesting;
     }
 
+    
+    
+    @Override
+    public final Map<String, NodeResult> getAllSubNodesRecursive(String pathStart) {
+        return getAllSubNodesRecursive(GenericNode.stringPathToListPath(pathStart));
+    }
+
+    @Override
+    public final Map<String, NodeResult> getAllSubNodesRecursive() {
+        return getAllSubNodesRecursive(new ArrayList<>());
+    }
+
+    
+    
+    @Override
+    public final NodeResult getNodeResultFromPath(List<String> path) {
+        if (path.isEmpty()) return null;
+        List<String> pathSaved = new ArrayList<>(path);
+        return new NodeResult(new NodePath(pathSaved, GenericNode.getSubNodeIdFromPathElement(pathSaved.get(pathSaved.size()-1))), getNodeFromPath(path));
+    }
+
+    @Override
+    public final NodeResult getNodeResultFromPath(String path) {
+        return getNodeResultFromPath(GenericNode.stringPathToListPath(path));
+    }
+    
+
+    
     @Override
     public final GenericNode getNodeFromPath(List<String> path) {
         if (path.isEmpty()) return this;
@@ -89,6 +125,13 @@ public abstract class AbstractNode implements GenericNode {
         }
         return null;
     }
+
+    @Override
+    public final GenericNode getNodeFromPath(String path) {
+        return getNodeFromPath(GenericNode.stringPathToListPath(path));
+    }
+
+    
     
     @Override
     public final boolean modifyNodeFromPath(List<String> path, Identifier newSubNodeValueIdentifier) {
@@ -105,6 +148,33 @@ public abstract class AbstractNode implements GenericNode {
             return parentNode.modifyNodeFromPath(subNodeTargetPath, newSubNodeValueIdentifier);
         }
         return false;
+    }
+
+    @Override
+    public final boolean modifyNodeFromPath(String path, Identifier newSubNodeValueIdentifier) {
+        return modifyNodeFromPath(GenericNode.stringPathToListPath(path), newSubNodeValueIdentifier);
+    }
+
+    
+    
+    @Override
+    public void resumeExecution(SpellExecutor spellExecutor, List<String> path) {
+        // if path is not empty try to execute resumeExecution at the right subNode to chain execution
+        if (!path.isEmpty()) {
+            SubNode<? extends GenericNode> node = this.getSubNode(path.get(0));
+            if (node != null) {
+                path.remove(0);
+                node.getNode().resumeExecution(spellExecutor, path);
+            } 
+            else if (!path.isEmpty()) {
+                System.out.println("path failed at: " + path);
+            }
+        }
+    }
+
+    @Override
+    public final void resumeExecution(SpellExecutor spellExecutor, String path) {
+        resumeExecution(spellExecutor, GenericNode.stringPathToListPath(path));
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -2,6 +2,7 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
@@ -14,6 +15,7 @@ public interface GenericNode {
 
     // node Id
     public abstract Identifier getNodeIdentifier();
+    
     // nbt
     public abstract NbtCompound toNbt();
     public abstract GenericNode setFromNbt(NbtCompound nbt);
@@ -44,25 +46,15 @@ public interface GenericNode {
     /** get all sub nodes and their sub nodes */
     public abstract Map<String, NodeResult> getAllSubNodesRecursive(List<String> pathStart);
     /** get all sub nodes and their sub nodes */
-    public default Map<String, NodeResult> getAllSubNodesRecursive(String pathStart) {
-        return getAllSubNodesRecursive(stringPathToListPath(pathStart));
-    };
+    public abstract Map<String, NodeResult> getAllSubNodesRecursive(String pathStart);
     /** get all sub nodes and their sub nodes */
-    public default Map<String, NodeResult> getAllSubNodesRecursive() {
-        return getAllSubNodesRecursive(new ArrayList<>());
-    };
+    public abstract Map<String, NodeResult> getAllSubNodesRecursive();
 
 
     /** get a node result from a path */
-    public default NodeResult getNodeResultFromPath(List<String> path) {
-        if (path.isEmpty()) return null;
-        List<String> pathSaved = new ArrayList<>(path);
-        return new NodeResult(new NodePath(pathSaved, GenericNode.getSubNodeIdFromPathElement(pathSaved.get(pathSaved.size()-1))), getNodeFromPath(path)); 
-    }
+    public abstract NodeResult getNodeResultFromPath(List<String> path);
     /** get a node result from a path */
-    public default NodeResult getNodeResultFromPath(String path) {
-        return getNodeResultFromPath(stringPathToListPath(path));
-    };
+    public abstract NodeResult getNodeResultFromPath(String path);
     
     
     /** get a sub node using a one element path */
@@ -70,18 +62,21 @@ public interface GenericNode {
     /** get a node from a path relative to this node. an empty path returns this node */
     public abstract GenericNode getNodeFromPath(List<String> path);
     /** get a node from a path relative to this node. an empty path returns this node */
-    public default GenericNode getNodeFromPath(String path) {
-        return getNodeFromPath(stringPathToListPath(path));
-    };
+    public abstract GenericNode getNodeFromPath(String path);
     
     
     /** modify a sub node using a one element path */
     public abstract boolean modifySubNode(String path, Identifier newSubNodeValueIdentifier);
     /** modify a node from a path relative to this node */
     public abstract boolean modifyNodeFromPath(List<String> path, Identifier newSubNodeValueIdentifier);
-    public default boolean modifyNodeFromPath(String path, Identifier newSubNodeValueIdentifier) {
-        return modifyNodeFromPath(stringPathToListPath(path), newSubNodeValueIdentifier);
-    };
+    public abstract boolean modifyNodeFromPath(String path, Identifier newSubNodeValueIdentifier);
+
+
+    /** function to run a node from path 
+     * </p> override and implement the node specific resume after the super call */
+    public abstract void resumeExecution(SpellExecutor spellExecutor, List<String> path);
+    /** function to run a node from path, calls the list version of this function */
+    public abstract void resumeExecution(SpellExecutor spellExecutor, String path);
     
     
     
