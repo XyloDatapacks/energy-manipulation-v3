@@ -1,6 +1,5 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
-import com.mojang.datafixers.types.Func;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodePath;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
@@ -9,17 +8,17 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public abstract class AbstractNodeWithList<T extends GenericNode> extends AbstractNode {
     private final String subNodesId;
     private final List<SubNode<T>> subNodes = new ArrayList<>();
-    private final BiFunction<Integer, Identifier, SubNode<T>> buildSubNode;
+    private final Function<Identifier, SubNode<T>> buildSubNode;
     
     public AbstractNodeWithList(NodeData nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate) {
         super(nodeData);
         this.subNodesId = subNodesId;
-        this.buildSubNode = (index, newSubNodeValueIdentifier) -> subNodeBuilderTemplate.build(this, newSubNodeValueIdentifier);
+        this.buildSubNode = (newSubNodeValueIdentifier) -> subNodeBuilderTemplate.build(this, newSubNodeValueIdentifier);
     }
 
     public final SubNode<T> getSubNode(int index) {
@@ -41,19 +40,19 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
     }
 
     public final void appendSubNode() {
-        subNodes.add(subNodes.size(), buildSubNode.apply(subNodes.size(), null));
+        subNodes.add(subNodes.size(), buildSubNode.apply(null));
     }
 
     public final void appendSubNode(Identifier newSubNodeValueIdentifier) {
-        subNodes.add(subNodes.size(), buildSubNode.apply(subNodes.size(), newSubNodeValueIdentifier));
+        subNodes.add(subNodes.size(), buildSubNode.apply(newSubNodeValueIdentifier));
     }
     
     public final void prependSubNode(Identifier newSubNodeValueIdentifier) {
-        subNodes.add(0, buildSubNode.apply(0, newSubNodeValueIdentifier));
+        subNodes.add(0, buildSubNode.apply(newSubNodeValueIdentifier));
     }
     
     public final void insertSubNode(int index, Identifier newSubNodeValueIdentifier) {
-        subNodes.add(index, buildSubNode.apply(index, newSubNodeValueIdentifier));
+        subNodes.add(index, buildSubNode.apply(newSubNodeValueIdentifier));
     }
 
     public final SubNode<T> removeSubNode(int index) {
