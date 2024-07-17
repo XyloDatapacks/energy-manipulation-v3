@@ -8,6 +8,8 @@ public interface SpellExecutor {
 
     public abstract void setLastPath(String lastPath);
     
+    public abstract void setDelayTicks(int ticks);
+    
     public abstract Entity getCaster();
 
     public abstract Vec3d getContextPosition();

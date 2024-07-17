@@ -120,7 +120,7 @@ public final class SubNode<T extends GenericNode> {
          * @param defaultValue identifier of one of the node values added. if not found, use first one instead
          */
         public SubNode<T> build(GenericNode parentNode, Identifier defaultValue) {
-            if (nodeClasses.containsKey(defaultValue)) {
+            if (defaultValue != null && nodeClasses.containsKey(defaultValue)) {
                 selectedClassIdentifier = defaultValue;
                 return new SubNode<>(parentNode, nodeClasses, selectedClassIdentifier);
             } 

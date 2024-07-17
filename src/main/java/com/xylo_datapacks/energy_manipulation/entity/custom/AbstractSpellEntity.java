@@ -19,7 +19,9 @@ import java.util.Optional;
 
 public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.AbstractItemDisplayProjectile implements SpellExecutor {
     public static final String SPELL_DATA_KEY = "spell_data";
+    public static final String SPELL_DELAY_KEY = "spell_delay";
     private SpellData spellData;
+    private int spellDelay = 0;
 
     public AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> entityType, World world) {
         super(entityType, world);
@@ -44,6 +46,7 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
         super.readCustomDataFromNbt(nbt);
         
         this.spellData = SpellData.readFromNbt(nbt, this.getWorld());
+        this.spellDelay = nbt.getInt(SPELL_DELAY_KEY);
     }
     
     @Override
@@ -51,6 +54,7 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
         super.writeCustomDataToNbt(nbt);
         
         nbt.put(SPELL_DATA_KEY, SpellData.writeToNbt(this.spellData));
+        nbt.putInt(SPELL_DELAY_KEY, spellDelay);
     }
 
     @Override
@@ -89,6 +93,11 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     @Override
     public void setLastPath(String lastPath) {
         spellData.lastSpellPath = lastPath;
+    }
+
+    @Override
+    public void setDelayTicks(int ticks) {
+        spellDelay = ticks;
     }
 
     @Override

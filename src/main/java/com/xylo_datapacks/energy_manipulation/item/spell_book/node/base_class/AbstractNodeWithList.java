@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
+import com.mojang.datafixers.types.Func;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodePath;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
@@ -8,24 +9,17 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 public abstract class AbstractNodeWithList<T extends GenericNode> extends AbstractNode {
     private final String subNodesId;
-    private final SubNode.Builder<T> subNodeBuilderTemplate;
     private final List<SubNode<T>> subNodes = new ArrayList<>();
+    private final BiFunction<Integer, Identifier, SubNode<T>> buildSubNode;
     
     public AbstractNodeWithList(NodeData nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate) {
         super(nodeData);
         this.subNodesId = subNodesId;
-        this.subNodeBuilderTemplate = subNodeBuilderTemplate;
-    }
-
-    public final void appendSubNode() {
-        subNodes.add(subNodes.size(), subNodeBuilderTemplate.build(this));
-    }
-    
-    public final void appendSubNode(Identifier newSubNodeValueIdentifier) {
-        subNodes.add(subNodes.size(), subNodeBuilderTemplate.build(this, newSubNodeValueIdentifier));
+        this.buildSubNode = (index, newSubNodeValueIdentifier) -> subNodeBuilderTemplate.build(this, newSubNodeValueIdentifier);
     }
 
     public final SubNode<T> getSubNode(int index) {
@@ -45,13 +39,21 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
         }
         return false;
     }
+
+    public final void appendSubNode() {
+        subNodes.add(subNodes.size(), buildSubNode.apply(subNodes.size(), null));
+    }
+
+    public final void appendSubNode(Identifier newSubNodeValueIdentifier) {
+        subNodes.add(subNodes.size(), buildSubNode.apply(subNodes.size(), newSubNodeValueIdentifier));
+    }
     
     public final void prependSubNode(Identifier newSubNodeValueIdentifier) {
-        subNodes.add(0, subNodeBuilderTemplate.build(this, newSubNodeValueIdentifier));
+        subNodes.add(0, buildSubNode.apply(0, newSubNodeValueIdentifier));
     }
     
     public final void insertSubNode(int index, Identifier newSubNodeValueIdentifier) {
-        subNodes.add(index, subNodeBuilderTemplate.build(this, newSubNodeValueIdentifier));
+        subNodes.add(index, buildSubNode.apply(index, newSubNodeValueIdentifier));
     }
 
     public final SubNode<T> removeSubNode(int index) {
@@ -66,14 +68,6 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
         return removeSubNode(GenericNode.stripIndexFromPathElement(listPath.get(listPath.size() - 1)));
     }
     
-    public final SubNode<T> removeFirstSubNode() {
-        return subNodes.remove(0);
-    }
-    
-    public final SubNode<T> removeLastSubNode() {
-        return subNodes.remove(subNodes.size() - 1);
-    }
-
     public final void removeAllSubNodes() {
         subNodes.clear();
     }
