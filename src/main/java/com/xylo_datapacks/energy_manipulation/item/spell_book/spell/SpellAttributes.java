@@ -11,11 +11,11 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 public class SpellAttributes {
-    protected static final String IMPACT_KEY = "impact";
-    protected static final String DIRECTIVITY_KEY = "directivity";
-    protected static final String CONDUCTANCE_KEY = "conductance";
-    protected static final String CONDENSATION_TIME_KEY = "condensation_time";
-    protected static final String CHARGE_TIME_KEY = "charge_time";
+    public static final String IMPACT_KEY = "impact";
+    public static final String DIRECTIVITY_KEY = "directivity";
+    public static final String CONDUCTANCE_KEY = "conductance";
+    public static final String CONDENSATION_TIME_KEY = "condensation_time";
+    public static final String CHARGE_TIME_KEY = "charge_time";
     private Integer impact;
     private Float directivity;
     private Integer conductance;

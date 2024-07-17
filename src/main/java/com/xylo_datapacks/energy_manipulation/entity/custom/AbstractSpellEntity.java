@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.AbstractItemDisplayProjectile implements SpellExecutor {
-    protected static final String SPELL_DATA_KEY = "spell_data";
+    public static final String SPELL_DATA_KEY = "spell_data";
     private SpellData spellData;
 
     public AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> entityType, World world) {

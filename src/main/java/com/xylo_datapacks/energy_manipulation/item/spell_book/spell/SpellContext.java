@@ -9,8 +9,8 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 public class SpellContext {
-    protected static final String POSITION_KEY = "position";
-    protected static final String ROTATION_KEY = "rotation";
+    public static final String POSITION_KEY = "position";
+    public static final String ROTATION_KEY = "rotation";
     
     private Vec3d position;
     private Vec2f rotation;

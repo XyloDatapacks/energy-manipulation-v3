@@ -10,10 +10,10 @@ import net.minecraft.world.World;
 import java.util.UUID;
 
 public class SpellData {
-    protected static final String CASTER_KEY = "caster";
-    protected static final String SPELL_NODE_KEY = "spell_node";
-    protected static final String CONTEXT_KEY = "context";
-    protected static final String ATTRIBUTES_KEY = "attributes";
+    public static final String CASTER_KEY = "caster";
+    public static final String SPELL_NODE_KEY = "spell_node";
+    public static final String CONTEXT_KEY = "context";
+    public static final String ATTRIBUTES_KEY = "attributes";
     
     public Entity caster;
     public SpellNode spellNode;
