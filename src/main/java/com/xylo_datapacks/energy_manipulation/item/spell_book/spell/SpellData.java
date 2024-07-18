@@ -66,7 +66,6 @@ public class SpellData {
 
         // spell node
         NbtCompound spellNodeNbt = nbt.getCompound(SPELL_NODE_KEY);
-        System.out.println("SPELL ENTITY LOAD SPELL" + spellNodeNbt);
         SpellNode spellNode = !spellNodeNbt.isEmpty() && GenericNode.generateFromNbt(spellNodeNbt) instanceof SpellNode genSpellNode 
                 ? genSpellNode 
                 : null;

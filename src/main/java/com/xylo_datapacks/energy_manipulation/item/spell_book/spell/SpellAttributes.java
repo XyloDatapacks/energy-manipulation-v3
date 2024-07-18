@@ -86,15 +86,15 @@ public class SpellAttributes {
        );
     }
 
-    /** write attributes only if they are not null */
+    /** write attributes only if they are not null or zero */
     public static NbtCompound writeToNbt(SpellAttributes attributes) {
         NbtCompound spellAttributesNbt = new NbtCompound();
         if (attributes == null) return spellAttributesNbt;
 
-        if (attributes.impact != null) spellAttributesNbt.putInt(IMPACT_KEY, attributes.impact);
-        if (attributes.directivity != null) spellAttributesNbt.putFloat(DIRECTIVITY_KEY, attributes.directivity);
-        if (attributes.conductance != null) spellAttributesNbt.putInt(CONDUCTANCE_KEY, attributes.conductance);
-        if (attributes.condensationTime != null) spellAttributesNbt.putInt(CONDENSATION_TIME_KEY, attributes.condensationTime);
+        if (attributes.impact != null && attributes.impact != 0) spellAttributesNbt.putInt(IMPACT_KEY, attributes.impact);
+        if (attributes.directivity != null && attributes.directivity != 0) spellAttributesNbt.putFloat(DIRECTIVITY_KEY, attributes.directivity);
+        if (attributes.conductance != null && attributes.conductance != 0) spellAttributesNbt.putInt(CONDUCTANCE_KEY, attributes.conductance);
+        if (attributes.condensationTime != null && attributes.condensationTime != 0) spellAttributesNbt.putInt(CONDENSATION_TIME_KEY, attributes.condensationTime);
 
         return spellAttributesNbt;
     }
