@@ -10,15 +10,22 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public final class SubNode<T extends GenericNode> {
+    private final String id;
     private T node;
     private final Map<Identifier, Supplier<T>> nodeClasses;
     private Identifier SelectedClassIdentifier;
     
-    private SubNode(GenericNode parentNode, Map<Identifier, Supplier<T>> nodeValues, Identifier SelectedValue) {
+    private SubNode(GenericNode parentNode, String id, Map<Identifier, Supplier<T>> nodeValues, Identifier SelectedValue) {
+        this.id = id;
         this.nodeClasses = nodeValues;
         this.SelectedClassIdentifier = SelectedValue;
         this.node = nodeValues.get(SelectedClassIdentifier).get();
         ((AbstractNode) this.node).setParentNode(parentNode);
+    }
+    
+    /** get the id this subNode got registered with */
+    public String getId() {
+        return id;
     }
     
     /**
@@ -119,20 +126,20 @@ public final class SubNode<T extends GenericNode> {
          * call to finalize the construction of the sub node
          * @param defaultValue identifier of one of the node values added. if not found, use first one instead
          */
-        public SubNode<T> build(GenericNode parentNode, Identifier defaultValue) {
+        public SubNode<T> build(GenericNode parentNode, String id, Identifier defaultValue) {
             if (defaultValue != null && nodeClasses.containsKey(defaultValue)) {
                 selectedClassIdentifier = defaultValue;
-                return new SubNode<>(parentNode, nodeClasses, selectedClassIdentifier);
+                return new SubNode<>(parentNode, id, nodeClasses, selectedClassIdentifier);
             } 
-           return build(parentNode);
+           return build(parentNode, id);
         }
 
         /**
          * call to finalize the construction of the sub node
          */
-        public SubNode<T> build(GenericNode parentNode) {
+        public SubNode<T> build(GenericNode parentNode, String id) {
             selectedClassIdentifier = nodeClasses.keySet().iterator().next();
-            return new SubNode<>(parentNode, nodeClasses, selectedClassIdentifier);
+            return new SubNode<>(parentNode, id, nodeClasses, selectedClassIdentifier);
         }
     }
 } 

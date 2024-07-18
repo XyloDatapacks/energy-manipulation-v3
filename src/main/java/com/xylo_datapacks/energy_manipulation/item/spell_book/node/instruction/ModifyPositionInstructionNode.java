@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractRunnableNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
@@ -14,13 +15,13 @@ public class ModifyPositionInstructionNode extends AbstractNodeWithMap implement
             .addNodeValues(List.of(
                     Nodes.POSITION_OFFSET,
                     Nodes.POSITION_ALIGN))
-            .build(this));
+    );
     
     public ModifyPositionInstructionNode() {
         super(Nodes.INSTRUCTION_MODIFY_POSITION);
     }
 
-/*--------------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
     /* InstructionNode Interface */
     
     @Override
@@ -29,7 +30,6 @@ public class ModifyPositionInstructionNode extends AbstractNodeWithMap implement
         return true;
     }
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-    
-    
+    /*----------------------------------------------------------------------------------------------------------------*/
+
 }

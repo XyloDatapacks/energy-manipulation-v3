@@ -29,7 +29,7 @@ public class CatalystItem extends Item {
         // pass catalyst attributes
         CatalystComponent catalystComponents = projectileStack.get(ModDataComponentTypes.CATALYST);
         if (catalystComponents != null) {
-            spell.getSpellData().spellAttributes = new SpellAttributes(catalystComponents);
+            spell.getSpellData().getSpellAttributes().setFromCatalyst(catalystComponents);
         }
         // set display
         spell.setDisplayedItemStack(new ItemStack(Items.LECTERN));

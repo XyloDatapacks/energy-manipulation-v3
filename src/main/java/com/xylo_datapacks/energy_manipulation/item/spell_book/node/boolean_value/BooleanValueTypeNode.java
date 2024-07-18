@@ -19,7 +19,7 @@ public class BooleanValueTypeNode extends AbstractNodeWithValue<Boolean> impleme
 
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* NumberNode Interface */
+    /* BooleanNode Interface */
 
     @Override
     public Boolean getBoolean(SpellExecutor spellExecutor) {

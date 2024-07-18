@@ -12,7 +12,7 @@ public class IntegerNumberNode extends AbstractNodeWithMap implements NumberNode
     SubNode<ValueTypeNode<Integer>> value = registerSubNode("value", new SubNode.Builder<ValueTypeNode<Integer>>()
             .addNodeValues(List.of(
                     Nodes.VALUE_TYPE_INTEGER))
-            .build(this));
+    );
     
     public IntegerNumberNode() {
         super(Nodes.NUMBER_INTEGER);

@@ -13,15 +13,15 @@ public class AlignPositionNode extends AbstractNodeWithMap implements PositionNo
     SubNode<BooleanNode> x = registerSubNode("x", new SubNode.Builder<BooleanNode>()
             .addNodeValues(List.of(
                     Nodes.VALUE_TYPE_BOOLEAN))
-            .build(this));
+    );
     SubNode<BooleanNode> y = registerSubNode("y", new SubNode.Builder<BooleanNode>()
             .addNodeValues(List.of(
                     Nodes.VALUE_TYPE_BOOLEAN))
-            .build(this));
+    );
     SubNode<BooleanNode> z = registerSubNode("z", new SubNode.Builder<BooleanNode>()
             .addNodeValues(List.of(
                     Nodes.VALUE_TYPE_BOOLEAN))
-            .build(this));
+    );
     
     public AlignPositionNode() {
         super(Nodes.POSITION_ALIGN);

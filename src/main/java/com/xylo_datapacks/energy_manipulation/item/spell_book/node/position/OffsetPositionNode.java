@@ -14,7 +14,7 @@ public class OffsetPositionNode extends AbstractNodeWithMap implements PositionN
             .addNodeValues(List.of(
                     Nodes.OFFSET_CARDINAL,
                     Nodes.OFFSET_DIRECTIONAL))
-            .build(this));
+    );
     
     public OffsetPositionNode() {
         super(Nodes.POSITION_OFFSET);

@@ -14,17 +14,17 @@ public class CardinalOffsetNode extends AbstractNodeWithMap implements OffsetNod
             .addNodeValues(List.of(
                     Nodes.NUMBER_DOUBLE,
                     Nodes.VALUE_TYPE_DOUBLE))
-            .build(this));
+    );
     SubNode<NumberNode> y = registerSubNode("y", new SubNode.Builder<NumberNode>()
             .addNodeValues(List.of(
                     Nodes.NUMBER_DOUBLE,
                     Nodes.VALUE_TYPE_DOUBLE))
-            .build(this));
+    );
     SubNode<NumberNode> z = registerSubNode("z", new SubNode.Builder<NumberNode>()
             .addNodeValues(List.of(
                     Nodes.NUMBER_DOUBLE,
                     Nodes.VALUE_TYPE_DOUBLE))
-            .build(this));
+    );
     
     public CardinalOffsetNode() {
         super(Nodes.OFFSET_CARDINAL);

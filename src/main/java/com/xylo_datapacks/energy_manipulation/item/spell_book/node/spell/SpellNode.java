@@ -2,6 +2,7 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractRunnableNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.ReturnType;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
@@ -10,11 +11,11 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.I
 
 import java.util.List;
 
-public class SpellNode extends AbstractRunnableNodeWithMap {
+public class SpellNode extends AbstractNodeWithMap {
     SubNode<InstructionProviderNode> program = registerSubNode("program", new SubNode.Builder<InstructionProviderNode>()
             .addNodeValues(List.of(
                     Nodes.INSTRUCTION_PROVIDER))
-            .build(this));
+    );
     
     public SpellNode() {
         super(Nodes.SPELL);
@@ -24,24 +25,9 @@ public class SpellNode extends AbstractRunnableNodeWithMap {
     /* SpellNode Interface */
     
     public void executeSpell(SpellExecutor spellExecutor) {
-        System.out.println("Executing spell node");
         program.getNode().runInstructions(spellExecutor);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
-    /*----------------------------------------------------------------------------------------------------------------*/
-    /* RunnableNode Interface */
-
-    @Override
-    public void execute(SpellExecutor spellExecutor) {
-
-    }
-
-    @Override
-    public void resumeExecution(SpellExecutor spellExecutor) {
-        super.resumeExecution(spellExecutor);
-    }
-
-    /*----------------------------------------------------------------------------------------------------------------*/
+    
 }

@@ -1,8 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.entity.custom;
 
-import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellAttributes;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellData;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.*;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,6 +20,7 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     public static final String SPELL_DELAY_KEY = "spell_delay";
     private SpellData spellData;
     private int spellDelay = 0;
+    private ExecutionData executionData = new ExecutionData();
 
     public AbstractSpellEntity(EntityType<? extends AbstractSpellEntity> entityType, World world) {
         super(entityType, world);
@@ -38,6 +37,19 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
         spellData = new SpellData(getOwner(), null, null, null);
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        
+        if (spellDelay > 0) {
+            spellDelay--;
+        }
+        else {
+            runSpell();
+        }
+    }
+
+
     /*----------------------------------------------------------------------------------------------------------------*/
     /* PersistentProjectileEntity Interface */
 
@@ -45,7 +57,7 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         
-        this.spellData = SpellData.readFromNbt(nbt, this.getWorld());
+        this.spellData = SpellData.readFromNbt(nbt.getCompound(SPELL_DATA_KEY), this.getWorld());
         this.spellDelay = nbt.getInt(SPELL_DELAY_KEY);
     }
     
@@ -71,7 +83,9 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
 
     public void runSpell() {
         if (spellData.spellNode != null) {
-            spellData.spellNode.resumeExecution(this);
+            System.out.println("Executing spell");
+            getExecutionData().returnType = ReturnType.NONE;
+            spellData.spellNode.executeSpell(this);
         }
     }
 
@@ -107,22 +121,27 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
 
     @Override
     public Vec3d getContextPosition() {
-        return Optional.ofNullable(spellData.spellContext.getPosition()).orElse(getPos());
+        return Optional.ofNullable(spellData.getSpellContext().getPosition()).orElse(getPos());
     }
 
     @Override
     public Vec2f getContextRotation() {
-        return Optional.ofNullable(spellData.spellContext.getRotation()).orElse(new Vec2f(getYaw(), getPitch()));
+        return Optional.ofNullable(spellData.getSpellContext().getRotation()).orElse(new Vec2f(getYaw(), getPitch()));
     }
 
     @Override
     public void setContextPosition(Vec3d position) {
-        spellData.spellContext.setPosition(position);
+        spellData.getSpellContext().setPosition(position);
     }
 
     @Override
     public void setContextRotation(Vec2f rotation) {
-        spellData.spellContext.setRotation(rotation); 
+        spellData.getSpellContext().setRotation(rotation); 
+    }
+
+    @Override
+    public ExecutionData getExecutionData() {
+        return executionData;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

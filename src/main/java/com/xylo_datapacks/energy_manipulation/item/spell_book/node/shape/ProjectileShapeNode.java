@@ -13,7 +13,7 @@ public class ProjectileShapeNode extends AbstractNodeWithMap implements ShapeNod
     SubNode<EffectProviderNode> effects = registerSubNode("effects", new SubNode.Builder<EffectProviderNode>()
             .addNodeValues(List.of(
                     Nodes.EFFECT_PROVIDER))
-            .build(this));
+    );
     
     
     public ProjectileShapeNode() {

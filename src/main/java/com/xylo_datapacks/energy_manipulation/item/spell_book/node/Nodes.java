@@ -2,6 +2,7 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node;
 
 import com.xylo_datapacks.energy_manipulation.EnergyManipulation;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.condition.CasterOnGroundConditionNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.BreakEffectNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.EffectProviderNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.FireEffectNode;
@@ -49,6 +50,10 @@ public class Nodes {
             "condition", new SubNodeData("Condition","Condition to pass"),
             "passed", new SubNodeData("Passed","What happens if condition = true"),
             "failed", new SubNodeData("Failed","What happens if condition = false")
+    )));
+    public static final NodeData<WhileLoopInstructionNode> INSTRUCTION_WHILE_LOOP = registerNode("instruction", "while", new NodeData.NodeDataMaker<>("While", "execute instructions in loop as long as the condition is true", WhileLoopInstructionNode::new, Map.of(
+            "condition", new SubNodeData("Condition","Condition to pass"),
+            "body", new SubNodeData("Body","the instructions to run")
     )));
 
     /** Shapes */
@@ -104,7 +109,9 @@ public class Nodes {
     
     /** Boolean Value */
     public static final NodeData<BooleanValueTypeNode> VALUE_TYPE_BOOLEAN = registerNode("boolean_value", "boolean", new NodeData.NodeDataMaker<>("Value Boolean", "Select the value", BooleanValueTypeNode::new, Map.of()));
-
+    
+    /** Condition */
+    public static final NodeData<CasterOnGroundConditionNode> CONDITION_CASTER_ON_GROUND = registerNode("condition", "caster_on_ground", new NodeData.NodeDataMaker<>("Caster On Ground", "returns true if the caster is on ground", CasterOnGroundConditionNode::new, Map.of()));
 
 
     // Function called to add nodes

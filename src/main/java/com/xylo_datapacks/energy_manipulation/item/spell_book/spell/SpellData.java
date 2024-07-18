@@ -19,8 +19,8 @@ public class SpellData {
     public Entity caster;
     public SpellNode spellNode;
     public String lastSpellPath;
-    public SpellContext spellContext;
-    public SpellAttributes spellAttributes;
+    private final SpellContext spellContext;
+    private final SpellAttributes spellAttributes;
 
     public SpellData(Entity caster, SpellNode spellNode, String lastSpellPath, SpellContext spellContext, SpellAttributes spellAttributes) {
         this.caster = caster;
@@ -33,6 +33,22 @@ public class SpellData {
     public SpellData(Entity caster, SpellNode spellNode, SpellContext spellContext, SpellAttributes spellAttributes) {
         this(caster, spellNode, "", spellContext, spellAttributes);
     }
+    
+    
+    public SpellContext getSpellContext() {
+        if (spellContext == null) {
+            return new SpellContext();
+        }
+        return spellContext;
+    }
+
+    public SpellAttributes getSpellAttributes() {
+        if (spellAttributes == null) {
+            return new SpellAttributes();
+        }
+        return spellAttributes;
+    }
+    
 
     /** if not present in nbt: 
      *      caster, spellNode, spellContext and spellAttributes are null, 
@@ -50,6 +66,7 @@ public class SpellData {
 
         // spell node
         NbtCompound spellNodeNbt = nbt.getCompound(SPELL_NODE_KEY);
+        System.out.println("SPELL ENTITY LOAD SPELL" + spellNodeNbt);
         SpellNode spellNode = !spellNodeNbt.isEmpty() && GenericNode.generateFromNbt(spellNodeNbt) instanceof SpellNode genSpellNode 
                 ? genSpellNode 
                 : null;

@@ -64,7 +64,14 @@ public class SpellAttributes {
     public Integer getCondensationTime() {
         return this.condensationTime;
     }
-    
+
+
+    public void setFromCatalyst(CatalystComponent catalystComponents) {
+        this.setImpact(catalystComponents.impact());
+        this.setDirectivity(catalystComponents.directivity());
+        this.setConductance(catalystComponents.conductance());
+        this.setCondensationTime(catalystComponents.getCondensationTicks());
+    }
     
     
     
@@ -91,4 +98,5 @@ public class SpellAttributes {
 
         return spellAttributesNbt;
     }
+    
 }

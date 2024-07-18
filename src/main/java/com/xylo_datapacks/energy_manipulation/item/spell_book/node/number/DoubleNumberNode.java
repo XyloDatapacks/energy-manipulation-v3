@@ -12,7 +12,7 @@ public class DoubleNumberNode extends AbstractNodeWithMap implements NumberNode 
     SubNode<ValueTypeNode<Double>> value = registerSubNode("value", new SubNode.Builder<ValueTypeNode<Double>>()
             .addNodeValues(List.of(
                     Nodes.VALUE_TYPE_DOUBLE))
-            .build(this));
+    );
     
     public DoubleNumberNode() {
         super(Nodes.NUMBER_DOUBLE);

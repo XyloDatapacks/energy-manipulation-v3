@@ -15,7 +15,12 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
         super(nodeData);
     }
 
-    protected final <T extends GenericNode> SubNode<T> registerSubNode(String subNodeId, SubNode<T> subNode) {
+    protected final <T extends GenericNode> SubNode<T> registerSubNode(String subNodeId, SubNode.Builder<T> subNodeBuilderTemplate) {
+        return registerSubNode(subNodeId, subNodeBuilderTemplate, null);
+    }
+
+    protected final <T extends GenericNode> SubNode<T> registerSubNode(String subNodeId, SubNode.Builder<T> subNodeBuilderTemplate, Identifier newSubNodeValueIdentifier) {
+        SubNode<T> subNode = subNodeBuilderTemplate.build(this, subNodeId, newSubNodeValueIdentifier);
         subNodes.put(subNodeId, subNode);
         return subNode;
     }
@@ -104,7 +109,7 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
     @Override
     public final SubNode<? extends GenericNode> getSubNode(String path) {
         // if the subNodeId is already registered
-        if (subNodes.containsKey(path)) {
+        if (path != null && subNodes.containsKey(path)) {
             return subNodes.get(path);
         }
         return null;

@@ -18,7 +18,11 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
     public AbstractNodeWithList(NodeData nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate) {
         super(nodeData);
         this.subNodesId = subNodesId;
-        this.buildSubNode = (newSubNodeValueIdentifier) -> subNodeBuilderTemplate.build(this, newSubNodeValueIdentifier);
+        this.buildSubNode = (newSubNodeValueIdentifier) -> subNodeBuilderTemplate.build(this, subNodesId, newSubNodeValueIdentifier);
+    }
+    
+    public int getSubNodesSize() {
+        return subNodes.size();
     }
 
     public final SubNode<T> getSubNode(int index) {

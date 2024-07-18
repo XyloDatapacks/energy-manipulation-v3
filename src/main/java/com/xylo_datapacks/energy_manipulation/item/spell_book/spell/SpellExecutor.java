@@ -19,4 +19,6 @@ public interface SpellExecutor {
     public abstract void setContextPosition(Vec3d position);
     
     public abstract void setContextRotation(Vec2f position);
+    
+    public abstract ExecutionData getExecutionData();
 }

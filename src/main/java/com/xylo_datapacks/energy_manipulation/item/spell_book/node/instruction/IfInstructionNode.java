@@ -7,25 +7,28 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.Su
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value.BooleanNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.NumberNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.ReturnType;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 
 import java.util.List;
+import java.util.Optional;
 
-public class IfInstructionNode extends AbstractRunnableNodeWithMap implements InstructionNode {
+public class IfInstructionNode extends AbstractRunnableNodeWithMap<Boolean> implements InstructionNode {
     SubNode<BooleanNode> condition = registerSubNode("condition", new SubNode.Builder<BooleanNode>()
             .addNodeValues(List.of(
-                    Nodes.VALUE_TYPE_BOOLEAN))
-            .build(this));
+                    Nodes.VALUE_TYPE_BOOLEAN,
+                    Nodes.CONDITION_CASTER_ON_GROUND))
+    );
     
     SubNode<InstructionProviderNode> passed = registerSubNode("passed", new SubNode.Builder<InstructionProviderNode>()
             .addNodeValues(List.of(
                     Nodes.INSTRUCTION_PROVIDER))
-            .build(this));
+    );
     
     SubNode<InstructionProviderNode> failed = registerSubNode("failed", new SubNode.Builder<InstructionProviderNode>()
             .addNodeValues(List.of(
                     Nodes.INSTRUCTION_PROVIDER))
-            .build(this));
+    );
     
     public IfInstructionNode() {
         super(Nodes.INSTRUCTION_IF);
@@ -34,31 +37,45 @@ public class IfInstructionNode extends AbstractRunnableNodeWithMap implements In
     /*----------------------------------------------------------------------------------------------------------------*/
     /* InstructionNode Interface */
 
+    /**
+     * execute instructions based on the condition
+     * @return if condition passed
+     */
     @Override
     public boolean executeInstruction(SpellExecutor spellExecutor) {
-        if (condition.getNode().getBoolean(spellExecutor)) {
-            passed.getNode().runInstructions(spellExecutor);
-        }
-        else {
-            failed.getNode().runInstructions(spellExecutor);
-        }
-        return true;
+        return this.runNode(spellExecutor);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* RunnableNode Interface */
-
+    
     @Override
-    public void execute(SpellExecutor spellExecutor) {
+    public Boolean newExecution(SpellExecutor spellExecutor) {
+        boolean isConditionTrue = condition.getNode().getBoolean(spellExecutor);
         
+        if (isConditionTrue) {
+            execute(passed).runInstructions(spellExecutor);
+        }
+        else {
+            execute(failed).runInstructions(spellExecutor);
+        }
+
+        if (spellExecutor.getExecutionData().returnType == ReturnType.NONE) resetExecution(spellExecutor);
+        return isConditionTrue;
     }
 
     @Override
-    public void resumeExecution(SpellExecutor spellExecutor) {
-        super.resumeExecution(spellExecutor);
+    public Boolean resumeExecution(SpellExecutor spellExecutor) {
+        /* at this point we are at the line after the call:
+         * "execute(passed).runInstructions(spellExecutor);" or "execute(failed).runInstructions(spellExecutor);" */
+
+        // get condition state before resetting 
+        boolean wasConditionTrue = getLastExecuted().equals(passed.getId()); 
+        
+        if (spellExecutor.getExecutionData().returnType == ReturnType.NONE) resetExecution(spellExecutor);
+        return wasConditionTrue;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

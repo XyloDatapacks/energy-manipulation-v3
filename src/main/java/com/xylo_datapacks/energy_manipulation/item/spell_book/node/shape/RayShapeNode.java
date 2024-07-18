@@ -13,7 +13,7 @@ public class RayShapeNode extends AbstractNodeWithMap implements ShapeNode {
     SubNode<EffectProviderNode> effects = registerSubNode("effects", new SubNode.Builder<EffectProviderNode>()
             .addNodeValues(List.of(
                     Nodes.EFFECT_PROVIDER))
-            .build(this));
+    );
     
     public RayShapeNode() {
         super(Nodes.SHAPE_RAY);
