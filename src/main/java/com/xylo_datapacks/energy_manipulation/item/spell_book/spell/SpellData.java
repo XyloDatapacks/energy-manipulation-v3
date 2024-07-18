@@ -19,8 +19,8 @@ public class SpellData {
     public Entity caster;
     public SpellNode spellNode;
     public String lastSpellPath;
-    private final SpellContext spellContext;
-    private final SpellAttributes spellAttributes;
+    private SpellContext spellContext;
+    private SpellAttributes spellAttributes;
 
     public SpellData(Entity caster, SpellNode spellNode, String lastSpellPath, SpellContext spellContext, SpellAttributes spellAttributes) {
         this.caster = caster;
@@ -37,14 +37,14 @@ public class SpellData {
     
     public SpellContext getSpellContext() {
         if (spellContext == null) {
-            return new SpellContext();
+            spellContext = new SpellContext();
         }
         return spellContext;
     }
 
     public SpellAttributes getSpellAttributes() {
         if (spellAttributes == null) {
-            return new SpellAttributes();
+            spellAttributes = new SpellAttributes();
         }
         return spellAttributes;
     }
