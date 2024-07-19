@@ -1,7 +1,9 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.FromNbtSettings;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.ToNbtSettings;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
@@ -43,9 +45,11 @@ public abstract class AbstractNodeWithValue<T> extends AbstractNode implements V
      *  }
      */
     @Override
-    public final NbtCompound toNbt() {
+    public final NbtCompound toNbt(ToNbtSettings settings) {
         // get base nbt compound
-        NbtCompound nbt = super.toNbt();
+        NbtCompound nbt = super.toNbt(settings);
+        
+        if (settings.saveOnlyExecutionData()) return nbt;
         
         // add value to nbt
         if (value instanceof Integer intValue) {
@@ -71,9 +75,13 @@ public abstract class AbstractNodeWithValue<T> extends AbstractNode implements V
     }
 
     @Override
-    public final GenericNode setFromNbt(NbtCompound nbt) {
+    public final GenericNode setFromNbt(NbtCompound nbt, FromNbtSettings settings) {
         // set guiData
         getGuiData().setFromNbt(nbt.getCompound("gui_data"));
+
+        // init value if requested
+        if (!settings.buildNode()) return this;
+        
         // set value
         if (value instanceof Integer intValue) {
             intValue = nbt.getInt("value");

@@ -2,7 +2,6 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
@@ -41,14 +40,15 @@ public abstract class AbstractNode implements GenericNode {
      *  }
      */
     @Override
-    public NbtCompound toNbt() {
+    public NbtCompound toNbt(ToNbtSettings settings) {
+        if (settings.saveOnlyExecutionData()) return new NbtCompound(); // {}
+        
         // {}
         NbtCompound nbt = new NbtCompound();
         // add node_type: "<@node_identifier>" to nbt
         nbt.putString("node_type", getNodeIdentifier().toString());
-
         // add guiData
-        nbt.put("gui_data", getGuiData().toNbt());
+        if (settings.saveGuiData()) nbt.put("gui_data", getGuiData().toNbt());
         
         return nbt;
     }

@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.entity.custom;
 
+import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.*;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import net.minecraft.entity.Entity;
@@ -57,7 +58,10 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         
-        this.spellData = SpellData.readFromNbt(nbt.getCompound(SPELL_DATA_KEY), this.getWorld());
+        SpellNode spellNode = this.getWeaponStack() != null && this.getWeaponStack().getItem() instanceof SpellBookItem 
+                ? SpellBookItem.getSpellNode(this.getRegistryManager(), this.getWeaponStack()) 
+                : null;
+        this.spellData = SpellData.readFromNbt(nbt.getCompound(SPELL_DATA_KEY), this.getWorld(), spellNode);
         this.spellDelay = nbt.getInt(SPELL_DELAY_KEY);
     }
     

@@ -1,6 +1,8 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.FromNbtSettings;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.ToNbtSettings;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
@@ -75,18 +77,18 @@ public abstract class AbstractRunnableNodeWithMap<U> extends AbstractNodeWithMap
     /* AbstractNodeWithMap Interface */
 
     @Override
-    public NbtCompound toNbt() {
-        NbtCompound nbt = super.toNbt();
-        if (!isFreshExecution()) {
+    public NbtCompound toNbt(ToNbtSettings settings) {
+        NbtCompound nbt = super.toNbt(settings);
+        if (settings.saveExecutionData() && !isFreshExecution()) {
             saveExecutionToNbt(nbt);
         }
         return nbt;
     }
     
     @Override
-    public GenericNode setFromNbt(NbtCompound nbt) {
+    public GenericNode setFromNbt(NbtCompound nbt, FromNbtSettings settings) {
         loadExecutionFromNbt(nbt);
-        return super.setFromNbt(nbt);
+        return super.setFromNbt(nbt, settings);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -1,8 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodePath;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
@@ -40,16 +38,17 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
      *  }
      */
     @Override
-    public NbtCompound toNbt() {
+    public NbtCompound toNbt(ToNbtSettings settings) {
         // get base nbt compound
-        NbtCompound nbt = super.toNbt();
+        NbtCompound nbt = super.toNbt(settings);
 
         // sub_nodes: {}
         NbtCompound subNodesCompound = new NbtCompound();
         // add all <@subNodeId>: {...} to sub_nodes
         for (Map.Entry<String, SubNode<? extends GenericNode>> entry : subNodes.entrySet()) {
-            GenericNode node = entry.getValue().getNode();
-            subNodesCompound.put(entry.getKey(), node.toNbt());
+            /* we might get empty compound (if we save execution data only), in this case we don't need to save it */
+            NbtCompound entryNodeNbt = entry.getValue().getNode().toNbt(settings);
+            if (!entryNodeNbt.isEmpty()) subNodesCompound.put(entry.getKey(), entryNodeNbt);
         }
         // add sub_nodes to nbt
         if (!subNodesCompound.isEmpty()) nbt.put("sub_nodes", subNodesCompound);
@@ -58,19 +57,22 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
     }
 
     @Override
-    public GenericNode setFromNbt(NbtCompound nbt) {
+    public GenericNode setFromNbt(NbtCompound nbt, FromNbtSettings settings) {
         // set guiData
         getGuiData().setFromNbt(nbt.getCompound("gui_data"));
         // set subNodes
         NbtCompound subNodesCompound = nbt.getCompound("sub_nodes");
         subNodesCompound.getKeys().forEach(key -> {
             NbtCompound subNodeNbt = subNodesCompound.getCompound(key);
-            Identifier nodeIdentifier = Identifier.tryParse(subNodeNbt.getString("node_type"));
-            modifySubNode(key, nodeIdentifier);
+            // modify subNode class if requested
+            if (settings.buildNode()) {
+                Identifier nodeIdentifier = Identifier.tryParse(subNodeNbt.getString("node_type"));
+                modifySubNode(key, nodeIdentifier);
+            }
             // recursive
             SubNode<?> subNode = getSubNode(key);
             if (subNode != null) {
-                subNode.getNode().setFromNbt(subNodeNbt);
+                subNode.getNode().setFromNbt(subNodeNbt, settings);
             } 
         });
         return this;

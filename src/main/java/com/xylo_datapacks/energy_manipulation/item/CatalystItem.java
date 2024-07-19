@@ -21,7 +21,7 @@ public class CatalystItem extends Item {
     }
 
     public PersistentProjectileEntity createSpell(World world, ItemStack projectileStack, LivingEntity shooter, ItemStack spellBookStack) {
-        SpellNode spellNode = SpellBookItem.getSpellNode(shooter, spellBookStack);
+        SpellNode spellNode = SpellBookItem.getSpellNode(shooter.getRegistryManager(), spellBookStack);
         ProjectileShapeEntity spell = new ProjectileShapeEntity(shooter, world, projectileStack, spellBookStack);
         
         // pass spell

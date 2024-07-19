@@ -89,9 +89,9 @@ public class SpellBookItem extends RangedWeaponItem {
     /*----------------------------------------------------------------------------------------------------------------*/
     /* region Casting Logic */
 
-    public static SpellNode getSpellNode(LivingEntity user, ItemStack itemStack) {
+    public static SpellNode getSpellNode(RegistryWrapper.WrapperLookup registries, ItemStack itemStack) {
         // get inventory items
-        Map<Integer, ItemStack> spellBookContent = getBackpackContents(user.getRegistryManager(), itemStack);
+        Map<Integer, ItemStack> spellBookContent = getBackpackContents(registries, itemStack);
         // check if there is slot zero
         if (spellBookContent.containsKey(0)) {
             // check if slot zero is spell book page

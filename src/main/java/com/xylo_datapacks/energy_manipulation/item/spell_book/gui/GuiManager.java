@@ -7,6 +7,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.Va
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.SubNodeData;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.ToNbtSettings;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.List;
@@ -201,7 +202,7 @@ public class GuiManager {
     
     public NbtCompound toNbt() {
         if (rootNode != null) {
-            return rootNode.toNbt();
+            return rootNode.toNbt(ToNbtSettings.EDITOR);
         }
         return new NbtCompound();
     }

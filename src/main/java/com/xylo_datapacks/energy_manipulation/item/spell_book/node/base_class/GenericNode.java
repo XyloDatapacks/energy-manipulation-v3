@@ -2,12 +2,10 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -17,10 +15,10 @@ public interface GenericNode {
     public abstract Identifier getNodeIdentifier();
     
     // nbt
-    public abstract NbtCompound toNbt();
-    public abstract GenericNode setFromNbt(NbtCompound nbt);
+    public abstract NbtCompound toNbt(ToNbtSettings settings);
+    public abstract GenericNode setFromNbt(NbtCompound nbt, FromNbtSettings settings);
     public static GenericNode generateFromNbt(NbtCompound nbt) {
-        return Nodes.NODES.get(Identifier.tryParse(nbt.getString("node_type"))).nodeSupplier().get().setFromNbt(nbt);
+        return Nodes.NODES.get(Identifier.tryParse(nbt.getString("node_type"))).nodeSupplier().get().setFromNbt(nbt, FromNbtSettings.BUILD);
     };
 
     /** get guiData of this node */

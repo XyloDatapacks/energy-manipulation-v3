@@ -1,8 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodePath;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Identifier;
@@ -90,38 +88,46 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
      *  }
      */
     @Override
-    public NbtCompound toNbt() {
+    public NbtCompound toNbt(ToNbtSettings settings) {
         // get base nbt compound
-        NbtCompound nbt = super.toNbt();
+        NbtCompound nbt = super.toNbt(settings);
         
         // sub_nodes: []
         NbtList subNodesList = new NbtList();
         // add all {...} to sub_nodes
+        boolean areAllEmpty = true; // check if [{},{},{},...,{}] with no data for any subNode
         for (SubNode<? extends GenericNode> entry : subNodes) {
-            GenericNode node = entry.getNode();
-            subNodesList.add(node.toNbt());
+            /* even tho we might get an empty compound (if we save execution data only), add the sub node because we might have:
+             * [{},{},{node_type:"...",...},{}]. After adding all to the list, if all compounds are empty, don't add sub_nodes compound*/
+            NbtCompound entryNodeNbt = entry.getNode().toNbt(settings);
+            subNodesList.add(entryNodeNbt);
+            if (!entryNodeNbt.isEmpty()) areAllEmpty = false;
         }
         // add sub_nodes to nbt
-        if (!subNodesList.isEmpty()) nbt.put("sub_nodes", subNodesList);
+        if (!subNodesList.isEmpty() && !areAllEmpty) nbt.put("sub_nodes", subNodesList);
         
         return nbt;
     }
 
     @Override
-    public GenericNode setFromNbt(NbtCompound nbt) {
+    public GenericNode setFromNbt(NbtCompound nbt, FromNbtSettings settings) {
         // set guiData
         getGuiData().setFromNbt(nbt.getCompound("gui_data"));
         // set subNodes
-        nbt.getList("sub_nodes", NbtCompound.COMPOUND_TYPE).forEach(compound -> {
-            NbtCompound subNodeNbt = ((NbtCompound) compound);
-            Identifier nodeIdentifier = Identifier.tryParse(subNodeNbt.getString("node_type"));
-            appendSubNode(nodeIdentifier);
-            // recursive
-            SubNode<?> subNode = getSubNode(subNodes.size() - 1);
-            if (subNode != null) {
-                subNode.getNode().setFromNbt(subNodeNbt);
+        NbtList nbtList = nbt.getList("sub_nodes", NbtCompound.COMPOUND_TYPE);
+        for (int i = 0; i < nbtList.size(); i++) {
+            NbtCompound subNodeNbt = nbtList.getCompound(i);
+            // add subNode if requested
+            if (settings.buildNode()) {
+                Identifier nodeIdentifier = Identifier.tryParse(subNodeNbt.getString("node_type"));
+                appendSubNode(nodeIdentifier);
             }
-        });
+            // recursive
+            SubNode<?> subNode = getSubNode(i);
+            if (subNode != null) {
+                subNode.getNode().setFromNbt(subNodeNbt, settings);
+            }
+        }
         return this;
     }
 
