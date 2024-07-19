@@ -1,12 +1,17 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.spell;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.RunnableNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
+import net.minecraft.command.argument.NbtPathArgumentType;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class SpellData {
@@ -98,6 +103,19 @@ public class SpellData {
         // spell node
         if (data.spellNode != null) {
             spellDataNbt.put(SPELL_NODE_KEY, data.spellNode.toNbt());
+
+            // TODO: Properly implement
+            Map<String, NodeResult> map = data.spellNode.getAllSubNodesRecursive();
+            NbtCompound nbt = new NbtCompound();
+            map.forEach((key, value) -> {
+                if (value.node() instanceof RunnableNode<?> runnableNode) {
+                    NbtCompound compound = new NbtCompound();
+                    runnableNode.saveExecutionToNbt(compound);
+                    nbt.put(key, compound);
+                }
+            });
+
+            System.out.println(nbt);
         }
 
         // last spell path

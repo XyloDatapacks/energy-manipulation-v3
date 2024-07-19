@@ -5,9 +5,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecuto
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public abstract class AbstractRunnableNodeWithMap<U> extends AbstractNodeWithMap implements RunnableNode<U> {
     protected static final String LAST_EXECUTED_KEY = "last_executed";
@@ -34,14 +32,15 @@ public abstract class AbstractRunnableNodeWithMap<U> extends AbstractNodeWithMap
         return action.apply(subNode.getNode());
     }
 
-    protected U runNode(SpellExecutor spellExecutor) {
+    @Override
+    public U runNode(SpellExecutor spellExecutor) {
         if (isFreshExecution()) {
             return newExecution(spellExecutor);
         }
 
         SubNode<? extends GenericNode> subNode = getSubNode(getLastExecuted());
         if (subNode != null && subNode.getNode() instanceof RunnableNode<?> runnableNode) {
-            runnableNode.resumeExecution(spellExecutor);
+            runnableNode.runNode(spellExecutor);
         }
         return resumeExecution(spellExecutor);
     }

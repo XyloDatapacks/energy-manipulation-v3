@@ -5,11 +5,8 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecuto
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public abstract class AbstractRunnableNodeWithList<T extends GenericNode, U> extends AbstractNodeWithList<T> implements RunnableNode<U> {
     protected static final String LAST_EXECUTED_KEY = "last_executed";
@@ -39,14 +36,15 @@ public abstract class AbstractRunnableNodeWithList<T extends GenericNode, U> ext
         return execute(index).map(action);
     }
 
-    protected U runNode(SpellExecutor spellExecutor) {
+    @Override
+    public U runNode(SpellExecutor spellExecutor) {
         if (isFreshExecution()) {
             return newExecution(spellExecutor);
         }
 
         SubNode<T> subNode = getSubNode(getLastExecutedIndex());
         if (subNode != null && subNode.getNode() instanceof RunnableNode<?> runnableNode) {
-            runnableNode.resumeExecution(spellExecutor);
+            runnableNode.runNode(spellExecutor);
         }
         return resumeExecution(spellExecutor);
     }

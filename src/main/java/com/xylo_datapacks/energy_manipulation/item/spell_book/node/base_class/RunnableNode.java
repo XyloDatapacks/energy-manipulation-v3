@@ -7,6 +7,8 @@ import java.util.function.Supplier;
 
 public interface RunnableNode<U> extends GenericNode {
 
+    public abstract U runNode(SpellExecutor spellExecutor);
+    
     /** starts fresh execution 
      * </p> override to implement functionality */
     public abstract U newExecution(SpellExecutor spellExecutor);
