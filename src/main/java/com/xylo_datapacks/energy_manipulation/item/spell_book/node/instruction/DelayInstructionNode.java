@@ -14,7 +14,7 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 public class DelayInstructionNode extends AbstractNodeWithMap implements InstructionNode {
-    SubNode<IntegerNumberNode> time = registerSubNode("time", SubNodes.INTEGER.subNodeBuilderTemplate());
+    SubNode<IntegerNumberNode> time = registerSubNode("time", SubNodes.INTEGER);
     
     public DelayInstructionNode() {
         super(Nodes.INSTRUCTION_DELAY);

@@ -1,10 +1,12 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.FromNbtSettings;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.ToNbtSettings;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -14,8 +16,16 @@ public abstract class AbstractRunnableNodeWithList<T extends GenericNode, U> ext
     protected static final String LAST_EXECUTED_KEY = "last_executed";
     @Nullable private Integer lastExecutedIndex;
     
-    public AbstractRunnableNodeWithList(NodeData<?> nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate) {
-        super(nodeData, subNodesId, subNodeBuilderTemplate);
+    public AbstractRunnableNodeWithList(NodeData<?> nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate, Identifier defaultSubNodeValueIdentifier) {
+        super(nodeData, subNodesId, subNodeBuilderTemplate, defaultSubNodeValueIdentifier);
+    }
+
+    public AbstractRunnableNodeWithList(NodeData<?> nodeData, SubNodes.SubNodeDefinition<T> definition) {
+        super(nodeData, definition);
+    }
+
+    public AbstractRunnableNodeWithList(NodeData<?> nodeData, String subNodesId, SubNodes.SubNodeDefinition<T> definition) {
+        super(nodeData, subNodesId, definition);
     }
     
     protected void setLastExecuted(Integer index) {

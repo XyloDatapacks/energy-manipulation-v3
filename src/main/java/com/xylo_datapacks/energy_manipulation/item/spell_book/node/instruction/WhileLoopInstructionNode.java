@@ -8,11 +8,9 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.ReturnType;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 
-import java.util.List;
-
 public class WhileLoopInstructionNode extends AbstractRunnableNodeWithMap<Boolean> implements InstructionNode {
     SubNode<BooleanNode> condition = registerSubNode(SubNodes.CONDITION);
-    SubNode<InstructionProviderNode> body = registerSubNode("body", SubNodes.INSTRUCTIONS.subNodeBuilderTemplate());
+    SubNode<InstructionProviderNode> body = registerSubNode("body", SubNodes.LOOP_INSTRUCTION_PROVIDER);
 
     
     public WhileLoopInstructionNode() {
@@ -36,51 +34,56 @@ public class WhileLoopInstructionNode extends AbstractRunnableNodeWithMap<Boolea
     /*----------------------------------------------------------------------------------------------------------------*/
     /* RunnableNode Interface */
 
+    /* 
+     * RETURN: should always block execution and not cause a reset 
+     * BREAK: should block the loop but reset the returnType and cause a reset
+     * CONTINUE: should continue the loop but reset the returnType
+     * end execution with NONE: cause a reset
+     * 
+     * -> return on RETURN. on BREAK and CONTINUE reset returnType. BREAK stops loop
+     *    if ends with NONE (or BREAK) reset execution
+     */
+    
+    
     @Override
     public Boolean newExecution(SpellExecutor spellExecutor) {
+        System.out.println("NEW WHILE LOOP");
+        
         loop: while (condition.getNode().getBoolean(spellExecutor)) {
             execute(body).runInstructions(spellExecutor);
-            /* while loop runs a list of instructions, and should respond as a while loop to the return type */
-            switch (spellExecutor.getExecutionData().returnType) {
-                // the instructions called a "return", so we should exit the cycle
-                case RETURN: return true;
-                // the instructions called a "continue", so we should just go on, and consume the "continue"
-                case CONTINUE: {
-                    spellExecutor.getExecutionData().returnType = ReturnType.NONE;
-                    continue loop;
-                }
-                // the instructions called a "break", so we should break out of the loop, and consume the "break"
-                case BREAK: {
-                    spellExecutor.getExecutionData().returnType = ReturnType.NONE;
-                    break loop;
-                }
+            
+            if (shouldBlockExecution(spellExecutor)) {
+                ReturnType returnType = spellExecutor.getExecutionData().returnType;
+                if (returnType == ReturnType.RETURN) return true; 
+                // break or continue:
+                spellExecutor.getExecutionData().returnType = ReturnType.NONE;
+                if (returnType == ReturnType.BREAK) break loop;
             }
         }
-        if (spellExecutor.getExecutionData().returnType == ReturnType.NONE) resetExecution(spellExecutor);
+        if (shouldReset(spellExecutor)) {
+            System.out.println("reset while loop");
+            resetExecution(spellExecutor);
+        }
         return true;
     }
 
     @Override
     public Boolean resumeExecution(SpellExecutor spellExecutor) {
+        System.out.println("RESUMED WHILE LOOP");
         /* at this point we are at the line after the call:
          * "execute(body).runInstructions(spellExecutor);" */
-        
-        /* while loop runs a list of instructions, and should respond as a while loop to the return type */
-        switch (spellExecutor.getExecutionData().returnType) {
-            // the instructions called a "return", so we should exit the cycle
-            case RETURN: return true;
-            // the instructions called a "continue", so we should just go on, and consume the "continue"
-            case CONTINUE: {
-                spellExecutor.getExecutionData().returnType = ReturnType.NONE;
-                break; // break out of the switch, so we can run the loop again
-            }
-            // the instructions called a "break", so we should break out of the loop, and consume the "break"
-            case BREAK: {
-                spellExecutor.getExecutionData().returnType = ReturnType.NONE;
-                return true; // we don't want to start another loop
+
+        if (shouldBlockExecution(spellExecutor)) {
+            ReturnType returnType = spellExecutor.getExecutionData().returnType;
+            if (returnType == ReturnType.RETURN) return true;
+            // break or continue:
+            spellExecutor.getExecutionData().returnType = ReturnType.NONE;
+            if (returnType == ReturnType.BREAK) {
+                resetExecution(spellExecutor);
+                return true;
             }
         }
-        return newExecution(spellExecutor);
+        return newExecution(spellExecutor); // restart the loop if return NONE or CONTINUE
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

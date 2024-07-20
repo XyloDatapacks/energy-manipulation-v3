@@ -58,7 +58,7 @@
                                                             <!--nodes scroll bar style-->
                                                             <margins>
                                                                 <top>7</top>
-                                                                <bottom>32</bottom>
+                                                                <bottom>8</bottom>
                                                                 <horizontal>8</horizontal>
                                                             </margins>
                                                             
@@ -638,6 +638,36 @@
 
         </template>
         <!--CHECKBOX SELECTOR TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--TEXTBOX SELECTOR TEMPLATE-->
+        <template name="textbox_selector_template">
+
+            <flow-layout direction="vertical">
+                <children>
+                    <text-area id="textbox">
+                        <sizing>
+                            <horizontal method="fill">100</horizontal>
+                            <vertical method="fixed">80</vertical>
+                        </sizing>
+                    </text-area>
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+            </flow-layout>
+
+        </template>
+        <!--TEXTBOX SELECTOR TEMPLATE-->
         <!--=========================================================================================================-->
         <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         

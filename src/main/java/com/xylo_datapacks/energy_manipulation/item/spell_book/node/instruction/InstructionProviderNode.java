@@ -1,26 +1,19 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.*;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.ReturnType;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
-
-import java.util.List;
 
 
 public class InstructionProviderNode extends AbstractRunnableNodeWithList<InstructionNode, Integer> {
     
     public InstructionProviderNode() {
-        super(Nodes.INSTRUCTION_PROVIDER, "instruction", new SubNode.Builder<InstructionNode>()
-                .addNodeValues(List.of(
-                        Nodes.INSTRUCTION_GENERATE_SHAPE,
-                        Nodes.INSTRUCTION_MODIFY_POSITION,
-                        Nodes.INSTRUCTION_IF,
-                        Nodes.INSTRUCTION_DELAY,
-                        Nodes.INSTRUCTION_BREAK,
-                        Nodes.INSTRUCTION_CONTINUE,
-                        Nodes.INSTRUCTION_WHILE_LOOP)
-                ));
+        super(Nodes.INSTRUCTION_PROVIDER, "instruction", SubNodes.COMMON_INSTRUCTION);
+    }
+
+    public InstructionProviderNode(SubNodes.SubNodeDefinition<InstructionNode> definition) {
+        super(Nodes.INSTRUCTION_PROVIDER, "instruction", definition);
     }
     
     /** 
@@ -42,17 +35,24 @@ public class InstructionProviderNode extends AbstractRunnableNodeWithList<Instru
             execute(i, instruction -> instruction.executeInstruction(spellExecutor));
             /* instruction provider is a list of instructions, so should always stop
              * with any return type */
-            if (spellExecutor.getExecutionData().returnType != ReturnType.NONE) {
-                return instructionCount;
+            if (shouldBlockExecution(spellExecutor)) {
+                break;
             }
         }
-        resetExecution(spellExecutor);
+        if (shouldReset(spellExecutor)) {
+            resetExecution(spellExecutor);
+        }
         return instructionCount;
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* RunnableNode Interface */
 
+    /*
+     * should block execution for RETURN, BREAK, CONTINUE
+     * should always reset unless it is RETURN
+     */
+    
     @Override
     public Integer newExecution(SpellExecutor spellExecutor) {
         return run(spellExecutor);
@@ -65,10 +65,15 @@ public class InstructionProviderNode extends AbstractRunnableNodeWithList<Instru
         
         /* instruction provider is a list of instructions, so should always stop
          * with any return type */
-        if (spellExecutor.getExecutionData().returnType != ReturnType.NONE) {
-            return 0; // we cannot run any instruction
+        if (!shouldBlockExecution(spellExecutor)) {
+            return runFromIndex(spellExecutor, getLastExecutedIndex() + 1); // we can continue if not interrupted again
         }
-        return runFromIndex(spellExecutor, getLastExecutedIndex() + 1);
+        
+        if (shouldReset(spellExecutor)) {
+            resetExecution(spellExecutor);
+        }
+        return 0; // we cannot run any instruction
+        
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

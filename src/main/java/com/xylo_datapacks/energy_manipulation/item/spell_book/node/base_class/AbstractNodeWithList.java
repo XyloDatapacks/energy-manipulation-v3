@@ -14,16 +14,18 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
     private final List<SubNode<T>> subNodes = new ArrayList<>();
     private final Function<Identifier, SubNode<T>> buildSubNode;
     
-    public AbstractNodeWithList(NodeData<?> nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate) {
+    public AbstractNodeWithList(NodeData<?> nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate, Identifier defaultSubNodeValueIdentifier) {
         super(nodeData);
         this.subNodesId = subNodesId;
-        this.buildSubNode = (newSubNodeValueIdentifier) -> subNodeBuilderTemplate.build(this, subNodesId, newSubNodeValueIdentifier);
+        this.buildSubNode = (newSubNodeValueIdentifier) -> subNodeBuilderTemplate.build(this, subNodesId, Optional.ofNullable(newSubNodeValueIdentifier).orElse(defaultSubNodeValueIdentifier));
     }
 
     public AbstractNodeWithList(NodeData<?> nodeData, SubNodes.SubNodeDefinition<T> definition) {
-        super(nodeData);
-        this.subNodesId = definition.subNodeId();
-        this.buildSubNode = (newSubNodeValueIdentifier) -> definition.subNodeBuilderTemplate().build(this, subNodesId, newSubNodeValueIdentifier);
+        this(nodeData, definition.subNodeId(), definition.subNodeBuilderTemplate(), definition.newSubNodeValueIdentifier());  
+    }
+
+    public AbstractNodeWithList(NodeData<?> nodeData, String subNodesId, SubNodes.SubNodeDefinition<T> definition) {
+        this(nodeData, subNodesId, definition.subNodeBuilderTemplate(), definition.newSubNodeValueIdentifier());    
     }
     
     public int getSubNodesSize() {

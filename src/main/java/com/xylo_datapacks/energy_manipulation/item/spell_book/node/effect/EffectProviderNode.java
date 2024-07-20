@@ -11,11 +11,11 @@ import java.util.List;
 public class EffectProviderNode extends AbstractNodeWithList<EffectNode> {
     
     public EffectProviderNode() {
-        super(Nodes.EFFECT_PROVIDER, "effect",new SubNode.Builder<EffectNode>()
+        super(Nodes.EFFECT_PROVIDER, "effect", new SubNode.Builder<EffectNode>()
                 .addNodeValues(List.of(
                         Nodes.EFFECT_BREAK,
                         Nodes.EFFECT_FIRE)
-                ));
+                ), Nodes.EFFECT_FIRE.identifier());
     }
     
     public void executeEffects(SpellExecutor spellExecutor, Entity target) {

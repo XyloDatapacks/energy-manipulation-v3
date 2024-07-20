@@ -1,9 +1,8 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.ReturnType;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import net.minecraft.nbt.NbtCompound;
-
-import java.util.function.Supplier;
 
 public interface RunnableNode<U> extends GenericNode {
 
@@ -33,4 +32,12 @@ public interface RunnableNode<U> extends GenericNode {
     /** load execution data from nbt 
      * </p> override to add extra data */
     public abstract void loadExecutionFromNbt(NbtCompound nbt);
+    
+    public default boolean shouldReset(SpellExecutor spellExecutor) {
+        return spellExecutor.getExecutionData().returnType != ReturnType.RETURN;
+    }
+    
+    public default boolean shouldBlockExecution(SpellExecutor spellExecutor) {
+        return spellExecutor.getExecutionData().returnType != ReturnType.NONE;
+    }
 }

@@ -14,19 +14,24 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
         super(nodeData);
     }
 
-    protected final <T extends GenericNode> SubNode<T> registerSubNode(SubNodes.SubNodeDefinition<T> definition) {
-        return registerSubNode(definition.subNodeId(), definition.subNodeBuilderTemplate(), definition.newSubNodeValueIdentifier());
-    }
-    
-    protected final <T extends GenericNode> SubNode<T> registerSubNode(String subNodeId, SubNode.Builder<T> subNodeBuilderTemplate) {
-        return registerSubNode(subNodeId, subNodeBuilderTemplate, null);
-    }
-
     protected final <T extends GenericNode> SubNode<T> registerSubNode(String subNodeId, SubNode.Builder<T> subNodeBuilderTemplate, Identifier newSubNodeValueIdentifier) {
         SubNode<T> subNode = subNodeBuilderTemplate.build(this, subNodeId, newSubNodeValueIdentifier);
         subNodes.put(subNodeId, subNode);
         return subNode;
     }
+
+    protected final <T extends GenericNode> SubNode<T> registerSubNode(String subNodeId, SubNode.Builder<T> subNodeBuilderTemplate) {
+        return registerSubNode(subNodeId, subNodeBuilderTemplate, null);
+    }
+    
+    protected final <T extends GenericNode> SubNode<T> registerSubNode(SubNodes.SubNodeDefinition<T> definition) {
+        return registerSubNode(definition.subNodeId(), definition.subNodeBuilderTemplate(), definition.newSubNodeValueIdentifier());
+    }
+
+    protected final <T extends GenericNode> SubNode<T> registerSubNode(String subNodeId, SubNodes.SubNodeDefinition<T> definition) {
+        return registerSubNode(subNodeId, definition.subNodeBuilderTemplate(), definition.newSubNodeValueIdentifier());
+    }
+    
     
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GenericNode Interface */

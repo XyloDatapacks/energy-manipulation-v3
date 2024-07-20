@@ -11,9 +11,9 @@ import net.minecraft.util.math.Vec3d;
 import java.util.List;
 
 public class AlignPositionNode extends AbstractNodeWithMap implements PositionNode {
-    SubNode<BooleanNode> x = registerSubNode("x", SubNodes.CONDITION.subNodeBuilderTemplate());
-    SubNode<BooleanNode> y = registerSubNode("y", SubNodes.CONDITION.subNodeBuilderTemplate());
-    SubNode<BooleanNode> z = registerSubNode("z", SubNodes.CONDITION.subNodeBuilderTemplate());
+    SubNode<BooleanNode> x = registerSubNode("x", SubNodes.CONDITION);
+    SubNode<BooleanNode> y = registerSubNode("y", SubNodes.CONDITION);
+    SubNode<BooleanNode> z = registerSubNode("z", SubNodes.CONDITION);
     
     public AlignPositionNode() {
         super(Nodes.POSITION_ALIGN);

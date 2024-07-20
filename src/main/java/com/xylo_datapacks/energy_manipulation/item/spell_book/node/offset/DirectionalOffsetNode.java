@@ -11,9 +11,9 @@ import net.minecraft.util.math.Vec3d;
 import java.util.List;
 
 public class DirectionalOffsetNode extends AbstractNodeWithMap implements OffsetNode {
-    SubNode<NumberNode> x = registerSubNode("x", SubNodes.NUMBER.subNodeBuilderTemplate());
-    SubNode<NumberNode> y = registerSubNode("y", SubNodes.NUMBER.subNodeBuilderTemplate());
-    SubNode<NumberNode> z = registerSubNode("z", SubNodes.NUMBER.subNodeBuilderTemplate());
+    SubNode<NumberNode> x = registerSubNode("x", SubNodes.NUMBER);
+    SubNode<NumberNode> y = registerSubNode("y", SubNodes.NUMBER);
+    SubNode<NumberNode> z = registerSubNode("z", SubNodes.NUMBER);
     
     public DirectionalOffsetNode() {
         super(Nodes.OFFSET_DIRECTIONAL);

@@ -57,6 +57,7 @@ public class Nodes {
             "condition", new SubNodeData("Condition","Condition to pass"),
             "body", new SubNodeData("Body","the instructions to run")
     )));
+    public static final NodeData<OutputInstructionNode> INSTRUCTION_OUTPUT = registerNode("instruction", "output", new NodeData.NodeDataMaker<>("Output", "print a debug string", OutputInstructionNode::new, Map.of()));
 
     /** Shapes */
     public static final NodeData<ProjectileShapeNode> SHAPE_PROJECTILE = registerNode("shape", "projectile", new NodeData.NodeDataMaker<>("Projectile", "Projectile like spell", ProjectileShapeNode::new, Map.of(
