@@ -1,6 +1,7 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractRunnableNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value.BooleanNode;
@@ -10,17 +11,10 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecuto
 import java.util.List;
 
 public class WhileLoopInstructionNode extends AbstractRunnableNodeWithMap<Boolean> implements InstructionNode {
-    SubNode<BooleanNode> condition = registerSubNode("condition", new SubNode.Builder<BooleanNode>()
-            .addNodeValues(List.of(
-                    Nodes.VALUE_TYPE_BOOLEAN,
-                    Nodes.CONDITION_CASTER_ON_GROUND))
-    );
+    SubNode<BooleanNode> condition = registerSubNode(SubNodes.CONDITION);
+    SubNode<InstructionProviderNode> body = registerSubNode("body", SubNodes.INSTRUCTIONS.subNodeBuilderTemplate());
 
-    SubNode<InstructionProviderNode> body = registerSubNode("body", new SubNode.Builder<InstructionProviderNode>()
-            .addNodeValues(List.of(
-                    Nodes.INSTRUCTION_PROVIDER))
-    );
-
+    
     public WhileLoopInstructionNode() {
         super(Nodes.INSTRUCTION_WHILE_LOOP);
     }

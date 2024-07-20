@@ -10,11 +10,11 @@ public enum FromNbtSettings {
     }
 
     public boolean setGuiData() {
-        return this == SET_GUI_DATA;
+        return this == BUILD || this == SET_GUI_DATA;
     }
     
     public boolean setExecutionData() {
-        return this == SET_EXECUTION_DATA;
+        return this == BUILD || this == SET_EXECUTION_DATA;
     }
     
     //TODO: implement setExecutionData and setGuiData in setFromNbt methods

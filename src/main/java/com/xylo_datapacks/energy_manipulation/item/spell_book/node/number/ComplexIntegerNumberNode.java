@@ -1,0 +1,30 @@
+package com.xylo_datapacks.energy_manipulation.item.spell_book.node.number;
+
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
+
+public class ComplexIntegerNumberNode extends AbstractNodeWithMap implements NumberNode, IntegerNumberNode {
+    SubNode<IntegerNumberNode> value = registerSubNode("value", new SubNode.Builder<IntegerNumberNode>()
+                    .addNodeValues(SubNodes.TEMPLATE_ALL_INTEGER),
+            Nodes.VALUE_TYPE_INTEGER.identifier());
+    
+    public ComplexIntegerNumberNode() {
+        super(Nodes.NUMBER_INTEGER);
+    }
+
+    
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* NumberNode Interface */
+
+    @Override
+    public Number getNumber(SpellExecutor spellExecutor) {
+        return value.getNode().getNumber(spellExecutor);
+    }
+    
+    /*----------------------------------------------------------------------------------------------------------------*/
+    
+
+}

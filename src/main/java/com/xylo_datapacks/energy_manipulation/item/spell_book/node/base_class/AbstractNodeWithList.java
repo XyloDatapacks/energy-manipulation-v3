@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -13,10 +14,16 @@ public abstract class AbstractNodeWithList<T extends GenericNode> extends Abstra
     private final List<SubNode<T>> subNodes = new ArrayList<>();
     private final Function<Identifier, SubNode<T>> buildSubNode;
     
-    public AbstractNodeWithList(NodeData nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate) {
+    public AbstractNodeWithList(NodeData<?> nodeData, String subNodesId, SubNode.Builder<T> subNodeBuilderTemplate) {
         super(nodeData);
         this.subNodesId = subNodesId;
         this.buildSubNode = (newSubNodeValueIdentifier) -> subNodeBuilderTemplate.build(this, subNodesId, newSubNodeValueIdentifier);
+    }
+
+    public AbstractNodeWithList(NodeData<?> nodeData, SubNodes.SubNodeDefinition<T> definition) {
+        super(nodeData);
+        this.subNodesId = definition.subNodeId();
+        this.buildSubNode = (newSubNodeValueIdentifier) -> definition.subNodeBuilderTemplate().build(this, subNodesId, newSubNodeValueIdentifier);
     }
     
     public int getSubNodesSize() {

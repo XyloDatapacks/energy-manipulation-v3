@@ -1,6 +1,7 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractRunnableNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
@@ -14,21 +15,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class IfInstructionNode extends AbstractRunnableNodeWithMap<Boolean> implements InstructionNode {
-    SubNode<BooleanNode> condition = registerSubNode("condition", new SubNode.Builder<BooleanNode>()
-            .addNodeValues(List.of(
-                    Nodes.VALUE_TYPE_BOOLEAN,
-                    Nodes.CONDITION_CASTER_ON_GROUND))
-    );
+    SubNode<BooleanNode> condition = registerSubNode(SubNodes.CONDITION);
+    SubNode<InstructionProviderNode> passed = registerSubNode("passed", SubNodes.INSTRUCTIONS.subNodeBuilderTemplate());
+    SubNode<InstructionProviderNode> failed = registerSubNode("failed", SubNodes.INSTRUCTIONS.subNodeBuilderTemplate());
     
-    SubNode<InstructionProviderNode> passed = registerSubNode("passed", new SubNode.Builder<InstructionProviderNode>()
-            .addNodeValues(List.of(
-                    Nodes.INSTRUCTION_PROVIDER))
-    );
-    
-    SubNode<InstructionProviderNode> failed = registerSubNode("failed", new SubNode.Builder<InstructionProviderNode>()
-            .addNodeValues(List.of(
-                    Nodes.INSTRUCTION_PROVIDER))
-    );
     
     public IfInstructionNode() {
         super(Nodes.INSTRUCTION_IF);

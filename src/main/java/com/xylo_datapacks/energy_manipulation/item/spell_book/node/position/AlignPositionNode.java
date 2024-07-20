@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.position;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
@@ -10,18 +11,9 @@ import net.minecraft.util.math.Vec3d;
 import java.util.List;
 
 public class AlignPositionNode extends AbstractNodeWithMap implements PositionNode {
-    SubNode<BooleanNode> x = registerSubNode("x", new SubNode.Builder<BooleanNode>()
-            .addNodeValues(List.of(
-                    Nodes.VALUE_TYPE_BOOLEAN))
-    );
-    SubNode<BooleanNode> y = registerSubNode("y", new SubNode.Builder<BooleanNode>()
-            .addNodeValues(List.of(
-                    Nodes.VALUE_TYPE_BOOLEAN))
-    );
-    SubNode<BooleanNode> z = registerSubNode("z", new SubNode.Builder<BooleanNode>()
-            .addNodeValues(List.of(
-                    Nodes.VALUE_TYPE_BOOLEAN))
-    );
+    SubNode<BooleanNode> x = registerSubNode("x", SubNodes.CONDITION.subNodeBuilderTemplate());
+    SubNode<BooleanNode> y = registerSubNode("y", SubNodes.CONDITION.subNodeBuilderTemplate());
+    SubNode<BooleanNode> z = registerSubNode("z", SubNodes.CONDITION.subNodeBuilderTemplate());
     
     public AlignPositionNode() {
         super(Nodes.POSITION_ALIGN);

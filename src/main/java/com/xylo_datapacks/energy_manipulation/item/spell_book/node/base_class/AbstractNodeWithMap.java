@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -13,6 +14,10 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
         super(nodeData);
     }
 
+    protected final <T extends GenericNode> SubNode<T> registerSubNode(SubNodes.SubNodeDefinition<T> definition) {
+        return registerSubNode(definition.subNodeId(), definition.subNodeBuilderTemplate(), definition.newSubNodeValueIdentifier());
+    }
+    
     protected final <T extends GenericNode> SubNode<T> registerSubNode(String subNodeId, SubNode.Builder<T> subNodeBuilderTemplate) {
         return registerSubNode(subNodeId, subNodeBuilderTemplate, null);
     }

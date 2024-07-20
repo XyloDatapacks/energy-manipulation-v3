@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractRunnableNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.ReturnType;
@@ -12,10 +13,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.I
 import java.util.List;
 
 public class SpellNode extends AbstractNodeWithMap {
-    SubNode<InstructionProviderNode> program = registerSubNode("program", new SubNode.Builder<InstructionProviderNode>()
-            .addNodeValues(List.of(
-                    Nodes.INSTRUCTION_PROVIDER))
-    );
+    SubNode<InstructionProviderNode> program = registerSubNode("program", SubNodes.INSTRUCTIONS.subNodeBuilderTemplate());
     
     public SpellNode() {
         super(Nodes.SPELL);

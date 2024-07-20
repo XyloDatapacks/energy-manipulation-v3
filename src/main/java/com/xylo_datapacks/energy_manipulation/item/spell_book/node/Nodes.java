@@ -7,8 +7,8 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.BreakE
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.EffectProviderNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.FireEffectNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.*;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.DoubleNumberNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerNumberNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.ComplexDoubleNumberNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.ComplexIntegerNumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerValueTypeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.offset.CardinalOffsetNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.offset.DirectionalOffsetNode;
@@ -98,10 +98,10 @@ public class Nodes {
     )));
 
     /** Number */
-    public static final NodeData<DoubleNumberNode> NUMBER_DOUBLE = registerNode("number", "double", new NodeData.NodeDataMaker<>("Double", "A Double number", DoubleNumberNode::new, Map.of(
+    public static final NodeData<ComplexDoubleNumberNode> NUMBER_DOUBLE = registerNode("number", "double", new NodeData.NodeDataMaker<>("Double", "A Double number", ComplexDoubleNumberNode::new, Map.of(
             "value", new SubNodeData("Value","A double number")
     )));
-    public static final NodeData<IntegerNumberNode> NUMBER_INTEGER = registerNode("number", "integer", new NodeData.NodeDataMaker<>("Integer", "A Integer number", IntegerNumberNode::new, Map.of(
+    public static final NodeData<ComplexIntegerNumberNode> NUMBER_INTEGER = registerNode("number", "integer", new NodeData.NodeDataMaker<>("Integer", "A Integer number", ComplexIntegerNumberNode::new, Map.of(
             "value", new SubNodeData("Value","A integer number")
     )));
     public static final NodeData<DoubleValueTypeNode> VALUE_TYPE_DOUBLE = registerNode("number_value", "double", new NodeData.NodeDataMaker<>("Value Double", "Move the slider to select a number", DoubleValueTypeNode::new, Map.of()));

@@ -10,7 +10,7 @@ import io.wispforest.owo.ui.parsing.UIModel;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class IntegerValueTypeNode extends AbstractNodeWithValue<Integer> implements NumberNode {
+public class IntegerValueTypeNode extends AbstractNodeWithValue<Integer> implements NumberNode, IntegerNumberNode {
     private int minValue = -100;
     private int maxValue = 100;
     
