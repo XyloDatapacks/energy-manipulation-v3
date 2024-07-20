@@ -17,6 +17,8 @@ public class InstructionProviderNode extends AbstractRunnableNodeWithList<Instru
                         Nodes.INSTRUCTION_MODIFY_POSITION,
                         Nodes.INSTRUCTION_IF,
                         Nodes.INSTRUCTION_DELAY,
+                        Nodes.INSTRUCTION_BREAK,
+                        Nodes.INSTRUCTION_CONTINUE,
                         Nodes.INSTRUCTION_WHILE_LOOP)
                 ));
     }

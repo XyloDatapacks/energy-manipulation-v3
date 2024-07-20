@@ -46,6 +46,8 @@ public class Nodes {
     public static final NodeData<DelayInstructionNode> INSTRUCTION_DELAY = registerNode("instruction", "delay", new NodeData.NodeDataMaker<>("Delay", "Stops execution for a certain time", DelayInstructionNode::new, Map.of(
             "time", new SubNodeData("Time","Length of the delay")
     )));
+    public static final NodeData<BreakInstructionNode> INSTRUCTION_BREAK = registerNode("instruction", "break", new NodeData.NodeDataMaker<>("Break", "Stops execution of this loop", BreakInstructionNode::new, Map.of()));
+    public static final NodeData<ContinueInstructionNode> INSTRUCTION_CONTINUE = registerNode("instruction", "continue", new NodeData.NodeDataMaker<>("Continue", "Skip to next iteration of this loop", ContinueInstructionNode::new, Map.of()));
     public static final NodeData<IfInstructionNode> INSTRUCTION_IF = registerNode("instruction", "if", new NodeData.NodeDataMaker<>("If", "execute instructions based on a condition", IfInstructionNode::new, Map.of(
             "condition", new SubNodeData("Condition","Condition to pass"),
             "passed", new SubNodeData("Passed","What happens if condition = true"),
