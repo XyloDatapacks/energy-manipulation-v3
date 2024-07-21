@@ -3,6 +3,7 @@ package com.xylo_datapacks.energy_manipulation.component;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.xylo_datapacks.energy_manipulation.api.Give;
 import com.xylo_datapacks.energy_manipulation.network.codec.ModPacketCodec;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,8 +59,9 @@ public record CatalystComponent(int impact, float directivity, int conductance, 
                 return ((ItemStack)optional.get()).copy();
             }
 
-            if (!player.getWorld().isClient()) {
-                player.getInventory().insertStack(((ItemStack)optional.get()).copy());
+            if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+                ItemStack giveStack = ((ItemStack)optional.get()).copy();
+                Give.execute(giveStack, serverPlayerEntity, giveStack.getCount());
             }
         }
         return itemStack;
@@ -68,9 +71,10 @@ public record CatalystComponent(int impact, float directivity, int conductance, 
     public static void giveConversionItem(PlayerEntity player, CatalystComponent catalystComponent) {
         Optional<ItemStack> optional = catalystComponent.usingConvertsTo();
         if (optional.isPresent() && !player.isInCreativeMode()) {
-            
-            if (!player.getWorld().isClient()) {
-                player.getInventory().insertStack(((ItemStack)optional.get()).copy());
+
+            if (player instanceof ServerPlayerEntity serverPlayerEntity) {
+                ItemStack giveStack = ((ItemStack)optional.get()).copy();
+                Give.execute(giveStack, serverPlayerEntity, giveStack.getCount());
             }
         }
     }
