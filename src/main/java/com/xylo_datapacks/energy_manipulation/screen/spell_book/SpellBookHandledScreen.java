@@ -5,6 +5,7 @@ import com.xylo_datapacks.energy_manipulation.api.Counter;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.gui.GuiManager;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithList;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithValue;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
 import com.xylo_datapacks.energy_manipulation.api.Dimension;
 import com.xylo_datapacks.energy_manipulation.screen.custom_owo.CollapsibleContainerV2;
@@ -25,13 +26,13 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Environment(value= EnvType.CLIENT)
 public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout, SpellBookScreenHandler> {
     private FlowLayout rootComponent;
-    private Map<String, Boolean> expandedMap = new HashMap<>();
+    private String selectedNodePath;
+    private Identifier selectedNodeValue;
     
     
     public SpellBookHandledScreen(SpellBookScreenHandler handler, PlayerInventory inventory, Text title) {
@@ -189,15 +190,39 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
         
         FlowLayout flowLayout = rootComponent.childById(FlowLayout.class, "node_info_scroll_content");
         if (flowLayout == null) return;
+
         
+        /*-------------------------------------------------------------------*/
+        // get selected node
         NodeResult nodeResult = this.handler.getGuiManager().getSelectedNode();
-        // reset children if needed
+        
+        // check if selected node changed
+        boolean nodeChanged = true;
+        if (nodeResult != null) {
+            // get path and value
+            String nodePath = GenericNode.listPathToStringPath(nodeResult.path().list());
+            Identifier nodeValue = nodeResult.node() != null ? nodeResult.node().getNodeIdentifier() : null;
+            // check if node changed
+            nodeChanged = !nodePath.equals(selectedNodePath) || nodeValue != selectedNodeValue;
+            // update selected node info
+            selectedNodePath = nodePath;
+            selectedNodeValue = nodeValue;
+        } 
+        else {
+            // update selected node info
+            selectedNodePath = null;
+            selectedNodeValue = null;
+        }
+        
+        // reset children if node is null
         if (nodeResult == null ||  nodeResult.node() == null) {
             flowLayout.clearChildren();
             return;
-        };
+        }
+        /*-------------------------------------------------------------------*/
         
-        // add child (second page)
+        
+        // add child to node info page if empty
         if (flowLayout.children().isEmpty()) {
             final var second_page = this.model.expandTemplate(FlowLayout.class, "second_page", Map.of());
             flowLayout.child(second_page);
@@ -256,12 +281,15 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
                 selectorBoxLayout = this.model.expandTemplate(FlowLayout.class, "selector_box", Map.of());
                 second_page.child(selectorBoxLayout);
             }
-            // clear layout children
-            selectorBoxLayout.clearChildren();
-            // add selector (from node)
-            selectorBoxLayout.child(nodeWithValue.getValueSelectorComponent(this.model, result -> {
-                this.handler.sendMessage(new SpellBookScreenHandler.SelectorValue(String.valueOf(result)));
-            }));
+            if (nodeChanged) {
+                System.out.println("NODE CHANGED");
+                // clear layout children
+                selectorBoxLayout.clearChildren();
+                // add selector (from node)
+                selectorBoxLayout.child(nodeWithValue.getValueSelectorComponent(this.model, result -> {
+                    this.handler.sendMessage(new SpellBookScreenHandler.SelectorValue(String.valueOf(result)));
+                }));
+            }
         }
         // if selector not needed and layout is already there, remove layout
         else {
