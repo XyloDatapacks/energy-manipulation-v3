@@ -5,7 +5,6 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractRunnableNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value.BooleanNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.ReturnType;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 
 public class IfInstructionNode extends AbstractRunnableNodeWithMap<Boolean> implements InstructionNode {

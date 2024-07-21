@@ -1,33 +1,32 @@
-package com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction;
+package com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.StringNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.InstructionNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerNumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
-public class OutputInstructionNode extends AbstractNodeWithMap implements InstructionNode {
-    SubNode<StringNode> text = registerSubNode("text", SubNodes.STRING);
-    
-    public OutputInstructionNode() {
-        super(Nodes.INSTRUCTION_OUTPUT);
+public class ComplexStringNode extends AbstractNodeWithMap implements StringNode {
+    SubNode<StringNode> string = registerSubNode("string", new SubNode.Builder<StringNode>()
+                    .addNodeValues(SubNodes.TEMPLATE_ALL_STRINGS),
+            Nodes.VALUE_TYPE_STRING.identifier());
+
+    public ComplexStringNode() {
+        super(Nodes.STRING);
     }
     
     /*----------------------------------------------------------------------------------------------------------------*/
     /* InstructionNode Interface */
 
     @Override
-    public boolean executeInstruction(SpellExecutor spellExecutor) {
-        if (spellExecutor.getCaster() instanceof PlayerEntity playerEntity) {
-            playerEntity.sendMessage(Text.of(text.getNode().getString()), false);
-            return true;
-        }
-        return false;
+    public String getString() {
+        return string.getNode().getString();
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
-    
+
 }

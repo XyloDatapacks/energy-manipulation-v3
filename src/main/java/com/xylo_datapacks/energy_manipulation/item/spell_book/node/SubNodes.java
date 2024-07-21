@@ -9,16 +9,23 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.I
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.DoubleNumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerNumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.NumberNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.StringNode;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
 
 public class SubNodes {
+    /** Used by ComplexIntegerNumberNode */
     public static List<NodeData<? extends IntegerNumberNode>> TEMPLATE_ALL_INTEGER = List.of(
             Nodes.VALUE_TYPE_INTEGER
     );
+    /** Used by ComplexDoubleNumberNode */
     public static List<NodeData<? extends DoubleNumberNode>> TEMPLATE_ALL_DOUBLE = List.of(
             Nodes.VALUE_TYPE_DOUBLE
+    );
+    /** Used by ComplexStringNode */
+    public static List<NodeData<? extends StringNode>> TEMPLATE_ALL_STRINGS = List.of(
+            Nodes.VALUE_TYPE_STRING
     );
     public static List<NodeData<? extends InstructionNode>> TEMPLATE_COMMON_INSTRUCTION = List.of(
             Nodes.INSTRUCTION_GENERATE_SHAPE,
@@ -94,6 +101,13 @@ public class SubNodes {
                     Nodes.NUMBER_DOUBLE
             )),
             Nodes.VALUE_TYPE_DOUBLE.identifier());
+
+    public static SubNodeDefinition<StringNode> STRING = new SubNodeDefinition<>("string", new SubNode.Builder<StringNode>()
+            .addNodeValues(List.of(
+                    Nodes.VALUE_TYPE_STRING,
+                    Nodes.STRING
+            )),
+            Nodes.VALUE_TYPE_STRING.identifier());
     
     
     

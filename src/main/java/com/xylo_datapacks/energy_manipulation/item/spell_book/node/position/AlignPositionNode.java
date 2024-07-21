@@ -8,8 +8,6 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.Su
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value.BooleanNode;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.List;
-
 public class AlignPositionNode extends AbstractNodeWithMap implements PositionNode {
     SubNode<BooleanNode> x = registerSubNode("x", SubNodes.CONDITION);
     SubNode<BooleanNode> y = registerSubNode("y", SubNodes.CONDITION);

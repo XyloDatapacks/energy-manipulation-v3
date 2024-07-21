@@ -21,6 +21,8 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.shape.RayShap
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value.BooleanValueTypeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.DoubleValueTypeNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.ComplexStringNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.StringValueTypeNode;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -57,7 +59,9 @@ public class Nodes {
             "condition", new SubNodeData("Condition","Condition to pass"),
             "body", new SubNodeData("Body","the instructions to run")
     )));
-    public static final NodeData<OutputInstructionNode> INSTRUCTION_OUTPUT = registerNode("instruction", "output", new NodeData.NodeDataMaker<>("Output", "print a debug string", OutputInstructionNode::new, Map.of()));
+    public static final NodeData<OutputInstructionNode> INSTRUCTION_OUTPUT = registerNode("instruction", "output", new NodeData.NodeDataMaker<>("Output", "print a debug string", OutputInstructionNode::new, Map.of(
+            "text", new SubNodeData("Text","the output message")
+    )));
 
     /** Shapes */
     public static final NodeData<ProjectileShapeNode> SHAPE_PROJECTILE = registerNode("shape", "projectile", new NodeData.NodeDataMaker<>("Projectile", "Projectile like spell", ProjectileShapeNode::new, Map.of(
@@ -101,18 +105,25 @@ public class Nodes {
     )));
 
     /** Number */
-    public static final NodeData<ComplexDoubleNumberNode> NUMBER_DOUBLE = registerNode("number", "double", new NodeData.NodeDataMaker<>("Double", "A Double number", ComplexDoubleNumberNode::new, Map.of(
+    public static final NodeData<ComplexDoubleNumberNode> NUMBER_DOUBLE = registerNode("number", "complex_double", new NodeData.NodeDataMaker<>("Double", "A Double number", ComplexDoubleNumberNode::new, Map.of(
             "value", new SubNodeData("Value","A double number")
     )));
-    public static final NodeData<ComplexIntegerNumberNode> NUMBER_INTEGER = registerNode("number", "integer", new NodeData.NodeDataMaker<>("Integer", "A Integer number", ComplexIntegerNumberNode::new, Map.of(
+    public static final NodeData<ComplexIntegerNumberNode> NUMBER_INTEGER = registerNode("number", "complex_integer", new NodeData.NodeDataMaker<>("Integer", "A Integer number", ComplexIntegerNumberNode::new, Map.of(
             "value", new SubNodeData("Value","A integer number")
     )));
-    public static final NodeData<DoubleValueTypeNode> VALUE_TYPE_DOUBLE = registerNode("number_value", "double", new NodeData.NodeDataMaker<>("Value Double", "Move the slider to select a number", DoubleValueTypeNode::new, Map.of()));
-    public static final NodeData<IntegerValueTypeNode> VALUE_TYPE_INTEGER = registerNode("number_value", "integer", new NodeData.NodeDataMaker<>("Value Integer", "Move the slider to select a number", IntegerValueTypeNode::new, Map.of()));
+    public static final NodeData<DoubleValueTypeNode> VALUE_TYPE_DOUBLE = registerNode("number", "double", new NodeData.NodeDataMaker<>("Value Double", "Move the slider to select a number", DoubleValueTypeNode::new, Map.of()));
+    public static final NodeData<IntegerValueTypeNode> VALUE_TYPE_INTEGER = registerNode("number", "integer", new NodeData.NodeDataMaker<>("Value Integer", "Move the slider to select a number", IntegerValueTypeNode::new, Map.of()));
     
     /** Boolean Value */
     public static final NodeData<BooleanValueTypeNode> VALUE_TYPE_BOOLEAN = registerNode("boolean_value", "boolean", new NodeData.NodeDataMaker<>("Value Boolean", "Select the value", BooleanValueTypeNode::new, Map.of()));
-    
+
+    /** String Value */
+    public static final NodeData<StringValueTypeNode> VALUE_TYPE_STRING = registerNode("string_value", "string", new NodeData.NodeDataMaker<>("Value String", "Select the value", StringValueTypeNode::new, Map.of()));
+    public static final NodeData<ComplexStringNode> STRING = registerNode("string_value", "complex_string", new NodeData.NodeDataMaker<>("String", "A string", ComplexStringNode::new, Map.of(
+            "string", new SubNodeData("String","A string")
+    )));
+
+
     /** Condition */
     public static final NodeData<CasterOnGroundConditionNode> CONDITION_CASTER_ON_GROUND = registerNode("condition", "caster_on_ground", new NodeData.NodeDataMaker<>("Caster On Ground", "returns true if the caster is on ground", CasterOnGroundConditionNode::new, Map.of()));
 
