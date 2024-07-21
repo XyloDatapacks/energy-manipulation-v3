@@ -35,7 +35,9 @@ public class SubNodes {
             Nodes.INSTRUCTION_WHILE_LOOP,
             Nodes.INSTRUCTION_OUTPUT,
             Nodes.INSTRUCTION_CONTINUE,
-            Nodes.INSTRUCTION_BREAK
+            Nodes.INSTRUCTION_BREAK,
+            Nodes.INSTRUCTION_CREATE_VARIABLE,
+            Nodes.INSTRUCTION_OPERATION
     );
 
 
@@ -57,7 +59,7 @@ public class SubNodes {
     
     
     public static SubNodeDefinition<InstructionProviderNode> COMMON_INSTRUCTION_PROVIDER = new SubNodeDefinition<>("instruction_provider", new SubNode.Builder<InstructionProviderNode>()
-            .addNodeValue(Nodes.INSTRUCTION_PROVIDER, null),
+            .addNodeValue(Nodes.INSTRUCTION_PROVIDER),
             Nodes.INSTRUCTION_PROVIDER.identifier());
 
     public static SubNodeDefinition<InstructionProviderNode> CONDITIONAL_INSTRUCTION_PROVIDER = new SubNodeDefinition<>("instruction_provider", new SubNode.Builder<InstructionProviderNode>()

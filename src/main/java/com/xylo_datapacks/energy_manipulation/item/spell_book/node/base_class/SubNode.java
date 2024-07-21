@@ -108,10 +108,18 @@ public final class SubNode<T extends GenericNode> {
          * @param nodeData node identifier of the node we want to add as possible value
          */
         public Builder<T> addNodeValues(List<NodeData<? extends T>> nodeData) {
-            nodeData.forEach( singleNodeData -> { addNodeValue(singleNodeData, null); });
+            nodeData.forEach(this::addNodeValue);
             return this;
         }
 
+        /**
+         * nodeData type (S) is defined by the class of the supplier it contains
+         * @param nodeData node we want to add as possible value
+         */
+        public <S extends T> Builder<T> addNodeValue(NodeData<S> nodeData) {
+            return addNodeValue(nodeData, null);
+        }
+        
         /**
          * nodeData type (S) is defined by the class of the supplier it contains
          * @param nodeData node we want to add as possible value

@@ -12,6 +12,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.Comple
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerValueTypeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.offset.CardinalOffsetNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.offset.DirectionalOffsetNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.NumberOperationNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.position.AlignPositionNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.position.OffsetPositionNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
@@ -23,6 +24,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.boolean_value
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.DoubleValueTypeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.ComplexStringNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.StringValueTypeNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.VariableTypeNode;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -61,6 +63,13 @@ public class Nodes {
     )));
     public static final NodeData<OutputInstructionNode> INSTRUCTION_OUTPUT = registerNode("instruction", "output", new NodeData.NodeDataMaker<>("Output", "print a debug string", OutputInstructionNode::new, Map.of(
             "text", new SubNodeData("Text","the output message")
+    )));
+    public static final NodeData<CreateVariableInstructionNode> INSTRUCTION_CREATE_VARIABLE = registerNode("instruction", "create_variable", new NodeData.NodeDataMaker<>("Create Variable", "creates a new variable", CreateVariableInstructionNode::new, Map.of(
+            "name", new SubNodeData("Name","the name of the variable"),
+            "type", new SubNodeData("Type","the type of the variable")
+    )));
+    public static final NodeData<OperationInstructionNode> INSTRUCTION_OPERATION = registerNode("instruction", "operation", new NodeData.NodeDataMaker<>("Operation", "modify the value of a variable", OperationInstructionNode::new, Map.of(
+            "operation", new SubNodeData("Operation Type","the operation type to use")
     )));
 
     /** Shapes */
@@ -126,6 +135,14 @@ public class Nodes {
 
     /** Condition */
     public static final NodeData<CasterOnGroundConditionNode> CONDITION_CASTER_ON_GROUND = registerNode("condition", "caster_on_ground", new NodeData.NodeDataMaker<>("Caster On Ground", "returns true if the caster is on ground", CasterOnGroundConditionNode::new, Map.of()));
+
+
+    /** Operation */
+    public static final NodeData<NumberOperationNode> OPERATION_NUMBER = registerNode("operation", "number", new NodeData.NodeDataMaker<>("Number Operation", "An operation between numbers", NumberOperationNode::new, Map.of()));
+
+
+    /** Variable */
+    public static final NodeData<VariableTypeNode> VARIABLE_TYPE = registerNode("variable", "type", new NodeData.NodeDataMaker<>("Variable Type", "Defines the type of a variable", VariableTypeNode::new, Map.of()));
 
 
     // Function called to add nodes
