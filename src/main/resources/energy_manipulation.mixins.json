@@ -5,7 +5,8 @@
 	"mixins": [
 		"ExampleMixin",
 		"SoundEventAccessor",
-		"EntityAccessor"
+		"EntityAccessor",
+		"OwoScrollContainerAccessor"
 	],
 	"client": [
 		"ItemRendererAccessor",

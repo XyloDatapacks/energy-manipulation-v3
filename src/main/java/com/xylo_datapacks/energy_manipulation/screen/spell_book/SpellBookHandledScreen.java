@@ -8,6 +8,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.Ab
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeResult;
 import com.xylo_datapacks.energy_manipulation.api.Dimension;
+import com.xylo_datapacks.energy_manipulation.mixin.OwoScrollContainerAccessor;
 import com.xylo_datapacks.energy_manipulation.screen.custom_owo.CollapsibleContainerV2;
 import com.xylo_datapacks.energy_manipulation.screen.custom_owo.XyloOwoContainers;
 import io.wispforest.owo.ui.base.BaseUIModelHandledScreen;
@@ -91,10 +92,13 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
         double progressPercent = newMaxScrollHeight > 0.0 ? Math.max((Math.min((maxScrollHeight - distance) / newMaxScrollHeight, 1.0)), 0.0) : 0.0; // clamp [(maxScrollHeight - distance) / newMaxScrollHeight]
         /*System.out.println("maxScrollHeight: " + maxScrollHeight);
         System.out.println("newMaxScrollHeight: " + newMaxScrollHeight);
+        System.out.println("maxLayoutY: " + maxLayoutY);
         System.out.println("distance: " + distance);
         System.out.println("progressPercent = (maxScrollHeight - distance) / newMaxScrollHeight: " + progressPercent);*/
+        
         // restore scroll percentage
         scrollContainer.scrollTo(progressPercent);
+        ((OwoScrollContainerAccessor) scrollContainer).setCurrentScrollPosition(((OwoScrollContainerAccessor) scrollContainer).getScrollOffset());
     }
 
     private void addButtons(FlowLayout flowLayout, Map<String, NodeResult> nodeResults, Counter nodeIndexCounter) {
