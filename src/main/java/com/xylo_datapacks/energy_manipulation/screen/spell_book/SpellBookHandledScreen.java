@@ -96,7 +96,7 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
         System.out.println("distance: " + distance);
         System.out.println("progressPercent = (maxScrollHeight - distance) / newMaxScrollHeight: " + progressPercent);*/
         
-        // restore scroll percentage
+        // restore scroll percentage (we set the current scroll position too in order to avoid the interpolation, which would cause issues with rapid updates)
         scrollContainer.scrollTo(progressPercent);
         ((OwoScrollContainerAccessor) scrollContainer).setCurrentScrollPosition(((OwoScrollContainerAccessor) scrollContainer).getScrollOffset());
     }
