@@ -5,6 +5,7 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.SubNodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.*;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerNumberNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerValueTypeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.NumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.shape.ShapeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.ReturnType;
@@ -19,8 +20,14 @@ public class DelayInstructionNode extends AbstractNodeWithMap implements Instruc
     public DelayInstructionNode() {
         super(Nodes.INSTRUCTION_DELAY);
     }
-    
-    
+
+    @Override
+    protected void onSubNodeModified(String id, Identifier newSubNodeValueIdentifier) {
+        if (getSubNode(id).getNode() instanceof IntegerValueTypeNode node) {
+            node.setBounds(0, 200);
+        }
+    }
+
     /*--------------------------------------------------------------------------------------------------------------------*/
     /* InstructionNode Interface */
 

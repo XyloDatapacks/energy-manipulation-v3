@@ -33,7 +33,7 @@ public class CollapsibleContainerV2 extends FlowLayout  {
             0x77FFFFFF
     );
 
-    protected final EventStream<CollapsibleContainer.OnToggled> toggledEvents = CollapsibleContainer.OnToggled.newStream();
+    protected final EventStream<CollapsibleContainerV2.OnToggled> toggledEvents = CollapsibleContainerV2.OnToggled.newStream();
 
     protected final List<Component> collapsibleChildren = new ArrayList<>();
     protected final List<Component> collapsibleChildrenView = Collections.unmodifiableList(this.collapsibleChildren);
@@ -71,13 +71,18 @@ public class CollapsibleContainerV2 extends FlowLayout  {
 
         this.contentLayout = Containers.verticalFlow(Sizing.content(), Sizing.content());
         this.contentLayout.padding(Insets.left(2));
-        this.contentLayout.surface(SURFACE);
+        //this.contentLayout.surface(SURFACE);
 
         super.child(this.contentLayout);
     }
 
     public FlowLayout titleLayout() {
         return this.titleLayout;
+    }
+
+    public FlowLayout contentLayoutPadding(Insets padding) {
+        contentLayout.padding(padding);
+        return this;
     }
 
     public List<Component> collapsibleChildren() {
@@ -88,7 +93,7 @@ public class CollapsibleContainerV2 extends FlowLayout  {
         return this.expanded;
     }
 
-    public EventSource<CollapsibleContainer.OnToggled> onToggled() {
+    public EventSource<CollapsibleContainerV2.OnToggled> onToggled() {
         return this.toggledEvents.source();
     }
 
@@ -175,19 +180,19 @@ public class CollapsibleContainerV2 extends FlowLayout  {
         return this.contentLayout.removeChild(child);
     }
 
-    public static CollapsibleContainer parse(Element element) {
+    public static CollapsibleContainerV2 parse(Element element) {
         var textElement = UIParsing.childElements(element).get("text");
         var title = textElement == null ? Text.empty() : UIParsing.parseText(textElement);
 
         return element.getAttribute("expanded").equals("true")
-                ? Containers.collapsible(Sizing.content(), Sizing.content(), title, true)
-                : Containers.collapsible(Sizing.content(), Sizing.content(), title, false);
+                ? XyloOwoContainers.collapsibleV2(Sizing.content(), Sizing.content(), title, true)
+                : XyloOwoContainers.collapsibleV2(Sizing.content(), Sizing.content(), title, false);
     }
 
     public interface OnToggled {
         void onToggle(boolean nowExpanded);
 
-        static EventStream<CollapsibleContainer.OnToggled> newStream() {
+        static EventStream<CollapsibleContainerV2.OnToggled> newStream() {
             return new EventStream<>(subscribers -> nowExpanded -> {
                 for (var subscriber : subscribers) {
                     subscriber.onToggle(nowExpanded);

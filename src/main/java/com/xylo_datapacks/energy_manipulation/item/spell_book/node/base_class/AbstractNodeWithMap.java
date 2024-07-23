@@ -33,6 +33,10 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
     }
     
     
+    protected void onSubNodeModified(String id, Identifier newSubNodeValueIdentifier) {
+        
+    }
+    
     /*----------------------------------------------------------------------------------------------------------------*/
     /* GenericNode Interface */
 
@@ -132,6 +136,7 @@ public abstract class AbstractNodeWithMap extends AbstractNode {
         // if the subNodeId is already registered
         if (subNodes.containsKey(path)) {
             if (subNodes.get(path).setNodeClass(newSubNodeValueIdentifier)) {
+                onSubNodeModified(path, newSubNodeValueIdentifier);
                 return true;
             }
         }

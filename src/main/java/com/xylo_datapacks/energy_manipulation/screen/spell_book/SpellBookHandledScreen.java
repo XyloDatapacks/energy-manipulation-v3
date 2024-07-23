@@ -22,6 +22,7 @@ import io.wispforest.owo.ui.container.StackLayout;
 import io.wispforest.owo.ui.core.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -31,6 +32,8 @@ import java.util.Map;
 @Environment(value= EnvType.CLIENT)
 public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout, SpellBookScreenHandler> {
     private FlowLayout rootComponent;
+    private FlowLayout scrollbarLayout;
+    private ScrollContainer<?> scrollContainer;
     private String selectedNodePath;
     private Identifier selectedNodeValue;
     
@@ -57,6 +60,11 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
     @Override
     protected void build(FlowLayout rootComponent) {
         this.rootComponent = rootComponent;
+
+        scrollContainer = rootComponent.childById(ScrollContainer.class, "nodes_list_scroll");
+        if (scrollContainer == null) return;
+
+        scrollbarLayout = scrollContainer.childById(FlowLayout.class, "nodes_list_scroll_content");
         
         refreshNodesList();
         this.handler.registerNodeListUpdate(bUpdate -> {
@@ -65,28 +73,26 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
     }
     
     public void refreshNodesList() {
-        ScrollContainer<?> scrollContainer = rootComponent.childById(ScrollContainer.class, "nodes_list_scroll");
-        if (scrollContainer == null) return;
-        
-        FlowLayout flowLayout = scrollContainer.childById(FlowLayout.class, "nodes_list_scroll_content");
-        if (flowLayout == null) return;
-
         // needed to calculate the scroll percentage
-        double flowLayoutHeightPreUpdate = flowLayout.fullSize().height();
+        double flowLayoutHeightPreUpdate = scrollbarLayout.fullSize().height();
         
         // reset and refresh list
-        flowLayout.clearChildren();
+        scrollbarLayout.clearChildren();
         Map<String, NodeResult> nodeResults = this.handler.getGuiManager().getRootSubNodes();
-        addButtons(flowLayout, nodeResults, new Counter());
+        addButtons(scrollbarLayout, nodeResults, new Counter());
         // refresh node info panel
         refreshNodeInfo();
 
         // calculate scroll percentage
         double maxScrollHeight = flowLayoutHeightPreUpdate - scrollContainer.height(); // container height minus the exposed area
-        double newMaxScrollHeight = flowLayout.fullSize().height() - scrollContainer.height(); // new container height minus the exposed area
+        double newMaxScrollHeight = scrollbarLayout.fullSize().height() - scrollContainer.height(); // new container height minus the exposed area
         double maxLayoutY = scrollContainer.y() - maxScrollHeight; // Y pos of the layout when scrolled down at 100%
-        double distance = Math.abs(flowLayout.y() - maxLayoutY); // goes from maxScrollHeight at 0% to 0 at 100%
+        double distance = Math.abs(scrollbarLayout.y() - maxLayoutY); // goes from maxScrollHeight at 0% to 0 at 100%
         double progressPercent = newMaxScrollHeight > 0.0 ? Math.max((Math.min((maxScrollHeight - distance) / newMaxScrollHeight, 1.0)), 0.0) : 0.0; // clamp [(maxScrollHeight - distance) / newMaxScrollHeight]
+        /*System.out.println("maxScrollHeight: " + maxScrollHeight);
+        System.out.println("newMaxScrollHeight: " + newMaxScrollHeight);
+        System.out.println("distance: " + distance);
+        System.out.println("progressPercent = (maxScrollHeight - distance) / newMaxScrollHeight: " + progressPercent);*/
         // restore scroll percentage
         scrollContainer.scrollTo(progressPercent);
     }

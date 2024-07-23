@@ -255,7 +255,7 @@
                                 <padding>
                                     <all>0</all>
                                 </padding>
-
+                                
                                 <sizing>
                                     <horizontal method="content">0</horizontal>
                                     <vertical method="content">0</vertical>
@@ -668,6 +668,30 @@
 
         </template>
         <!--TEXTBOX SELECTOR TEMPLATE-->
+        <!--=========================================================================================================-->
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+
+        <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+        <!--=========================================================================================================-->
+        <!--EMPTY SELECTOR TEMPLATE-->
+        <template name="empty_selector_template">
+
+            <flow-layout direction="vertical">
+                <children>
+                    
+                </children>
+
+                <sizing>
+                    <horizontal method="fill">100</horizontal>
+                    <vertical method="content">0</vertical>
+                </sizing>
+
+                <horizontal-alignment>center</horizontal-alignment>
+                <vertical-alignment>center</vertical-alignment>
+            </flow-layout>
+
+        </template>
+        <!--EMPTY SELECTOR TEMPLATE-->
         <!--=========================================================================================================-->
         <!--/////////////////////////////////////////////////////////////////////////////////////////////////////////-->
         

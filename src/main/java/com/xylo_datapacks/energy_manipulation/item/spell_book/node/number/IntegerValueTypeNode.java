@@ -56,6 +56,7 @@ public class IntegerValueTypeNode extends AbstractNodeWithValue<Integer> impleme
     public FlowLayout getValueSelectorComponent(UIModel model, Consumer<Integer> onValueChanged) {
         FlowLayout flowLayout = model.expandTemplate(FlowLayout.class, "slider_selector_template", Map.of("value", Integer.toString(getValue()), "min_value", Integer.toString(minValue), "max_value", Integer.toString(maxValue)));
         flowLayout.childById(DiscreteSliderComponent.class, "slider").<DiscreteSliderComponent>configure(slider -> {
+            slider.snap(true);
             slider.onChanged().subscribe(value -> onValueChanged.accept((int) value));
         });
         return flowLayout;

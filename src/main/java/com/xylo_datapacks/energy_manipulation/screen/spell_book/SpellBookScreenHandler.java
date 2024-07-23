@@ -145,7 +145,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
             if (categoryId == BUTTON_CATEGORY.NODE_SELECT_BUTTON.getId()) {
                 // update the selected node in the guiManager from the id
                 guiManager.selectNode(path);
-                sendNodeListUpdate();
+                updateNodeList();
             } else if (categoryId == BUTTON_CATEGORY.TOGGLE_NODE_EXPANDED_BUTTON.getId()) {
                 // toggle expanded
                 guiManager.getNodeAtPath(path).node().getGuiData().toggleExpanded();
@@ -201,7 +201,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         }
         System.out.println("LOADED SPELL: " + guiManager.toNbt());
         // update screen
-        sendNodeListUpdate();
+        updateNodeList();
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -239,7 +239,7 @@ public class SpellBookScreenHandler extends ScreenHandler {
         this.NodeListUpdateConsumer = NodeListUpdateConsumer; 
     }
     
-    private void sendNodeListUpdate() {
+    private void updateNodeList() {
         if (NodeListUpdateConsumer != null) {
             System.out.println("SENDING NODE LIST UPDATE");
             this.NodeListUpdateConsumer.accept(true);
