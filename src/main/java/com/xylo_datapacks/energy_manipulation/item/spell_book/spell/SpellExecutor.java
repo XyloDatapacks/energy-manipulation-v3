@@ -21,4 +21,8 @@ public interface SpellExecutor {
     public abstract void setContextRotation(Vec2f position);
     
     public abstract ExecutionData getExecutionData();
+
+    Object getVariable(String name);
+
+    void setVariable(String variableName, Object result);
 }

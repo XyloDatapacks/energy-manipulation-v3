@@ -15,7 +15,7 @@ public abstract class AbstractNode implements GenericNode {
     private int nesting = 0;
     private final GuiData guiData;
     
-    public AbstractNode(NodeData nodeData) {
+    public AbstractNode(NodeData<?> nodeData) {
         this.nodeIdentifier = nodeData.identifier();
         guiData = new GuiData();
     }

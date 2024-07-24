@@ -9,6 +9,8 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction.I
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.DoubleNumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerNumberNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.NumberNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.operator.DoubleOperatorNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.operator.IntegerOperatorNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.StringNode;
 import net.minecraft.util.Identifier;
 
@@ -38,6 +40,24 @@ public class SubNodes {
             Nodes.INSTRUCTION_BREAK,
             Nodes.INSTRUCTION_CREATE_VARIABLE,
             Nodes.INSTRUCTION_OPERATION
+    );
+    public static List<NodeData<? extends IntegerOperatorNode>> TEMPLATE_INTEGER_NUMBER_OPERATORS = List.of(
+            Nodes.OPERATOR_ADD,
+            Nodes.OPERATOR_SUBTRACT,
+            Nodes.OPERATOR_MULTIPLY,
+            Nodes.OPERATOR_DIVIDE,
+            Nodes.OPERATOR_EQUAL,
+            Nodes.OPERATOR_GREATER_THEN,
+            Nodes.OPERATOR_LESS_THEN
+    );
+    public static List<NodeData<? extends DoubleOperatorNode>> TEMPLATE_DOUBLE_NUMBER_OPERATORS = List.of(
+            Nodes.OPERATOR_ADD,
+            Nodes.OPERATOR_SUBTRACT,
+            Nodes.OPERATOR_MULTIPLY,
+            Nodes.OPERATOR_DIVIDE,
+            Nodes.OPERATOR_EQUAL,
+            Nodes.OPERATOR_GREATER_THEN,
+            Nodes.OPERATOR_LESS_THEN
     );
 
 
@@ -110,8 +130,20 @@ public class SubNodes {
                     Nodes.STRING
             )),
             Nodes.VALUE_TYPE_STRING.identifier());
-    
-    
-    
+
+
+
+    public static SubNodeDefinition<IntegerOperatorNode> INTEGER_NUMBER_OPERATOR = new SubNodeDefinition<>("integer_operator", new SubNode.Builder<IntegerOperatorNode>()
+            .addNodeValues(TEMPLATE_INTEGER_NUMBER_OPERATORS),
+            Nodes.OPERATOR_ADD.identifier());
+
+    public static SubNodeDefinition<DoubleOperatorNode> DOUBLE_NUMBER_OPERATOR = new SubNodeDefinition<>("double_operator", new SubNode.Builder<DoubleOperatorNode>()
+            .addNodeValues(TEMPLATE_DOUBLE_NUMBER_OPERATORS),
+            Nodes.OPERATOR_ADD.identifier());
+
+
+
+
+
     public record SubNodeDefinition<T extends GenericNode>(String subNodeId, SubNode.Builder<T> subNodeBuilderTemplate, Identifier newSubNodeValueIdentifier) {}
 }

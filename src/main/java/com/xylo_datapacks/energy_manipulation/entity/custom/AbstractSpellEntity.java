@@ -148,6 +148,16 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
         return executionData;
     }
 
+    @Override
+    public Object getVariable(String name) {
+        return null;
+    }
+
+    @Override
+    public void setVariable(String variableName, Object result) {
+        
+    }
+
     /*----------------------------------------------------------------------------------------------------------------*/
 
     

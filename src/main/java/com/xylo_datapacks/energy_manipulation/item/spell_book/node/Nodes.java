@@ -12,7 +12,9 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.Comple
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.IntegerValueTypeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.offset.CardinalOffsetNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.offset.DirectionalOffsetNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.NumberOperationNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.DoubleOperationNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.IntegerOperationNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.operator.*;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.position.AlignPositionNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.position.OffsetPositionNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
@@ -138,11 +140,31 @@ public class Nodes {
 
 
     /** Operation */
-    public static final NodeData<NumberOperationNode> OPERATION_NUMBER = registerNode("operation", "number", new NodeData.NodeDataMaker<>("Number Operation", "An operation between numbers", NumberOperationNode::new, Map.of()));
+    public static final NodeData<IntegerOperationNode> OPERATION_INTEGER_NUMBER = registerNode("operation", "integer_number", new NodeData.NodeDataMaker<>("Integer Number Operation", "An operation between integer numbers", IntegerOperationNode::new, Map.of(
+            "variable", new SubNodeData("Variable","the variable to modify"),
+            "operator", new SubNodeData("Operator","apply operator"),
+            "number", new SubNodeData("Number","the second number")
+    )));
+    public static final NodeData<DoubleOperationNode> OPERATION_DOUBLE_NUMBER = registerNode("operation", "double_number", new NodeData.NodeDataMaker<>("Double Number Operation", "An operation between double numbers", DoubleOperationNode::new, Map.of(
+            "variable", new SubNodeData("Variable","the variable to modify"),
+            "operator", new SubNodeData("Operator","apply operator"),
+            "number", new SubNodeData("Number","the second number")
+    )));
 
 
     /** Variable */
     public static final NodeData<VariableTypeNode> VARIABLE_TYPE = registerNode("variable", "type", new NodeData.NodeDataMaker<>("Variable Type", "Defines the type of a variable", VariableTypeNode::new, Map.of()));
+
+    /* Operators */
+    public static final NodeData<AddOperatorNode> OPERATOR_ADD = registerNode("operation.operator", "add", new NodeData.NodeDataMaker<>("Add Operator", "Adds two values to each other", AddOperatorNode::new, Map.of()));
+    public static final NodeData<SubtractOperatorNode> OPERATOR_SUBTRACT = registerNode("operation.operator", "subtract", new NodeData.NodeDataMaker<>("Subtract Operator", "Subtract a values to another", SubtractOperatorNode::new, Map.of()));
+    public static final NodeData<MultiplyOperatorNode> OPERATOR_MULTIPLY = registerNode("operation.operator", "multiply", new NodeData.NodeDataMaker<>("Multiply Operator", "Multiply two values", MultiplyOperatorNode::new, Map.of()));
+    public static final NodeData<DivideOperatorNode> OPERATOR_DIVIDE = registerNode("operation.operator", "divide", new NodeData.NodeDataMaker<>("Divide Operator", "Divide a values for another", DivideOperatorNode::new, Map.of()));
+    public static final NodeData<EqualOperatorNode> OPERATOR_EQUAL = registerNode("operation.operator", "equal", new NodeData.NodeDataMaker<>("Equal Operator", "Make a value equal to the other", EqualOperatorNode::new, Map.of()));
+    public static final NodeData<GreaterThenOperatorNode> OPERATOR_GREATER_THEN = registerNode("operation.operator", "greater_then", new NodeData.NodeDataMaker<>("Greater Then Operator", "Make a value the greater between the two", GreaterThenOperatorNode::new, Map.of()));
+    public static final NodeData<LessThenOperatorNode> OPERATOR_LESS_THEN = registerNode("operation.operator", "less_then", new NodeData.NodeDataMaker<>("Less Then Operator", "Make a value the smaller between the two", LessThenOperatorNode::new, Map.of()));
+
+
 
 
     // Function called to add nodes

@@ -11,12 +11,10 @@ import java.util.Map;
 public class test {
     public static void main(String[] args) {
 
-        ReturnType returnTypeOg = ReturnType.BREAK;
-
-        ReturnType returnType = returnTypeOg;
-        returnTypeOg = ReturnType.NONE;
-        System.out.println(returnType);
-        System.out.println(returnTypeOg);
+        Number a = 2;
+        Number b = a;
+        a = 4;
+        System.out.println("a = " + a + ", b = " + b);
         
     }
 }
