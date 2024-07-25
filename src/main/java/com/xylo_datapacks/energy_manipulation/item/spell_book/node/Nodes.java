@@ -77,7 +77,7 @@ public class Nodes {
             "type", new SubNodeData("Type","the type of the variable")
     )));
     public static final NodeData<ModifyVariableInstructionNode> INSTRUCTION_MODIFY_VARIABLE = registerNode("instruction", "modify_variable", new NodeData.NodeDataMaker<>("Modify Variable", "modify the value of a variable", ModifyVariableInstructionNode::new, Map.of(
-            "modifier", new SubNodeData("Modifier","the type of variable to modify")
+            "modifier", new SubNodeData("Type","the type of variable to modify")
     )));
 
     /** Shapes */
@@ -160,27 +160,28 @@ public class Nodes {
 
     /** Variable */
     public static final NodeData<VariableTypeNode> VARIABLE_TYPE = registerNode("variable", "type", new NodeData.NodeDataMaker<>("Variable Type", "Defines the type of a variable", VariableTypeNode::new, Map.of()));
-    public static final NodeData<IntegerVariableGetterNode> VARIABLE_GETTER_INTEGER = registerNode("variable.getter", "integer", new NodeData.NodeDataMaker<>("Integer Variable Getter", "Get a integer variable", IntegerVariableGetterNode::new, Map.of(
-            "variable_name", new SubNodeData("Variable Name","the name of the variable to modify")
+    
+    public static final NodeData<IntegerVariableGetterNode> VARIABLE_GETTER_INTEGER = registerNode("variable.getter", "integer", new NodeData.NodeDataMaker<>("Integer Variable", "Get a integer variable", IntegerVariableGetterNode::new, Map.of(
+            "variable_name", new SubNodeData("Name","the name of the variable to modify")
     )));
-    public static final NodeData<DoubleVariableGetterNode> VARIABLE_GETTER_DOUBLE = registerNode("variable.getter", "double", new NodeData.NodeDataMaker<>("Double Variable Getter", "Get a double variable", DoubleVariableGetterNode::new, Map.of(
-            "variable_name", new SubNodeData("Variable Name","the name of the variable to modify")
+    public static final NodeData<DoubleVariableGetterNode> VARIABLE_GETTER_DOUBLE = registerNode("variable.getter", "double", new NodeData.NodeDataMaker<>("Double Variable", "Get a double variable", DoubleVariableGetterNode::new, Map.of(
+            "variable_name", new SubNodeData("Name","the name of the variable to modify")
     )));
-    public static final NodeData<StringVariableGetterNode> VARIABLE_GETTER_STRING = registerNode("variable.getter", "string", new NodeData.NodeDataMaker<>("String Variable Getter", "Get a string variable", StringVariableGetterNode::new, Map.of(
-            "variable_name", new SubNodeData("Variable Name","the name of the variable to modify")
+    public static final NodeData<StringVariableGetterNode> VARIABLE_GETTER_STRING = registerNode("variable.getter", "string", new NodeData.NodeDataMaker<>("String Variable", "Get a string variable", StringVariableGetterNode::new, Map.of(
+            "variable_name", new SubNodeData("Name","the name of the variable to modify")
     )));
 
-    public static final NodeData<IntegerVariableModifierNode> VARIABLE_MODIFIER_INTEGER = registerNode("variable.modifier", "integer", new NodeData.NodeDataMaker<>("Integer Variable Modifier", "Modify a integer variable", IntegerVariableModifierNode::new, Map.of(
-            "variable", new SubNodeData("Variable","The variable to modify"),
-            "value", new SubNodeData("Value","The value to use")
+    public static final NodeData<IntegerVariableModifierNode> VARIABLE_MODIFIER_INTEGER = registerNode("variable.modifier", "integer", new NodeData.NodeDataMaker<>("Integer Variable", "Modify a integer variable", IntegerVariableModifierNode::new, Map.of(
+            "variable", new SubNodeData("Getter","Get the variable to modify"),
+            "value", new SubNodeData("Setter","The new value to set the variable at")
     )));
-    public static final NodeData<DoubleVariableModifierNode> VARIABLE_MODIFIER_DOUBLE = registerNode("variable.modifier", "double", new NodeData.NodeDataMaker<>("Double Variable Modifier", "Modify a double variable", DoubleVariableModifierNode::new, Map.of(
-            "variable", new SubNodeData("Variable","The variable to modify"),
-            "value", new SubNodeData("Value","The value to use")
+    public static final NodeData<DoubleVariableModifierNode> VARIABLE_MODIFIER_DOUBLE = registerNode("variable.modifier", "double", new NodeData.NodeDataMaker<>("Double Variable", "Modify a double variable", DoubleVariableModifierNode::new, Map.of(
+            "variable", new SubNodeData("Getter","Get the variable to modify"),
+            "value", new SubNodeData("Setter","The new value to set the variable at")
     )));
-    public static final NodeData<StringVariableModifierNode> VARIABLE_MODIFIER_STRING = registerNode("variable.modifier", "string", new NodeData.NodeDataMaker<>("String Variable Modifier", "Modify a string variable", StringVariableModifierNode::new, Map.of(
-            "variable", new SubNodeData("Variable","The variable to modify"),
-            "value", new SubNodeData("Value","The value to use")
+    public static final NodeData<StringVariableModifierNode> VARIABLE_MODIFIER_STRING = registerNode("variable.modifier", "string", new NodeData.NodeDataMaker<>("String Variable", "Modify a string variable", StringVariableModifierNode::new, Map.of(
+            "variable", new SubNodeData("Getter","Get the variable to modify"),
+            "value", new SubNodeData("Setter","The new value to set the variable at")
     )));
     
     

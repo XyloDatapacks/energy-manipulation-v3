@@ -8,6 +8,7 @@ import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.core.*;
 import io.wispforest.owo.ui.parsing.UIParsing;
 import io.wispforest.owo.ui.util.Delta;
+import io.wispforest.owo.ui.util.NinePatchTexture;
 import io.wispforest.owo.ui.util.UISounds;
 import io.wispforest.owo.util.EventSource;
 import io.wispforest.owo.util.EventStream;
@@ -25,14 +26,6 @@ import java.util.function.Supplier;
 
 public class CollapsibleContainerV2 extends FlowLayout  {
 
-    public static final Surface SURFACE = (context, component) -> context.fill(
-            component.x() + 5,
-            component.y(),
-            component.x() + 6,
-            component.y() + component.height(),
-            0x77FFFFFF
-    );
-
     protected final EventStream<CollapsibleContainerV2.OnToggled> toggledEvents = CollapsibleContainerV2.OnToggled.newStream();
 
     protected final List<Component> collapsibleChildren = new ArrayList<>();
@@ -45,12 +38,10 @@ public class CollapsibleContainerV2 extends FlowLayout  {
 
     protected CollapsibleContainerV2(Sizing horizontalSizing, Sizing verticalSizing, Text title, boolean expanded) {
         super(horizontalSizing, verticalSizing, Algorithm.VERTICAL);
-
-        super.padding(Insets.bottom(2));
         
         // Title
         this.titleLayout = Containers.horizontalFlow(Sizing.content(), Sizing.content());
-        this.titleLayout.padding(Insets.of(4, 2, 2, 4));
+        this.titleLayout.padding(Insets.of(3, 1, 3, 3));
         this.titleLayout.verticalAlignment(VerticalAlignment.CENTER);
         this.allowOverflow(false);
 
@@ -58,10 +49,9 @@ public class CollapsibleContainerV2 extends FlowLayout  {
         this.spinnyBoi.margins(Insets.of(0, 0, 4, 2));
         this.titleLayout.child(spinnyBoi);
 
-        //title = title.copy().formatted(Formatting.UNDERLINE);
-        //this.titleLayout.child(Components.button(title, buttonComponent -> {}));
-
+        
         this.expanded = expanded;
+        fixBottomPadding();
         this.spinnyBoi.targetRotation = expanded ? 90 : 0;
         this.spinnyBoi.rotation = this.spinnyBoi.targetRotation;
 
@@ -70,10 +60,14 @@ public class CollapsibleContainerV2 extends FlowLayout  {
         // Content
 
         this.contentLayout = Containers.verticalFlow(Sizing.content(), Sizing.content());
-        this.contentLayout.padding(Insets.left(2));
+        this.contentLayout.padding(Insets.left(4));
         //this.contentLayout.surface(SURFACE);
-
         super.child(this.contentLayout);
+    }
+
+    public FlowLayout fixBottomPadding() {
+        this.padding(Insets.bottom(expanded && !collapsibleChildren.isEmpty() ? 0 : 2));
+        return this;
     }
 
     public FlowLayout titleLayout() {
@@ -94,6 +88,7 @@ public class CollapsibleContainerV2 extends FlowLayout  {
     }
 
     public EventSource<CollapsibleContainerV2.OnToggled> onToggled() {
+        fixBottomPadding();
         return this.toggledEvents.source();
     }
 
@@ -146,6 +141,10 @@ public class CollapsibleContainerV2 extends FlowLayout  {
         }
     }
 
+    
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* Children */
+    
     @Override
     public FlowLayout child(Component child) {
         this.collapsibleChildren.add(child);
@@ -179,6 +178,8 @@ public class CollapsibleContainerV2 extends FlowLayout  {
         this.collapsibleChildren.remove(child);
         return this.contentLayout.removeChild(child);
     }
+
+    /*----------------------------------------------------------------------------------------------------------------*/
 
     public static CollapsibleContainerV2 parse(Element element) {
         var textElement = UIParsing.childElements(element).get("text");

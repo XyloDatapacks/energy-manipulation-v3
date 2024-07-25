@@ -24,9 +24,12 @@ import io.wispforest.owo.ui.core.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.entity.decoration.DisplayEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
+import org.w3c.dom.css.RGBColor;
 
 import java.util.Map;
 
@@ -38,6 +41,11 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
     private String selectedNodePath;
     private Identifier selectedNodeValue;
     
+    private Color START_COLOR = new Color(0.015686275f, 0.21960784f, 0.18431373f);
+    private Color END_COLOR = new Color(0.7411765f, 0.9490196f, 0.9137255f);
+    private Color HOVERED_COLOR = new Color(0.05490196f, 0.18039216f, 0.15686275f);
+    private Color DISABLED_COLOR = new Color(0.14117648f, 0.21176471f, 0.19607843f);
+    private int MAX_INDENTATION = 20;
     
     public SpellBookHandledScreen(SpellBookScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title, FlowLayout.class, BaseUIModelScreen.DataSource.asset(Identifier.of(EnergyManipulation.MOD_ID, "spell_book/spell_book_menu")));
@@ -45,9 +53,6 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
         Dimension dimension = handler.getDimension();
         this.backgroundWidth = dimension.getWidth();
         this.backgroundHeight = dimension.getHeight();
-        //this.titleY = 7;
-        //this.playerInventoryTitleX = handler.getPlayerInvSlotPosition(dimension, 0, 0).x;
-        //this.playerInventoryTitleY = this.backgroundHeight - 94;
     }
 
     /**
@@ -115,9 +120,17 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
         GuiManager.ButtonDisplay buttonDisplay = GuiManager.getButtonDisplay(nodeResult);
         int nodeIndex = nodeIndexCounter.getValue();
         
+        // color
+        float delta = (float) nodeResult.node().getNesting() / MAX_INDENTATION;
+        Color ElementColor = START_COLOR.interpolate(END_COLOR, delta);
+        
         // create layout to contain button
         CollapsibleContainerV2 collapsibleTile = (CollapsibleContainerV2) XyloOwoContainers.collapsibleV2(Sizing.content(0), Sizing.content(0), Text.of(buttonDisplay.subNodeName()), nodeResult.node().getGuiData().getExpanded())
-                .surface(Surface.DARK_PANEL)
+                .surface((context, component) -> {
+                    context.setShaderColor(ElementColor.red(), ElementColor.green(), ElementColor.blue(), 1);
+                    context.drawPanel(component.x(), component.y(), component.width(), component.height(), false);
+                    context.setShaderColor(1, 1, 1, 1);
+                })
                 .id(nodePath);
         collapsibleTile.onToggled().subscribe(expanded -> {
             // node expanded packet
@@ -136,9 +149,10 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
                         this.client.interactionManager.clickButton(((SpellBookScreenHandler) this.handler).syncId, nodeIndex + SpellBookScreenHandler.BUTTON_CATEGORY.NODE_SELECT_BUTTON.getOffset());
                     }
                 })
+                .renderer(ButtonComponent.Renderer.flat(ElementColor.rgb(), HOVERED_COLOR.rgb(), DISABLED_COLOR.rgb()))
                 .id(nodePath)
                 .horizontalSizing(Sizing.content(0))
-                .verticalSizing(Sizing.fixed(16));
+                .verticalSizing(Sizing.fixed(12));
         
         // add button component to layout
         collapsibleTile.titleLayout().child(buttonComponent);
@@ -153,7 +167,7 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
                             })
                     .id(nodePath)
                     .horizontalSizing(Sizing.content(0))
-                    .verticalSizing(Sizing.fixed(16));
+                    .verticalSizing(Sizing.fixed(12));
 
             collapsibleTile.titleLayout().child(plusButton);
         }
@@ -168,7 +182,7 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
                             })
                     .id(nodePath)
                     .horizontalSizing(Sizing.content(0))
-                    .verticalSizing(Sizing.fixed(16));
+                    .verticalSizing(Sizing.fixed(12));
 
             collapsibleTile.titleLayout().child(removeButton);
         }
@@ -176,6 +190,7 @@ public class SpellBookHandledScreen extends BaseUIModelHandledScreen<FlowLayout,
         // add children recursive
         Map<String, NodeResult> nodeResults = this.handler.getGuiManager().getSubNodes(nodeResult);
         addButtons(collapsibleTile, nodeResults, nodeIndexCounter.increment());
+        collapsibleTile.fixBottomPadding();
         
         return collapsibleTile;
     }
