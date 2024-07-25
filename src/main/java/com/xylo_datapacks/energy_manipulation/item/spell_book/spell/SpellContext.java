@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.spell;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.VariableType;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtDouble;
@@ -8,12 +9,21 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
+import javax.xml.transform.Result;
+import java.util.HashMap;
+import java.util.Map;
+
 public class SpellContext {
     public static final String POSITION_KEY = "position";
     public static final String ROTATION_KEY = "rotation";
+    public static final String VARIABLES_KEY = "variables";
     
     private Vec3d position;
     private Vec2f rotation;
+    private final Map<String, Object> variables = new HashMap<>();
+    
+    
+    
     
     public SpellContext(Vec3d position, Vec2f rotation) {
         this.position = position;
@@ -29,6 +39,7 @@ public class SpellContext {
     
     
 
+    
     public Vec3d getPosition() {
         return position;
     }
@@ -44,6 +55,30 @@ public class SpellContext {
     public void setRotation(Vec2f rotation) {
         this.rotation = rotation;
     }
+    
+    
+    
+    
+    public boolean createVariable(String variableName, VariableType variableType) {
+        if (variables.containsKey(variableName)) return false;
+        
+        variables.put(variableName, variableType.CreateVariable());
+        return true;
+    }
+
+    public boolean setVariable(String variableName, Object result) {
+        if (!variables.containsKey(variableName)) return false;
+        if (!variables.get(variableName).getClass().isInstance(result)) return false;
+        
+        variables.put(variableName, result);
+        return true;
+    }
+    
+    public Object getVariable(String variableName) {
+        return variables.get(variableName);
+    }
+    
+    
     
     
     /** position and rotation are null if not present in nbt */

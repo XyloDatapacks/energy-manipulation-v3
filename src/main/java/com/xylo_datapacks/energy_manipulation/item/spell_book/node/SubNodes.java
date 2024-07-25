@@ -32,6 +32,8 @@ public class SubNodes {
     /** Used by ComplexStringNode */
     public static List<NodeData<? extends StringNode>> TEMPLATE_ALL_STRINGS = List.of(
             Nodes.VALUE_TYPE_STRING,
+            Nodes.NUMBER_INTEGER,
+            Nodes.NUMBER_DOUBLE,
             Nodes.VARIABLE_GETTER_STRING
     );
     public static List<NodeData<? extends InstructionNode>> TEMPLATE_COMMON_INSTRUCTION = List.of(

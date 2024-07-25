@@ -1,14 +1,12 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.spell;
 
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.VariableType;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.VariableType;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 public interface SpellExecutor {
 
-    public abstract void setLastPath(String lastPath);
-    
     public abstract void setDelayTicks(int ticks);
     
     public abstract Entity getCaster();
@@ -23,9 +21,9 @@ public interface SpellExecutor {
     
     public abstract ExecutionData getExecutionData();
 
-    public abstract Object getVariable(String name);
+    public abstract boolean createVariable(String variableName, VariableType variableType);
 
     public abstract boolean setVariable(String variableName, Object result);
-    
-    public abstract void createVariable(String variableName, VariableType variableType);
+
+    public abstract Object getVariable(String variableName);
 }

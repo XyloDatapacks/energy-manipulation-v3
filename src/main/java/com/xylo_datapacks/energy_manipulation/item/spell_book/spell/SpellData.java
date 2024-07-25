@@ -19,10 +19,10 @@ public class SpellData {
     
     public Entity caster;
     public SpellNode spellNode;
-    public String lastSpellPath;
     private SpellContext spellContext;
     private SpellAttributes spellAttributes;
 
+    
     public SpellData(Entity caster, SpellNode spellNode, SpellContext spellContext, SpellAttributes spellAttributes) {
         this.caster = caster;
         this.spellNode = spellNode;

@@ -2,13 +2,10 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithValue;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.NodeData;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.VariableType;
 import com.xylo_datapacks.energy_manipulation.screen.custom_owo.CollapsibleContainerV2;
 import com.xylo_datapacks.energy_manipulation.screen.custom_owo.XyloOwoContainers;
-import com.xylo_datapacks.energy_manipulation.screen.spell_book.SpellBookScreenHandler;
 import io.wispforest.owo.ui.component.Components;
-import io.wispforest.owo.ui.component.DiscreteSliderComponent;
-import io.wispforest.owo.ui.component.DropdownComponent;
 import io.wispforest.owo.ui.component.LabelComponent;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.core.Insets;
@@ -17,7 +14,6 @@ import io.wispforest.owo.ui.core.Surface;
 import io.wispforest.owo.ui.parsing.UIModel;
 import net.minecraft.text.Text;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;

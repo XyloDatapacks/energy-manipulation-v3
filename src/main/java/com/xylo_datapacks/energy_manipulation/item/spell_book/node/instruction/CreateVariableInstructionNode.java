@@ -23,8 +23,7 @@ public class CreateVariableInstructionNode extends AbstractNodeWithMap implement
 
     @Override
     public boolean executeInstruction(SpellExecutor spellExecutor) {
-        spellExecutor.createVariable(name.getNode().getString(spellExecutor), type.getNode().getType());
-        return true;
+        return spellExecutor.createVariable(name.getNode().getString(spellExecutor), type.getNode().getType());
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

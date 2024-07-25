@@ -1,7 +1,7 @@
 package com.xylo_datapacks.energy_manipulation.entity.custom;
 
 import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.VariableType;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.VariableType;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.*;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import net.minecraft.entity.Entity;
@@ -110,11 +110,6 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     /* SpellExecutor Interface */
 
     @Override
-    public void setLastPath(String lastPath) {
-        spellData.lastSpellPath = lastPath;
-    }
-
-    @Override
     public void setDelayTicks(int ticks) {
         spellDelay = ticks;
     }
@@ -148,20 +143,20 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     public ExecutionData getExecutionData() {
         return executionData;
     }
-
+    
     @Override
-    public Object getVariable(String name) {
-        return null;
+    public boolean createVariable(String variableName, VariableType variableType) {
+        return spellData.getSpellContext().createVariable(variableName, variableType);
     }
 
     @Override
     public boolean setVariable(String variableName, Object result) {
-        return false;
+        return spellData.getSpellContext().setVariable(variableName, result);
     }
 
     @Override
-    public void createVariable(String variableName, VariableType variableType) {
-        
+    public Object getVariable(String variableName) {
+        return spellData.getSpellContext().getVariable(variableName);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
