@@ -3,19 +3,22 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node.instruction;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.OperationNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.operation.NumberOperationNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.modifier.VariableModifierNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 
 import java.util.List;
 
-public class OperationInstructionNode extends AbstractNodeWithMap implements InstructionNode {
-    SubNode<OperationNode> operation = registerSubNode("operation", new SubNode.Builder<OperationNode>()
+public class ModifyVariableInstructionNode extends AbstractNodeWithMap implements InstructionNode {
+    SubNode<VariableModifierNode> modifier = registerSubNode("modifier", new SubNode.Builder<VariableModifierNode>()
             .addNodeValues(List.of(
-                    Nodes.OPERATION_INTEGER_NUMBER))
+                    Nodes.VARIABLE_MODIFIER_INTEGER,
+                    Nodes.VARIABLE_MODIFIER_DOUBLE,
+                    Nodes.VARIABLE_MODIFIER_STRING))
     );
     
-    public OperationInstructionNode() {
-        super(Nodes.INSTRUCTION_OPERATION);
+    public ModifyVariableInstructionNode() {
+        super(Nodes.INSTRUCTION_MODIFY_VARIABLE);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/
@@ -23,8 +26,7 @@ public class OperationInstructionNode extends AbstractNodeWithMap implements Ins
 
     @Override
     public boolean executeInstruction(SpellExecutor spellExecutor) {
-        operation.getNode().performOperation(spellExecutor);
-        return true;
+        return modifier.getNode().modifyVariable(spellExecutor);
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

@@ -29,8 +29,12 @@ public class VariableTypeNode extends AbstractNodeWithValue<Integer> {
         super(Nodes.VARIABLE_TYPE);
         setValue(0);
     }
-
-
+    
+    
+    public VariableType getType() {
+        return VARIABLE_TYPES.get(getValue());
+    }
+    
     /*----------------------------------------------------------------------------------------------------------------*/
     /* AbstractNodeWithValue Interface */
 

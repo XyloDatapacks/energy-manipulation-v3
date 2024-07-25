@@ -26,10 +26,10 @@ public class DoubleValueTypeNode extends AbstractNodeWithValue<Double> implement
 
     
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* NumberNode Interface */
+    /* DoubleNumberNode Interface */
 
     @Override
-    public Number getNumber(SpellExecutor spellExecutor) {
+    public Double getDoubleNumber(SpellExecutor spellExecutor) {
         return getValue();
     }
 

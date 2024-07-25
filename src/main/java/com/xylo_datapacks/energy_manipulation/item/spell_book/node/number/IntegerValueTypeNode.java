@@ -29,7 +29,7 @@ public class IntegerValueTypeNode extends AbstractNodeWithValue<Integer> impleme
     /* NumberNode Interface */
 
     @Override
-    public Number getNumber(SpellExecutor spellExecutor) {
+    public Integer getIntegerNumber(SpellExecutor spellExecutor) {
         return getValue();
     }
 

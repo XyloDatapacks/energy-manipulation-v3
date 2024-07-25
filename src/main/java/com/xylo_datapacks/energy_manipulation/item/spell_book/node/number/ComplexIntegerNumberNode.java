@@ -20,8 +20,8 @@ public class ComplexIntegerNumberNode extends AbstractNodeWithMap implements Num
     /* NumberNode Interface */
 
     @Override
-    public Number getNumber(SpellExecutor spellExecutor) {
-        return value.getNode().getNumber(spellExecutor);
+    public Integer getIntegerNumber(SpellExecutor spellExecutor) {
+        return value.getNode().getIntegerNumber(spellExecutor);
     }
     
     /*----------------------------------------------------------------------------------------------------------------*/

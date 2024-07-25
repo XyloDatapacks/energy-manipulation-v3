@@ -6,8 +6,6 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecuto
 import io.wispforest.owo.ui.component.TextAreaComponent;
 import io.wispforest.owo.ui.container.FlowLayout;
 import io.wispforest.owo.ui.parsing.UIModel;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -28,7 +26,7 @@ public class StringValueTypeNode extends AbstractNodeWithValue<String> implement
     /* StringNode Interface */
 
     @Override
-    public String getString() {
+    public String getString(SpellExecutor spellExecutor) {
         return getValue();
     }
 

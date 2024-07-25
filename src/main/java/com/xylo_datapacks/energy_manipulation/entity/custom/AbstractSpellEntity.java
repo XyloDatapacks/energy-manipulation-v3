@@ -1,6 +1,7 @@
 package com.xylo_datapacks.energy_manipulation.entity.custom;
 
 import com.xylo_datapacks.energy_manipulation.item.SpellBookItem;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.VariableType;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.*;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import net.minecraft.entity.Entity;
@@ -154,7 +155,12 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     }
 
     @Override
-    public void setVariable(String variableName, Object result) {
+    public boolean setVariable(String variableName, Object result) {
+        return false;
+    }
+
+    @Override
+    public void createVariable(String variableName, VariableType variableType) {
         
     }
 

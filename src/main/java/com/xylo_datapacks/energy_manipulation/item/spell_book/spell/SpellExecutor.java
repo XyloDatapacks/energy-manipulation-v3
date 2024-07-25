@@ -1,5 +1,6 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.spell;
 
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.VariableType;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
@@ -22,7 +23,9 @@ public interface SpellExecutor {
     
     public abstract ExecutionData getExecutionData();
 
-    Object getVariable(String name);
+    public abstract Object getVariable(String name);
 
-    void setVariable(String variableName, Object result);
+    public abstract boolean setVariable(String variableName, Object result);
+    
+    public abstract void createVariable(String variableName, VariableType variableType);
 }

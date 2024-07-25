@@ -4,8 +4,9 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecuto
 
 public interface DoubleNumberNode extends NumberNode {
 
-    public default Double getDoubleNumber(SpellExecutor spellExecutor) {
-        return (Double) getNumber(spellExecutor);
+    public abstract Double getDoubleNumber(SpellExecutor spellExecutor);
+
+    public default Number getNumber(SpellExecutor spellExecutor) {
+        return getDoubleNumber(spellExecutor);
     }
-    
 }

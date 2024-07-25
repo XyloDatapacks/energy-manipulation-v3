@@ -19,15 +19,20 @@ import java.util.List;
 public class SubNodes {
     /** Used by ComplexIntegerNumberNode */
     public static List<NodeData<? extends IntegerNumberNode>> TEMPLATE_ALL_INTEGER = List.of(
-            Nodes.VALUE_TYPE_INTEGER
+            Nodes.VALUE_TYPE_INTEGER,
+            Nodes.VARIABLE_GETTER_INTEGER,
+            Nodes.OPERATION_INTEGER_NUMBER
     );
     /** Used by ComplexDoubleNumberNode */
     public static List<NodeData<? extends DoubleNumberNode>> TEMPLATE_ALL_DOUBLE = List.of(
-            Nodes.VALUE_TYPE_DOUBLE
+            Nodes.VALUE_TYPE_DOUBLE,
+            Nodes.VARIABLE_GETTER_DOUBLE,
+            Nodes.OPERATION_DOUBLE_NUMBER
     );
     /** Used by ComplexStringNode */
     public static List<NodeData<? extends StringNode>> TEMPLATE_ALL_STRINGS = List.of(
-            Nodes.VALUE_TYPE_STRING
+            Nodes.VALUE_TYPE_STRING,
+            Nodes.VARIABLE_GETTER_STRING
     );
     public static List<NodeData<? extends InstructionNode>> TEMPLATE_COMMON_INSTRUCTION = List.of(
             Nodes.INSTRUCTION_GENERATE_SHAPE,
@@ -39,7 +44,7 @@ public class SubNodes {
             Nodes.INSTRUCTION_CONTINUE,
             Nodes.INSTRUCTION_BREAK,
             Nodes.INSTRUCTION_CREATE_VARIABLE,
-            Nodes.INSTRUCTION_OPERATION
+            Nodes.INSTRUCTION_MODIFY_VARIABLE
     );
     public static List<NodeData<? extends IntegerOperatorNode>> TEMPLATE_INTEGER_NUMBER_OPERATORS = List.of(
             Nodes.OPERATOR_ADD,

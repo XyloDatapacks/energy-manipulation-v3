@@ -18,11 +18,11 @@ public class ComplexDoubleNumberNode extends AbstractNodeWithMap implements Numb
 
     
     /*----------------------------------------------------------------------------------------------------------------*/
-    /* NumberNode Interface */
+    /* DoubleNumberNode Interface */
 
     @Override
-    public Number getNumber(SpellExecutor spellExecutor) {
-        return value.getNode().getNumber(spellExecutor);
+    public Double getDoubleNumber(SpellExecutor spellExecutor) {
+        return value.getNode().getDoubleNumber(spellExecutor);
     }
     
     /*----------------------------------------------------------------------------------------------------------------*/

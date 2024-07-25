@@ -27,6 +27,12 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.number.Double
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.ComplexStringNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.string_value.StringValueTypeNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.VariableTypeNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.getter.DoubleVariableGetterNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.getter.IntegerVariableGetterNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.getter.StringVariableGetterNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.modifier.DoubleVariableModifierNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.modifier.IntegerVariableModifierNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.variable.modifier.StringVariableModifierNode;
 import net.minecraft.util.Identifier;
 
 import java.util.HashMap;
@@ -70,8 +76,8 @@ public class Nodes {
             "name", new SubNodeData("Name","the name of the variable"),
             "type", new SubNodeData("Type","the type of the variable")
     )));
-    public static final NodeData<OperationInstructionNode> INSTRUCTION_OPERATION = registerNode("instruction", "operation", new NodeData.NodeDataMaker<>("Operation", "modify the value of a variable", OperationInstructionNode::new, Map.of(
-            "operation", new SubNodeData("Operation Type","the operation type to use")
+    public static final NodeData<ModifyVariableInstructionNode> INSTRUCTION_MODIFY_VARIABLE = registerNode("instruction", "modify_variable", new NodeData.NodeDataMaker<>("Modify Variable", "modify the value of a variable", ModifyVariableInstructionNode::new, Map.of(
+            "modifier", new SubNodeData("Modifier","the type of variable to modify")
     )));
 
     /** Shapes */
@@ -141,20 +147,43 @@ public class Nodes {
 
     /** Operation */
     public static final NodeData<IntegerOperationNode> OPERATION_INTEGER_NUMBER = registerNode("operation", "integer_number", new NodeData.NodeDataMaker<>("Integer Number Operation", "An operation between integer numbers", IntegerOperationNode::new, Map.of(
-            "variable", new SubNodeData("Variable","the variable to modify"),
+            "number1", new SubNodeData("First Number","the second number"),
             "operator", new SubNodeData("Operator","apply operator"),
-            "number", new SubNodeData("Number","the second number")
+            "number2", new SubNodeData("Second Number","the second number")
     )));
     public static final NodeData<DoubleOperationNode> OPERATION_DOUBLE_NUMBER = registerNode("operation", "double_number", new NodeData.NodeDataMaker<>("Double Number Operation", "An operation between double numbers", DoubleOperationNode::new, Map.of(
-            "variable", new SubNodeData("Variable","the variable to modify"),
+            "number1", new SubNodeData("First Number","the first number"),
             "operator", new SubNodeData("Operator","apply operator"),
-            "number", new SubNodeData("Number","the second number")
+            "number2", new SubNodeData("Second Number","the second number")
     )));
 
 
     /** Variable */
     public static final NodeData<VariableTypeNode> VARIABLE_TYPE = registerNode("variable", "type", new NodeData.NodeDataMaker<>("Variable Type", "Defines the type of a variable", VariableTypeNode::new, Map.of()));
+    public static final NodeData<IntegerVariableGetterNode> VARIABLE_GETTER_INTEGER = registerNode("variable.getter", "integer", new NodeData.NodeDataMaker<>("Integer Variable Getter", "Get a integer variable", IntegerVariableGetterNode::new, Map.of(
+            "variable_name", new SubNodeData("Variable Name","the name of the variable to modify")
+    )));
+    public static final NodeData<DoubleVariableGetterNode> VARIABLE_GETTER_DOUBLE = registerNode("variable.getter", "double", new NodeData.NodeDataMaker<>("Double Variable Getter", "Get a double variable", DoubleVariableGetterNode::new, Map.of(
+            "variable_name", new SubNodeData("Variable Name","the name of the variable to modify")
+    )));
+    public static final NodeData<StringVariableGetterNode> VARIABLE_GETTER_STRING = registerNode("variable.getter", "string", new NodeData.NodeDataMaker<>("String Variable Getter", "Get a string variable", StringVariableGetterNode::new, Map.of(
+            "variable_name", new SubNodeData("Variable Name","the name of the variable to modify")
+    )));
 
+    public static final NodeData<IntegerVariableModifierNode> VARIABLE_MODIFIER_INTEGER = registerNode("variable.modifier", "integer", new NodeData.NodeDataMaker<>("Integer Variable Modifier", "Modify a integer variable", IntegerVariableModifierNode::new, Map.of(
+            "variable", new SubNodeData("Variable","The variable to modify"),
+            "value", new SubNodeData("Value","The value to use")
+    )));
+    public static final NodeData<DoubleVariableModifierNode> VARIABLE_MODIFIER_DOUBLE = registerNode("variable.modifier", "double", new NodeData.NodeDataMaker<>("Double Variable Modifier", "Modify a double variable", DoubleVariableModifierNode::new, Map.of(
+            "variable", new SubNodeData("Variable","The variable to modify"),
+            "value", new SubNodeData("Value","The value to use")
+    )));
+    public static final NodeData<StringVariableModifierNode> VARIABLE_MODIFIER_STRING = registerNode("variable.modifier", "string", new NodeData.NodeDataMaker<>("String Variable Modifier", "Modify a string variable", StringVariableModifierNode::new, Map.of(
+            "variable", new SubNodeData("Variable","The variable to modify"),
+            "value", new SubNodeData("Value","The value to use")
+    )));
+    
+    
     /* Operators */
     public static final NodeData<AddOperatorNode> OPERATOR_ADD = registerNode("operation.operator", "add", new NodeData.NodeDataMaker<>("Add Operator", "Adds two values to each other", AddOperatorNode::new, Map.of()));
     public static final NodeData<SubtractOperatorNode> OPERATOR_SUBTRACT = registerNode("operation.operator", "subtract", new NodeData.NodeDataMaker<>("Subtract Operator", "Subtract a values to another", SubtractOperatorNode::new, Map.of()));

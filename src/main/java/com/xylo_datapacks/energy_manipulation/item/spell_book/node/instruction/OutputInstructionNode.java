@@ -22,7 +22,7 @@ public class OutputInstructionNode extends AbstractNodeWithMap implements Instru
     @Override
     public boolean executeInstruction(SpellExecutor spellExecutor) {
         if (spellExecutor.getCaster() instanceof PlayerEntity playerEntity) {
-            playerEntity.sendMessage(Text.of(text.getNode().getString()), false);
+            playerEntity.sendMessage(Text.of(text.getNode().getString(spellExecutor)), false);
             return true;
         }
         return false;
