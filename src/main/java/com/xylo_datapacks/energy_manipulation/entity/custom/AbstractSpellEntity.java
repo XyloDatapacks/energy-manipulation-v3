@@ -39,18 +39,6 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
         spellData = new SpellData(getOwner(), null, null, null);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        
-        if (spellDelay > 0) {
-            spellDelay--;
-        }
-        else {
-            runSpell();
-        }
-    }
-
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* PersistentProjectileEntity Interface */
@@ -105,7 +93,21 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     public SpellData getSpellData() {
         return spellData;
     }
-
+    
+    public int getSpellDelay() {
+        return spellDelay;
+    }
+    
+    /** decrement spell delay by delta
+     * @return true if the delay is done */
+    public boolean decrementSpellDelay(int delta) {
+        if (spellDelay > 0) {
+            spellDelay = Math.max(spellDelay - delta, 0);
+            return false;
+        }
+        return true;
+    }
+    
     /*----------------------------------------------------------------------------------------------------------------*/
     /* SpellExecutor Interface */
 

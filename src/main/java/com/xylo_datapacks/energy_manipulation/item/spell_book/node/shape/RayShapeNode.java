@@ -9,8 +9,8 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.Effect
 import java.util.List;
 
 
-public class RayShapeNode extends AbstractNodeWithMap implements ShapeNode {
-    SubNode<EffectProviderNode> effects = registerSubNode("effects", new SubNode.Builder<EffectProviderNode>()
+public class RayShapeNode extends AbstractShapeNode {
+    public SubNode<EffectProviderNode> effects = registerSubNode("effects", new SubNode.Builder<EffectProviderNode>()
             .addNodeValues(List.of(
                     Nodes.EFFECT_PROVIDER))
     );
@@ -19,16 +19,14 @@ public class RayShapeNode extends AbstractNodeWithMap implements ShapeNode {
         super(Nodes.SHAPE_RAY);
     }
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-    /* InstructionNode Interface */
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* AbstractShapeNode Interface */
 
     @Override
-    public boolean generateShape(SpellExecutor spellExecutor) {
-        System.out.println("Generating ray shape");
-        effects.getNode().executeEffects(spellExecutor, null);
-        return true;
+    public void summonShape(SpellExecutor spellExecutor) {
+
     }
 
-/*--------------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
     
 }

@@ -31,7 +31,7 @@ public abstract class AbstractRunnableNodeWithMap<U> extends AbstractNodeWithMap
     }
 
     protected <T extends RunnableNode<?>, R> R execute(SubNode<T> subNode, Function<T, R> action) {
-        return action.apply(subNode.getNode());
+        return action.apply(execute(subNode));
     }
 
     @Override

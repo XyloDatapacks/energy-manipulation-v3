@@ -9,27 +9,24 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.Effect
 import java.util.List;
 
 
-public class ProjectileShapeNode extends AbstractNodeWithMap implements ShapeNode {
-    SubNode<EffectProviderNode> effects = registerSubNode("effects", new SubNode.Builder<EffectProviderNode>()
+public class ProjectileShapeNode extends AbstractShapeNode {
+    public SubNode<EffectProviderNode> effects = registerSubNode("effects", new SubNode.Builder<EffectProviderNode>()
             .addNodeValues(List.of(
                     Nodes.EFFECT_PROVIDER))
     );
-    
     
     public ProjectileShapeNode() {
         super(Nodes.SHAPE_PROJECTILE);
     }
 
-/*--------------------------------------------------------------------------------------------------------------------*/
-    /* InstructionNode Interface */
+    /*----------------------------------------------------------------------------------------------------------------*/
+    /* AbstractShapeNode Interface */
 
     @Override
-    public boolean generateShape(SpellExecutor spellExecutor) {
-        System.out.println("Generating projectile shape");
-        effects.getNode().executeEffects(spellExecutor, null);
-        return true;
+    public void summonShape(SpellExecutor spellExecutor) {
+        
     }
 
-    /*--------------------------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------------------------*/
     
 }

@@ -4,6 +4,7 @@ import com.xylo_datapacks.energy_manipulation.component.CatalystComponent;
 import com.xylo_datapacks.energy_manipulation.component.ModDataComponentTypes;
 import com.xylo_datapacks.energy_manipulation.component.type.CatalystComponents;
 import com.xylo_datapacks.energy_manipulation.entity.custom.ProjectileShapeEntity;
+import com.xylo_datapacks.energy_manipulation.entity.custom.SpellEntity;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellAttributes;
 import net.minecraft.component.DataComponentTypes;
@@ -22,7 +23,7 @@ public class CatalystItem extends Item {
 
     public PersistentProjectileEntity createSpell(World world, ItemStack projectileStack, LivingEntity shooter, ItemStack spellBookStack) {
         SpellNode spellNode = SpellBookItem.getSpellNode(shooter.getRegistryManager(), spellBookStack);
-        ProjectileShapeEntity spell = new ProjectileShapeEntity(shooter, world, projectileStack, spellBookStack);
+        SpellEntity spell = new SpellEntity(shooter, world, projectileStack, spellBookStack);
         
         // pass spell
         spell.setSpellNode(spellNode);
