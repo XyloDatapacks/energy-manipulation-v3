@@ -2,14 +2,12 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.spell;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.VariableType;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtDouble;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.*;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import javax.xml.transform.Result;
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,13 +23,14 @@ public class SpellContext {
     
     
     
-    public SpellContext(Vec3d position, Vec2f rotation) {
+    public SpellContext(Vec3d position, Vec2f rotation, Map<String, Object> variables) {
         this.position = position;
         this.rotation = rotation;
+        this.variables.putAll(variables);
     }
     
     public SpellContext(Entity entity) {
-        this(entity.getPos(), new Vec2f(entity.getYaw(), entity.getPitch()));
+        this(entity.getPos(), new Vec2f(entity.getYaw(), entity.getPitch()), new HashMap<>());
     }
 
     public SpellContext() {
@@ -95,7 +94,15 @@ public class SpellContext {
                 new Vec2f(rotationNbt.getFloat(0), rotationNbt.getFloat(1))
                 : null;
 
-        return new SpellContext(position, rotation);
+        // variables
+        NbtCompound variablesNbt = nbt.getCompound(VARIABLES_KEY);
+        Map<String, Object> variables = new HashMap<>();
+        variablesNbt.getKeys().forEach(key -> {
+            NbtElement nbtElement = variablesNbt.get(key);
+            variables.put(key, VariableType.readFromNbt(nbtElement));
+        });
+        
+        return new SpellContext(position, rotation, variables);
     }
 
     /** write position and rotation only if they are not null */
@@ -118,6 +125,18 @@ public class SpellContext {
             rotationNbt.add(NbtDouble.of(context.rotation.x));
             rotationNbt.add(NbtDouble.of(context.rotation.y));
             spellContextNbt.put(ROTATION_KEY, rotationNbt);
+        }
+        
+        // variables
+        if (!context.variables.isEmpty()) {
+            NbtCompound variablesNbt = new NbtCompound();
+            for (Map.Entry<String, Object> entry : context.variables.entrySet()) {
+                NbtElement var = VariableType.writeToNbt(entry.getValue());
+                if (var != null) {
+                    variablesNbt.put(entry.getKey(), var);
+                }
+            }
+            spellContextNbt.put(VARIABLES_KEY, variablesNbt);
         }
 
         return spellContextNbt;
