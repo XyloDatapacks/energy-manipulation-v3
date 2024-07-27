@@ -30,7 +30,7 @@ public class SpellContext {
     }
     
     public SpellContext(Entity entity) {
-        this(entity.getPos(), new Vec2f(entity.getYaw(), entity.getPitch()), new HashMap<>());
+        this(entity.getPos(), new Vec2f(entity.getPitch(), entity.getYaw()), new HashMap<>());
     }
 
     public SpellContext() {
@@ -91,7 +91,8 @@ public class SpellContext {
         // rotation
         NbtList rotationNbt = nbt.getList(ROTATION_KEY, NbtElement.FLOAT_TYPE);
         Vec2f rotation = rotationNbt.size() == 2 ?
-                new Vec2f(rotationNbt.getFloat(0), rotationNbt.getFloat(1))
+                // nbt is [yaw, pitch]. Vec2f is [pitch, yaw]
+                new Vec2f(rotationNbt.getFloat(1), rotationNbt.getFloat(0))  // first i put the pitch (1), then the yaw (0)
                 : null;
 
         // variables
@@ -122,8 +123,9 @@ public class SpellContext {
         // rotation
         if (context.rotation != null) {
             NbtList rotationNbt = new NbtList();
-            rotationNbt.add(NbtDouble.of(context.rotation.x));
-            rotationNbt.add(NbtDouble.of(context.rotation.y));
+            // nbt is [yaw, pitch]. Vec2f is [pitch, yaw]
+            rotationNbt.add(NbtDouble.of(context.rotation.y)); // first I add the yaw (y)
+            rotationNbt.add(NbtDouble.of(context.rotation.x)); // then I add the pitch (x)
             spellContextNbt.put(ROTATION_KEY, rotationNbt);
         }
         

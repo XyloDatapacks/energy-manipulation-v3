@@ -115,7 +115,7 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
 
     @Override
     public Vec2f getContextRotation() {
-        return Optional.ofNullable(spellData.getSpellContext().getRotation()).orElse(new Vec2f(-getYaw(), -getPitch()));
+        return Optional.ofNullable(spellData.getSpellContext().getRotation()).orElse(new Vec2f(-getPitch(), -getYaw()));
     }
 
     @Override

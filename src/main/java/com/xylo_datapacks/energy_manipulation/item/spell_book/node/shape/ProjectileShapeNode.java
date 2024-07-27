@@ -45,9 +45,7 @@ public class ProjectileShapeNode extends AbstractShapeNode {
             projectileShapeEntity.refreshShapeNode();
             
             /* set velocity */
-            float pitch = spellExecutor.getContextRotation().y;
-            float yaw = spellExecutor.getContextRotation().x;
-            Vec3d direction = Vec3d.fromPolar(pitch, yaw);
+            Vec3d direction = Vec3d.fromPolar(spellExecutor.getContextRotation());
             projectileShapeEntity.setVelocity(direction.x, direction.y, direction.z, 2, 0);
 
             // set display

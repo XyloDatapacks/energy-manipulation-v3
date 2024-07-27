@@ -32,7 +32,7 @@ public class DirectionalOffsetNode extends AbstractNodeWithMap implements Offset
         double offsetZ = z.getNode().getNumber(spellExecutor).doubleValue();
         
         // stolen from LookingPosArgument#toAbsolutePos
-        Vec2f vec2f = new Vec2f(spellExecutor.getContextRotation().y, spellExecutor.getContextRotation().x);
+        Vec2f vec2f = spellExecutor.getContextRotation();
         float f = MathHelper.cos((vec2f.y + 90.0F) * (float) (Math.PI / 180.0));
         float g = MathHelper.sin((vec2f.y + 90.0F) * (float) (Math.PI / 180.0));
         float h = MathHelper.cos(-vec2f.x * (float) (Math.PI / 180.0));
