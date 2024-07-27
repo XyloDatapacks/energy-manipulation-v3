@@ -28,11 +28,13 @@ import org.joml.Vector3f;
 import org.slf4j.Logger;
 
 public abstract class AbstractDisplayProjectile extends PersistentProjectileEntity {
+    public static String BEHAVE_AS_PROJECTILE_KEY = "behave_as_projectile";
+    private boolean behaveAsProjectile = true;
     
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> entityType, World world) {
         super(entityType, world);
 
-        this.setTeleportDuration(1);
+        this.setTeleportDuration(2);
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
@@ -40,7 +42,7 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(type, x, y, z, world, stack, weapon);
 
-        this.setTeleportDuration(1);
+        this.setTeleportDuration(2);
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
     }
@@ -48,9 +50,17 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
     protected AbstractDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
         
-        this.setTeleportDuration(1);
+        this.setTeleportDuration(2);
         this.ignoreCameraFrustum = true;
         this.visibilityBoundingBox = this.getBoundingBox();
+    }
+    
+    public boolean doesBehaveAsProjectile() {
+        return this.behaveAsProjectile;
+    }
+    
+    public void setBehaveAsProjectile(boolean behaveAsProjectile) {
+        this.behaveAsProjectile = behaveAsProjectile;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +145,7 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
     @Override
     public void tick() {
         //if (this.getWorld().isClient) { System.out.println("CLIENT TICK---------------------"); } else { System.out.println("SERVER TICK---------------------"); }
-        super.tick();
+        if (doesBehaveAsProjectile()) super.tick(); // Added stuff
         
         if (this.getWorld().isClient) {
             if (this.startInterpolationSet) {
@@ -265,6 +275,10 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
         } else {
             this.setBrightness(null);
         }
+        
+        /* Added stuff */
+        // behaveAsProjectile = true if not specified or if set to true
+        behaveAsProjectile = !nbt.contains(BEHAVE_AS_PROJECTILE_KEY) || nbt.getBoolean(BEHAVE_AS_PROJECTILE_KEY);
     }
 
     @Override
@@ -286,6 +300,9 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
         if (brightness != null) {
             Brightness.CODEC.encodeStart(NbtOps.INSTANCE, brightness).ifSuccess(brightnessx -> nbt.put(BRIGHTNESS_NBT_KEY, brightnessx));
         }
+
+        /* Added stuff */
+        nbt.putBoolean(BEHAVE_AS_PROJECTILE_KEY, behaveAsProjectile);
     }
 
     private void setTransformation(AffineTransformation transformation) {

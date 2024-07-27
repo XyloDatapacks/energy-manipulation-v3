@@ -54,9 +54,9 @@ public class DoubleValueTypeNode extends AbstractNodeWithValue<Double> implement
 
     @Override
     public FlowLayout getValueSelectorComponent(UIModel model, Consumer<Double> onValueChanged) {
-        FlowLayout flowLayout = model.expandTemplate(FlowLayout.class, "slider_selector_template", Map.of("value", Double.toString(getValue()), "min_value", Double.toString(minValue), "max_value", Double.toString(maxValue)));
+        FlowLayout flowLayout = model.expandTemplate(FlowLayout.class, "slider_selector_template", Map.of("value", "0", "min_value", Double.toString(minValue), "max_value", Double.toString(maxValue)));
         flowLayout.childById(DiscreteSliderComponent.class, "slider").<DiscreteSliderComponent>configure(slider -> {
-            slider.decimalPlaces(2);
+            slider.decimalPlaces(2).setFromDiscreteValue(getValue());
             slider.snap(true);
             slider.onChanged().subscribe(onValueChanged::accept);
         });

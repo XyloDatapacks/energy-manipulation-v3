@@ -22,7 +22,7 @@ public class ProjectileShapeEntity extends AbstractShapeEntity {
         super(ModEntityType.PROJECTILE_SHAPE, world);
     }
 
-    protected ProjectileShapeEntity(double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
+    public ProjectileShapeEntity(double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
         super(ModEntityType.PROJECTILE_SHAPE, x, y, z, world, stack, weapon);
     }
 
@@ -49,13 +49,17 @@ public class ProjectileShapeEntity extends AbstractShapeEntity {
     @Override
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
-        shapeNode.effects.getNode().executeEffects(this, null);
+        if (shapeNode != null) {
+            shapeNode.effects.getNode().executeEffects(this, null);
+        }
     }
 
     @Override
     protected void onBlockHit(BlockHitResult blockHitResult) {
         super.onBlockHit(blockHitResult);
-        shapeNode.effects.getNode().executeEffects(this, null);
+        if (shapeNode != null) {
+            shapeNode.effects.getNode().executeEffects(this, null);
+        }
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

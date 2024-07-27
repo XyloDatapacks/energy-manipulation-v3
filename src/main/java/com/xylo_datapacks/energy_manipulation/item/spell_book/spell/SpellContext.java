@@ -84,13 +84,13 @@ public class SpellContext {
     public static SpellContext readFromNbt(NbtCompound nbt) {
         // position
         NbtList positionNbt = nbt.getList(POSITION_KEY, NbtElement.DOUBLE_TYPE);
-        Vec3d position = positionNbt != null && positionNbt.size() == 3 ?
+        Vec3d position = positionNbt.size() == 3 ?
                 new Vec3d(positionNbt.getDouble(0), positionNbt.getDouble(1), positionNbt.getDouble(2))
                 : null;
 
         // rotation
         NbtList rotationNbt = nbt.getList(ROTATION_KEY, NbtElement.FLOAT_TYPE);
-        Vec2f rotation = rotationNbt != null && rotationNbt.size() == 2 ?
+        Vec2f rotation = rotationNbt.size() == 2 ?
                 new Vec2f(rotationNbt.getFloat(0), rotationNbt.getFloat(1))
                 : null;
 

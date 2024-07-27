@@ -435,15 +435,7 @@ public class SpellBookItem extends RangedWeaponItem {
     }
 
     private static float getSpeed(ChargedProjectilesComponent stack) {
-        List<ItemStack> projectiles = stack.getProjectiles();
-        float chargeSeconds = 0.0F;
-        for (ItemStack projectile : projectiles) {
-            CatalystComponent catalystComponent = projectile.get(ModDataComponentTypes.CATALYST);
-            if (catalystComponent != null) {
-                chargeSeconds += catalystComponent.chargeSeconds();
-            }
-        }
-        return chargeSeconds / projectiles.size();
+        return 0.1F;
     }
     
     @Override

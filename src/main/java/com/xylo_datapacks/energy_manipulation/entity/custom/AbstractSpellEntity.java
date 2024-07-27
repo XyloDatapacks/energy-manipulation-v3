@@ -44,16 +44,6 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     /* PersistentProjectileEntity Interface */
 
     @Override
-    public void copyFrom(Entity original) {
-        super.copyFrom(original);
-        if (original instanceof AbstractSpellEntity spellEntity) {
-            this.spellData = spellEntity.spellData;
-            this.spellDelay = spellEntity.spellDelay;
-            this.executionData = spellEntity.executionData;
-        }
-    }
-
-    @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         
@@ -82,22 +72,9 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
 
-    public void runSpell() {
-        if (spellData.spellNode != null) {
-            System.out.println("Executing spell");
-            getExecutionData().returnType = ReturnType.NONE;
-            spellData.spellNode.executeSpell(this);
-        }
-    }
-
-    public void setSpellNode(SpellNode spellNode) {
-        spellData.spellNode = spellNode;
-    }
-    
-    protected SpellNode getSpellNode() {
-        return spellData.spellNode;
+    public void setSpellData(SpellData spellData) {
+        this.spellData = spellData;
     }
     
     public SpellData getSpellData() {
@@ -138,7 +115,7 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
 
     @Override
     public Vec2f getContextRotation() {
-        return Optional.ofNullable(spellData.getSpellContext().getRotation()).orElse(new Vec2f(getYaw(), getPitch()));
+        return Optional.ofNullable(spellData.getSpellContext().getRotation()).orElse(new Vec2f(-getYaw(), -getPitch()));
     }
 
     @Override

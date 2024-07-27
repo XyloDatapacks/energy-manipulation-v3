@@ -26,7 +26,7 @@ public class CatalystItem extends Item {
         SpellEntity spell = new SpellEntity(shooter, world, projectileStack, spellBookStack);
         
         // pass spell
-        spell.setSpellNode(spellNode);
+        spell.getSpellData().spellNode = spellNode;
         // pass catalyst attributes
         CatalystComponent catalystComponents = projectileStack.get(ModDataComponentTypes.CATALYST);
         if (catalystComponents != null) {

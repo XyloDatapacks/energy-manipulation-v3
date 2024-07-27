@@ -25,9 +25,9 @@ public class CardinalOffsetNode extends AbstractNodeWithMap implements OffsetNod
 
     @Override
     public Vec3d getOffset(SpellExecutor spellExecutor) {
-        double offsetX = (double) x.getNode().getNumber(spellExecutor);
-        double offsetY = (double) y.getNode().getNumber(spellExecutor);
-        double offsetZ = (double) z.getNode().getNumber(spellExecutor);
+        double offsetX = x.getNode().getNumber(spellExecutor).doubleValue();
+        double offsetY = y.getNode().getNumber(spellExecutor).doubleValue();
+        double offsetZ = z.getNode().getNumber(spellExecutor).doubleValue();
         return new Vec3d(offsetX, offsetY, offsetZ);
     }
 

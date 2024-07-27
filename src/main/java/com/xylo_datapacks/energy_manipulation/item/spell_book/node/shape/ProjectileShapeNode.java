@@ -1,14 +1,17 @@
 package com.xylo_datapacks.energy_manipulation.item.spell_book.node.shape;
 
-import com.xylo_datapacks.energy_manipulation.entity.ModEntityType;
 import com.xylo_datapacks.energy_manipulation.entity.custom.AbstractSpellEntity;
 import com.xylo_datapacks.energy_manipulation.entity.custom.ProjectileShapeEntity;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.ToNbtSettings;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellData;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecutor;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
-import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.AbstractNodeWithMap;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.EffectProviderNode;
-import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 
@@ -28,10 +31,28 @@ public class ProjectileShapeNode extends AbstractShapeNode {
 
     @Override
     public void summonShape(SpellExecutor spellExecutor) {
-        ProjectileShapeEntity projectileShapeEntity = ModEntityType.PROJECTILE_SHAPE.create(spellExecutor.getCaster().getWorld());
-        if (projectileShapeEntity != null && spellExecutor instanceof AbstractSpellEntity spellEntity) {
-            projectileShapeEntity.copyFrom(spellEntity); //TODO: fix
-            projectileShapeEntity.setShapeNode(this);
+        if (spellExecutor instanceof AbstractSpellEntity spellEntity) {
+            ProjectileShapeEntity projectileShapeEntity = new ProjectileShapeEntity(
+                    spellExecutor.getContextPosition().x,
+                    spellExecutor.getContextPosition().y,
+                    spellExecutor.getContextPosition().z,
+                    spellEntity.getWorld(),
+                    spellEntity.getItemStack(),
+                    spellEntity.getWeaponStack()
+                    );
+            projectileShapeEntity.setOwner(spellEntity.getOwner());
+            projectileShapeEntity.setSpellData(spellEntity.getSpellData().copy(spellEntity.getWorld()));
+            projectileShapeEntity.refreshShapeNode();
+            
+            /* set velocity */
+            float pitch = spellExecutor.getContextRotation().y;
+            float yaw = spellExecutor.getContextRotation().x;
+            Vec3d direction = Vec3d.fromPolar(pitch, yaw);
+            projectileShapeEntity.setVelocity(direction.x, direction.y, direction.z, 2, 0);
+
+            // set display
+            projectileShapeEntity.setDisplayedItemStack(new ItemStack(Items.FURNACE));
+            
             ((AbstractSpellEntity) spellExecutor).getWorld().spawnEntity(projectileShapeEntity);
         }
     }

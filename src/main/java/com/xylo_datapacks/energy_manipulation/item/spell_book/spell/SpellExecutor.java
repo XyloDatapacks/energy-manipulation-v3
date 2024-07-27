@@ -13,10 +13,12 @@ public interface SpellExecutor {
 
     public abstract Vec3d getContextPosition();
     
+    /** x: yaw, y: pitch */
     public abstract Vec2f getContextRotation();
 
     public abstract void setContextPosition(Vec3d position);
-    
+
+    /** x: yaw, y: pitch */
     public abstract void setContextRotation(Vec2f position);
     
     public abstract ExecutionData getExecutionData();

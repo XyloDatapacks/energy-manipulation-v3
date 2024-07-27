@@ -30,6 +30,11 @@ public class SpellData {
         this.spellAttributes = spellAttributes;
     }
     
+    public SpellData copy(World world) {
+        NbtCompound nbtCompound = SpellData.writeToNbt(this);
+        SpellNode newSpellNode = GenericNode.copy(this.spellNode);
+        return SpellData.readFromNbt(nbtCompound, world, newSpellNode);
+    }
     
     public SpellContext getSpellContext() {
         if (spellContext == null) {

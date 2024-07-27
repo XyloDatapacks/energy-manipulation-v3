@@ -24,6 +24,14 @@ public abstract class AbstractShapeEntity extends AbstractSpellEntity implements
     protected AbstractShapeEntity(EntityType<? extends AbstractShapeEntity> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
         super(type, owner, world, stack, shotFrom);
     }
+    
+    public void refreshShapeNode() {
+        // spell node execution is stopped at the shape node that created this spell. so we run the spell to
+        // run the shape node resumeExecution, which will set the shape node of this shape
+        if (getSpellData().spellNode != null) {
+            getSpellData().spellNode.executeSpell(this);
+        }
+    }
 
     /*----------------------------------------------------------------------------------------------------------------*/
     /* PersistentProjectileEntity Interface */
@@ -32,9 +40,7 @@ public abstract class AbstractShapeEntity extends AbstractSpellEntity implements
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
 
-        // spell node execution is stopped at the shape node that created this spell. so we run the spell to
-        // run the shape node resumeExecution, which will set the shape node of this shape
-        getSpellData().spellNode.executeSpell(this);
+        refreshShapeNode();
     }
 
     /*----------------------------------------------------------------------------------------------------------------*/

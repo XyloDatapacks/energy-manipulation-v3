@@ -116,7 +116,7 @@ public class Nodes {
             "z", new SubNodeData("Z","Z axis offset")
     )));
     public static final NodeData<DirectionalOffsetNode> OFFSET_DIRECTIONAL = registerNode("offset", "directional", new NodeData.NodeDataMaker<>("Directional", "Offsets the context position in view space coords", DirectionalOffsetNode::new, Map.of(
-            "x", new SubNodeData("Right","Right axis offset"),
+            "x", new SubNodeData("Left","Right axis offset"),
             "y", new SubNodeData("Up","Up axis offset"),
             "z", new SubNodeData("Forward","Forward axis offset")
     )));

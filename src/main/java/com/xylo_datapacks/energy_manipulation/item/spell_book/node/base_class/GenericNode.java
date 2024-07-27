@@ -2,6 +2,7 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class;
 
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.*;
+import com.xylo_datapacks.energy_manipulation.item.spell_book.node.spell.SpellNode;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
@@ -11,6 +12,10 @@ import java.util.Map;
 
 public interface GenericNode {
 
+    public static <T extends GenericNode> T copy(T node) {
+        return (T) GenericNode.generateFromNbt(node.toNbt(ToNbtSettings.EXECUTION));
+    }
+    
     // node Id
     public abstract Identifier getNodeIdentifier();
     
