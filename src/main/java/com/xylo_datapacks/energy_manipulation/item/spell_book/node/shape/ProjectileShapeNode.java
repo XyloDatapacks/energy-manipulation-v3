@@ -2,6 +2,7 @@ package com.xylo_datapacks.energy_manipulation.item.spell_book.node.shape;
 
 import com.xylo_datapacks.energy_manipulation.entity.custom.AbstractSpellEntity;
 import com.xylo_datapacks.energy_manipulation.entity.custom.ProjectileShapeEntity;
+import com.xylo_datapacks.energy_manipulation.item.ModItems;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.GenericNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.record.ToNbtSettings;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellData;
@@ -9,6 +10,8 @@ import com.xylo_datapacks.energy_manipulation.item.spell_book.spell.SpellExecuto
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.Nodes;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.base_class.SubNode;
 import com.xylo_datapacks.energy_manipulation.item.spell_book.node.effect.EffectProviderNode;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.CustomModelDataComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.Vec3d;
@@ -49,7 +52,9 @@ public class ProjectileShapeNode extends AbstractShapeNode {
             projectileShapeEntity.setVelocity(direction.x, direction.y, direction.z, 2, 0);
 
             // set display
-            projectileShapeEntity.setDisplayedItemStack(new ItemStack(Items.FURNACE));
+            ItemStack displayStack = new ItemStack(ModItems.DUMMY_DISPLAY);
+            displayStack.set(DataComponentTypes.CUSTOM_MODEL_DATA, new CustomModelDataComponent(114));
+            projectileShapeEntity.setDisplayedItemStack(displayStack);
             
             ((AbstractSpellEntity) spellExecutor).getWorld().spawnEntity(projectileShapeEntity);
         }

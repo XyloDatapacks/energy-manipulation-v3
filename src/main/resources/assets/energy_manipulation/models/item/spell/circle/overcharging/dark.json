@@ -1,0 +1,12 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "energy_manipulation:item/spell/book/dark/overcharging"
+	},
+	"display": {
+		"gui": {
+			"scale": [2.7, 2.7, 2.7]
+		}
+	}
+}

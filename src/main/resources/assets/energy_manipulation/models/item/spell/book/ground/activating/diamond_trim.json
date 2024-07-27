@@ -1,0 +1,8 @@
+{
+  "parent": "energy_manipulation:item/spell/book/book_casting",
+  "textures": {
+    "layer0": "energy_manipulation:item/spell/book/ground/book",
+    "layer1": "energy_manipulation:item/spell/book/ground/activating",
+    "trim": "energy_manipulation:item/spell/book/_trim/book_trim_diamond"
+  }
+}

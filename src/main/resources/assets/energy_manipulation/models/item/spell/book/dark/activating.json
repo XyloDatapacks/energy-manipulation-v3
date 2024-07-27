@@ -1,0 +1,7 @@
+{
+  "parent": "energy_manipulation:item/spell/book/book_casting",
+  "textures": {
+    "layer0": "energy_manipulation:item/spell/book/dark/book",
+    "layer1": "energy_manipulation:item/spell/book/dark/activating"
+  }
+}

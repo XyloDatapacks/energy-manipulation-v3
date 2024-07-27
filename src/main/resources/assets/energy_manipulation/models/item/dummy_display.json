@@ -1,0 +1,66 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "energy_manipulation:item/empty"
+	},
+	
+	"overrides": [
+		{"predicate": {"custom_model_data":6}, "model": "energy_manipulation:item/spell/circle/activating/generic"},
+		{"predicate": {"custom_model_data":7}, "model": "energy_manipulation:item/spell/circle/activating/sun"},
+		{"predicate": {"custom_model_data":8}, "model": "energy_manipulation:item/spell/circle/activating/ground"},
+		{"predicate": {"custom_model_data":9}, "model": "energy_manipulation:item/spell/circle/activating/soul"},
+		{"predicate": {"custom_model_data":10}, "model": "energy_manipulation:item/spell/circle/activating/dark"},
+		{"predicate": {"custom_model_data":11}, "model": "energy_manipulation:item/spell/circle/activating/void"},
+
+		{"predicate": {"custom_model_data":12}, "model": "energy_manipulation:item/spell/circle/charging/generic"},
+		{"predicate": {"custom_model_data":13}, "model": "energy_manipulation:item/spell/circle/charging/sun"},
+		{"predicate": {"custom_model_data":14}, "model": "energy_manipulation:item/spell/circle/charging/ground"},
+		{"predicate": {"custom_model_data":15}, "model": "energy_manipulation:item/spell/circle/charging/soul"},
+		{"predicate": {"custom_model_data":16}, "model": "energy_manipulation:item/spell/circle/charging/dark"},
+		{"predicate": {"custom_model_data":17}, "model": "energy_manipulation:item/spell/circle/charging/void"},
+
+		{"predicate": {"custom_model_data":18}, "model": "energy_manipulation:item/spell/circle/overcharging/generic"},
+		{"predicate": {"custom_model_data":19}, "model": "energy_manipulation:item/spell/circle/overcharging/sun"},
+		{"predicate": {"custom_model_data":20}, "model": "energy_manipulation:item/spell/circle/overcharging/ground"},
+		{"predicate": {"custom_model_data":21}, "model": "energy_manipulation:item/spell/circle/overcharging/soul"},
+		{"predicate": {"custom_model_data":22}, "model": "energy_manipulation:item/spell/circle/overcharging/dark"},
+		{"predicate": {"custom_model_data":23}, "model": "energy_manipulation:item/spell/circle/overcharging/void"},
+
+		{"predicate": {"custom_model_data":110}, "model": "energy_manipulation:item/spell/shape/projectile/generic"},
+		{"predicate": {"custom_model_data":111}, "model": "energy_manipulation:item/spell/shape/projectile/sun"},
+		{"predicate": {"custom_model_data":112}, "model": "energy_manipulation:item/spell/shape/projectile/ground"},
+		{"predicate": {"custom_model_data":113}, "model": "energy_manipulation:item/spell/shape/projectile/soul"},
+		{"predicate": {"custom_model_data":114}, "model": "energy_manipulation:item/spell/shape/projectile/dark"},
+		{"predicate": {"custom_model_data":115}, "model": "energy_manipulation:item/spell/shape/projectile/void"},
+
+		{"predicate": {"custom_model_data":120}, "model": "energy_manipulation:item/spell/shape/sprout/generic"},
+		{"predicate": {"custom_model_data":121}, "model": "energy_manipulation:item/spell/shape/sprout/sun"},
+		{"predicate": {"custom_model_data":122}, "model": "energy_manipulation:item/spell/shape/sprout/ground"},
+		{"predicate": {"custom_model_data":123}, "model": "energy_manipulation:item/spell/shape/sprout/soul"},
+		{"predicate": {"custom_model_data":124}, "model": "energy_manipulation:item/spell/shape/sprout/dark"},
+		{"predicate": {"custom_model_data":125}, "model": "energy_manipulation:item/spell/shape/sprout/void"},
+
+		{"predicate": {"custom_model_data":130}, "model": "energy_manipulation:item/spell/shape/turret/generic"},
+		{"predicate": {"custom_model_data":131}, "model": "energy_manipulation:item/spell/shape/turret/sun"},
+		{"predicate": {"custom_model_data":132}, "model": "energy_manipulation:item/spell/shape/turret/ground"},
+		{"predicate": {"custom_model_data":133}, "model": "energy_manipulation:item/spell/shape/turret/soul"},
+		{"predicate": {"custom_model_data":134}, "model": "energy_manipulation:item/spell/shape/turret/dark"},
+		{"predicate": {"custom_model_data":135}, "model": "energy_manipulation:item/spell/shape/turret/void"},
+
+		{"predicate": {"custom_model_data":140}, "model": "energy_manipulation:item/spell/shape/aoe/generic"},
+		{"predicate": {"custom_model_data":141}, "model": "energy_manipulation:item/spell/shape/aoe/sun"},
+		{"predicate": {"custom_model_data":142}, "model": "energy_manipulation:item/spell/shape/aoe/ground"},
+		{"predicate": {"custom_model_data":143}, "model": "energy_manipulation:item/spell/shape/aoe/soul"},
+		{"predicate": {"custom_model_data":144}, "model": "energy_manipulation:item/spell/shape/aoe/dark"},
+		{"predicate": {"custom_model_data":145}, "model": "energy_manipulation:item/spell/shape/aoe/void"},
+
+		{"predicate": {"custom_model_data":150}, "model": "energy_manipulation:item/spell/shape/dart/generic"},
+		{"predicate": {"custom_model_data":151}, "model": "energy_manipulation:item/spell/shape/dart/sun"},
+		{"predicate": {"custom_model_data":152}, "model": "energy_manipulation:item/spell/shape/dart/ground"},
+		{"predicate": {"custom_model_data":153}, "model": "energy_manipulation:item/spell/shape/dart/soul"},
+		{"predicate": {"custom_model_data":154}, "model": "energy_manipulation:item/spell/shape/dart/dark"},
+		{"predicate": {"custom_model_data":155}, "model": "energy_manipulation:item/spell/shape/dart/void"}
+		
+	]
+}
+

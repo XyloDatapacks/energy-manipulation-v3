@@ -1,0 +1,6 @@
+{
+  "parent": "energy_manipulation:item/spell/book/book_closed",
+  "textures": {
+    "layer0": "energy_manipulation:item/spell/book/ground/book"
+  }
+}

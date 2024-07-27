@@ -1,0 +1,7 @@
+{
+	"parent": "energy_manipulation:item/spell/shape/turret/base",
+	"textures": {
+		"layer0": "energy_manipulation:item/spell/book/soul/overcharging",
+		"layer1": "energy_manipulation:item/spell/shape/aoe/soul"
+	}
+}s

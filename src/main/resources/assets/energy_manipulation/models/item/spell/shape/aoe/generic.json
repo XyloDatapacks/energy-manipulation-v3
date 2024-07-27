@@ -1,0 +1,7 @@
+{
+	"parent": "energy_manipulation:item/spell/shape/aoe/base",
+	"textures": {
+		"1": "energy_manipulation:item/spell/shape/aoe/generic",
+		"particle": "energy_manipulation:item/spell/shape/aoe/generic"
+	}
+}

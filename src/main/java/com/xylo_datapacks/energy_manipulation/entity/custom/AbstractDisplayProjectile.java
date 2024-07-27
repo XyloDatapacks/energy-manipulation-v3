@@ -543,14 +543,17 @@ public abstract class AbstractDisplayProjectile extends PersistentProjectileEnti
 
         protected AbstractItemDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> entityType, World world) {
             super(entityType, world);
+            setTransformationMode(ModelTransformationMode.FIXED);
         }
 
         protected AbstractItemDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, double x, double y, double z, World world, ItemStack stack, @Nullable ItemStack weapon) {
             super(type, x, y, z, world, stack, weapon);
+            setTransformationMode(ModelTransformationMode.FIXED);
         }
 
         protected AbstractItemDisplayProjectile(EntityType<? extends AbstractItemDisplayProjectile> type, LivingEntity owner, World world, ItemStack stack, @Nullable ItemStack shotFrom) {
             super(type, owner, world, stack, shotFrom);
+            setTransformationMode(ModelTransformationMode.FIXED);
         }
 
 

@@ -15,6 +15,7 @@ public class ModItems {
     public static final Item BASIC_CATALYST = registerItem("basic_catalyst", new CatalystItem(new Item.Settings().component(ModDataComponentTypes.CATALYST, CatalystComponents.BASIC)));
     public static final Item SPIKE_CATALYST = registerItem("spike_catalyst", new CatalystItem(new Item.Settings().component(ModDataComponentTypes.CATALYST, CatalystComponents.SPIKE)));
     public static final Item PLATE_CATALYST = registerItem("plate_catalyst", new CatalystItem(new Item.Settings().component(ModDataComponentTypes.CATALYST, CatalystComponents.PLATE)));
+    public static final Item DUMMY_DISPLAY = registerItem("dummy_display", new Item(new Item.Settings()));
     
     // Function called to add items
     public static Item registerItem(String name, Item item) {
