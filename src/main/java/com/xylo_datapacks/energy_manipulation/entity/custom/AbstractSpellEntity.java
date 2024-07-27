@@ -44,6 +44,16 @@ public abstract class AbstractSpellEntity extends AbstractDisplayProjectile.Abst
     /* PersistentProjectileEntity Interface */
 
     @Override
+    public void copyFrom(Entity original) {
+        super.copyFrom(original);
+        if (original instanceof AbstractSpellEntity spellEntity) {
+            this.spellData = spellEntity.spellData;
+            this.spellDelay = spellEntity.spellDelay;
+            this.executionData = spellEntity.executionData;
+        }
+    }
+
+    @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         

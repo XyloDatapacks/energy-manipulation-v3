@@ -56,15 +56,13 @@ public abstract class AbstractShapeNode extends AbstractRunnableNodeWithMap<Bool
 
     @Override
     public Boolean newExecution(SpellExecutor spellExecutor) {
-        // block execution so that new shape will result stuck here
-        spellExecutor.getExecutionData().returnType = ReturnType.RETURN;
+        // set the last executed to dummy so that shape will have it set
         setLastExecuted("dummy");
         
         // create shape copying all data from spellExecutor
         summonShape(spellExecutor);
 
-        // reset return type so that this executor goes on
-        spellExecutor.getExecutionData().returnType = ReturnType.NONE;
+        // reset the execution, since original spell has to always run newExecution
         resetExecution(spellExecutor);
         return true;
     }
