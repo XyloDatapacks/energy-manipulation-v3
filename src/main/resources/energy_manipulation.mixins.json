@@ -9,6 +9,7 @@
 		"OwoScrollContainerAccessor"
 	],
 	"client": [
+		"HeldItemRendererMixin",
 		"ItemRendererAccessor",
 		"ItemRendererMixin"
 	],
